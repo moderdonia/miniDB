@@ -9,7 +9,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class Update : SQLtype
     {
         private string table;
-        private string database;
+        //private string database;
         private string[] attb;         //columns
         private string[] conds;    //where
 
@@ -18,10 +18,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             throw new NotImplementedException();
         }
 
-        public Update(string table, string database, string[] attb, string[] conds)
+        public Update(string table, string[] attb, string[] conds)
         {
             this.table = table;
-            this.database = database;
+            //this.database = database;
             this.attb = attb;
             this.conds = conds;
         }

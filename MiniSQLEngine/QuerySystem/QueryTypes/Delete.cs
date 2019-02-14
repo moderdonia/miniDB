@@ -9,8 +9,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class Delete : SQLtype
     {
         private string table;
-        private string database;
-        private string[] attb;         //columns
+        //private string database;
         private string[] conds;    //where
 
         bool Execute()
@@ -18,11 +17,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             throw new NotImplementedException();
         }
 
-        public Delete(string table, string database, string[] attb, string[] conds)
+        public Delete(string table, string[] conds)
         {
             this.table = table;
-            this.database = database;
-            this.attb = attb;
+            //this.database = database;
             this.conds = conds;
         }
     }

@@ -9,21 +9,21 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class Insert : SQLtype
     {
         private string table;
-        private string database;
+        //private string database;
         private string[] attb;         //columns
-        private string[] conds;    //where
+        private string[] values;    
 
         bool Execute()
         {
             throw new NotImplementedException();
         }
 
-        public Insert(string table, string database, string[] attb, string[] conds)
+        public Insert(string table, string[] attb, string[] values)
         {
             this.table = table;
-            this.database = database;
+            //this.database = database;
             this.attb = attb;
-            this.conds = conds;
+            this.values = values;
         }
     }
 }

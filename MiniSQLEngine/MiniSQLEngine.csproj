@@ -42,7 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="QuerySystem\QueryTypes\BackUp.cs" />
+    <Compile Include="QuerySystem\QueryTypes\CreateDB.cs" />
+    <Compile Include="QuerySystem\QueryTypes\CreateTable.cs" />
+    <Compile Include="QuerySystem\QueryTypes\Delete.cs" />
+    <Compile Include="QuerySystem\QueryTypes\DropDB.cs" />
+    <Compile Include="QuerySystem\QueryTypes\DropTable.cs" />
+    <Compile Include="QuerySystem\QueryTypes\Insert.cs" />
     <Compile Include="QuerySystem\QueryTypes\Select.cs" />
+    <Compile Include="QuerySystem\QueryTypes\Update.cs" />
     <Compile Include="QuerySystem\SQLtype.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuerySystem\Query.cs" />

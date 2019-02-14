@@ -9,15 +9,18 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class CreateTable : SQLtype
     {
         private string table;
+        private string[] attb;
 
         bool Execute()
         {
             throw new NotImplementedException();
         }
 
-        public CreateTable(string table)
+        public CreateTable(string table, string[] attb)
         {
             this.table = table;
+            this.attb = attb;
+
         }
     }
 }
