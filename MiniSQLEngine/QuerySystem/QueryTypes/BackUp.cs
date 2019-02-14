@@ -6,24 +6,20 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Select : SQLtype
+    class BackUp : SQLtype
     {
-        private string table;
         private string database;
-        private string[] attb;         //columns
-        private string[] conds;    //where
+        private string filepath;
 
         bool Execute()
         {
             throw new NotImplementedException();
         }
 
-        public Select(string table, string database, string[] attb, string[] conds)
+        public BackUp(string database, string filepath)
         {
-            this.table = table;
             this.database = database;
-            this.attb = attb;
-            this.conds = conds; 
+            this.filepath = filepath;
         }
     }
 }

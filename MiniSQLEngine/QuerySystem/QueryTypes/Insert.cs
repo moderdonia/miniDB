@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Select : SQLtype
+    class Insert : SQLtype
     {
         private string table;
         private string database;
@@ -18,12 +18,12 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             throw new NotImplementedException();
         }
 
-        public Select(string table, string database, string[] attb, string[] conds)
+        public Insert(string table, string database, string[] attb, string[] conds)
         {
             this.table = table;
             this.database = database;
             this.attb = attb;
-            this.conds = conds; 
+            this.conds = conds;
         }
     }
 }
