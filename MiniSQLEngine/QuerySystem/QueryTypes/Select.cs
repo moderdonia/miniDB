@@ -23,7 +23,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.table = table;
             this.database = database;
             this.attb = attb;
-            this.conds = conds;
+            //this.conds = conds; 
         }
     }
 }
