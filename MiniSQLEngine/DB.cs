@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MiniSQLEngine
+{
+    class DB
+    {
+        string name;
+
+        public DB(string name)
+        {
+            this.name = name;
+        }
+
+        public string runQuery(string query)
+        {
+            return null;
+        }
+    }
+}
