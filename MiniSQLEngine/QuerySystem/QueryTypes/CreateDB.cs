@@ -12,7 +12,16 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         bool Execute()
         {
-            throw new NotImplementedException();
+            System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory("../../SGBD/"+database);
+            if (di.Exists)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        
         }
 
         public CreateDB(string database)
