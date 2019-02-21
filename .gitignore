@@ -4,5 +4,9 @@
 
 bin
 obj
-*.exe
-.vs
+exe
+dll
+vs
+cache
+/packages
+/.vs

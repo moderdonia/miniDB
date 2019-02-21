@@ -7,7 +7,6 @@ C:\Users\docencia\Documents\ABD\Moderdonia\Tests\bin\Debug\Microsoft.VisualStudi
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\docencia\Documents\ABD\Moderdonia\Tests\obj\Debug\Tests.csprojAssemblyReference.cache
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\obj\Debug\Tests.csproj.CoreCompileInputs.cache
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\obj\Debug\Tests.csproj.CopyComplete
 C:\Users\docencia\Documents\ABD\Moderdonia\Tests\obj\Debug\Tests.dll
