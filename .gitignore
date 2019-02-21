@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Console/obj
+/MiniSQLEngine/obj/Debug
+/MiniSQLEngine/obj/Release
+/packages
+/Tests/bin/Debug
+/Tests/obj
+/Console/bin/Debug
