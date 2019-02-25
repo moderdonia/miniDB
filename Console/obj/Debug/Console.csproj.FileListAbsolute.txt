@@ -4,3 +4,7 @@ C:\Users\docencia\Documents\ABD\Moderdonia\Console\bin\Debug\Console.pdb
 C:\Users\docencia\Documents\ABD\Moderdonia\Console\obj\Debug\Console.csproj.CoreCompileInputs.cache
 C:\Users\docencia\Documents\ABD\Moderdonia\Console\obj\Debug\Console.exe
 C:\Users\docencia\Documents\ABD\Moderdonia\Console\obj\Debug\Console.pdb
+C:\Users\docencia\Documents\ABD\Moderdonia\Console\bin\Debug\MiniSQLEngine.dll
+C:\Users\docencia\Documents\ABD\Moderdonia\Console\bin\Debug\MiniSQLEngine.pdb
+C:\Users\docencia\Documents\ABD\Moderdonia\Console\obj\Debug\Console.csprojAssemblyReference.cache
+C:\Users\docencia\Documents\ABD\Moderdonia\Console\obj\Debug\Console.csproj.CopyComplete

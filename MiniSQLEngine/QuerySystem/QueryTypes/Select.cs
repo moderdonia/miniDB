@@ -15,6 +15,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         bool Execute()
         {
+
             throw new NotImplementedException();
         }
 

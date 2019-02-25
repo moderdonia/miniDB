@@ -1,1 +1,6 @@
 C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\obj\Debug\MiniSQLEngine.csproj.CoreCompileInputs.cache
+C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\bin\Debug\MiniSQLEngine.dll
+C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\bin\Debug\MiniSQLEngine.pdb
+C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\obj\Debug\MiniSQLEngine.csprojAssemblyReference.cache
+C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\obj\Debug\MiniSQLEngine.dll
+C:\Users\docencia\Documents\ABD\Moderdonia\MiniSQLEngine\obj\Debug\MiniSQLEngine.pdb

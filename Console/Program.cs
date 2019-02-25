@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Console
+
+namespace Programa
 {
     class Program
     {
         static void Main(string[] args)
         {
+            string val;
+            Console.WriteLine("Inserte Sentencia:");
+            val = Console.ReadLine();
 
+            Console.WriteLine(val);
+            Console.Read();
+           
         }
     }
 }

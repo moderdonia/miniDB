@@ -53,6 +53,7 @@
     <Compile Include="QuerySystem\SQLtype.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuerySystem\Query.cs" />
+    <Compile Include="QuerySystem\Table.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
