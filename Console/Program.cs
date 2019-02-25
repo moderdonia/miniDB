@@ -10,7 +10,6 @@ namespace Programa
             string val;
             Console.WriteLine("Inserte Sentencia:");
             val = Console.ReadLine();
-            
         }
     }
 }

@@ -9,7 +9,6 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class Select : SQLtype
     {
         private string table;
-        private string database;
         private string[] attb;         //columns
         private string[] conds;    //where
 
@@ -19,12 +18,11 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             throw new NotImplementedException();
         }
 
-        public Select(string table,string database, string[] attb, string[] conds)
+        public Select(string table, string[] attb, string[] conds)
         {
             this.table = table;
-            this.database = database;
             this.attb = attb;
-            this.conds = conds; 
+            this.conds = conds;
         }
     }
 }
