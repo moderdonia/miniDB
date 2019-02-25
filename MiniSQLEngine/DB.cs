@@ -23,7 +23,16 @@ namespace MiniSQLEngine
 
         public string runQuery(string query)
         {
-            string select = @"(SELECT)\s+(\*|(\w+)|(\w+)(\,\s+(\w+))+)\s+(FROM)\s+(\w+)(\;|\s+(WHERE)\s+(\w+)\s*(=|<|>)\s*(\w+);)";
+            //Con *:
+            string select1 = @"SELECT\s+(\*)\s+FROM\s+(\w+);";
+            string select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            //Con una tabla:
+            string select3 = @"SELECT\s+(\w+)\s+FROM\s+(\w+);";
+            string select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            //Con mas de una tabla:
+            string select5 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+);";
+            string select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+
             string insert = @"(INSERT)\s+(INTO)\s+(\w+)(\s+|\s+\((\w+)\)\s+|\s+\((\w+)(\,\s+(\w+))+\))\s+(VALUES)(\s+\((\w+)\)|\s+\((\w+)(\,\s+(\w+))+\));";
             string delete = @"(DELETE)\s + (FROM)\s + (\w +)\s + (WHERE)\s +\w +\s * (=|<|>)\s *\w +;";
             string update = @"(UPDATE)\s+(\w+)\s+(SET)\s+(\w+)\s*\=\s*(\w+)(\s+|\,\s+(\w+)\s*\=\s*(\w+)\s+)(WHERE)\s+(\w+)\s*(=|<|>)\s*(\w+);";

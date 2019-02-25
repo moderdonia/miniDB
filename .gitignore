@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs
+/Console/obj
+/MiniSQLEngine/obj/Debug
+/MiniSQLEngine/obj/Release
