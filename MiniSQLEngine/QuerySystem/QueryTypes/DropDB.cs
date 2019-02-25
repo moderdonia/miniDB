@@ -10,7 +10,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     {
         private string database;
 
-        bool Execute()
+        bool Execute(DB database)
         {
             throw new NotImplementedException();
         }

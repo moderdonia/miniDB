@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine
 {
-    class DB
+    public class DB
     {
         Hashtable ht;
 

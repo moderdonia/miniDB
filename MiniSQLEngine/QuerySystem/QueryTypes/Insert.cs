@@ -13,7 +13,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         private string[] attb;         //columns
         private string[] values;    
 
-        bool Execute()
+        bool Execute(DB database)
         {
             throw new NotImplementedException();
         }

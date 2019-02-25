@@ -11,7 +11,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         private string database;
         private string filepath;
 
-        bool Execute()
+        bool Execute(DB database)
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,5 @@ namespace MiniSQLEngine
     public class Class1
     {
 
-
-
     }
 }

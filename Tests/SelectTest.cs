@@ -12,8 +12,7 @@ namespace Tests
         public void TestMethod1()
         {
             string result;
-            DB db = new DB("DB1");
-            
+
         }
     }
 }
