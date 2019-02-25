@@ -23,7 +23,9 @@ namespace MiniSQLEngine
 
         public string runQuery(string query)
         {
-            return null;
+            SQLParser sqlparser = new SQLParser();
+            SQLtype sqltype = sqlparser.Parser(query);
+            return sqltype.Execute(this);
         }
     }
 }

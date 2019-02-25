@@ -10,7 +10,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     {
         private string database;
 
-        bool Execute(DB database)
+        public override string Execute(DB database)
         {
             System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory("../../SGBD/"+database);
             if (di.Exists)

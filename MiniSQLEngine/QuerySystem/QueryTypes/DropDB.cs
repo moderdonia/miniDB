@@ -10,14 +10,16 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     {
         private string database;
 
-        bool Execute(DB database)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public DropDB(string database)
         {
             this.database = database;
+        }
+
+        public override string Execute(DB database)
+        {
+            throw new NotImplementedException();
         }
     }
 }
