@@ -28,5 +28,9 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             this.database = database;
         }
+        public string getDB()
+        {
+            return database;
+        }
     }
 }

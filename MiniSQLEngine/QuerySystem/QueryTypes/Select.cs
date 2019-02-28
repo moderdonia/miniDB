@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Select : SQLtype
-    {
-        public string table { get; set; }
-        public string[] attb { get; set; }         //columns
-        public string[] conds { get; set; }    //where
+        public class Select : SQLtype
+        {
+        private string table;
+        private string[] attb;         //columns
+        private string[] conds;    //where
 
         public override string Execute(DB database)
         {
@@ -23,6 +23,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.table = table;
             this.attb = attb;
             this.conds = conds;
+        }
+        public string getTabla()
+        {
+            return table;
         }
     }
 }

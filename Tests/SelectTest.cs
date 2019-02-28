@@ -14,12 +14,13 @@ namespace Tests
         public void Select()
         {
             SQLParser par = new SQLParser();
-            SQLtype sbres = par.parser("SELECT * FROM table1;");
+            Select sbres = (Select)par.Parser("SELECT * FROM table1;");
             string[] a = new string[2];
             a[0] = "*";
             Select sel = new Select("table1", a, null);
-            Assert.AreEqual(sbres., sel.GetType());
-            
+            Assert.AreEqual(sbres.GetType(), sel.GetType());
+
+            Assert.AreEqual(sbres.getTabla(),sel.getTabla());
            // SQLtype a = new Select(null,null,null);
            // Select b = new Select(null,null,null);
            // Assert.AreEqual(a.GetType().ToString(), b.GetType());

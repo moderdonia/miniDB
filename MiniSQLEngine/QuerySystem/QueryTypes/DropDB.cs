@@ -21,5 +21,9 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             throw new NotImplementedException();
         }
+        public string getDB()
+        {
+            return database;
+        }
     }
 }

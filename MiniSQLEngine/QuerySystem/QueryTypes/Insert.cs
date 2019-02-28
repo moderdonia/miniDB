@@ -25,5 +25,17 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.attb = attb;
             this.values = values;
         }
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getAttb()
+        {
+            return attb;
+        }
+        public string[] getValues()
+        {
+            return values;
+        }
     }
 }

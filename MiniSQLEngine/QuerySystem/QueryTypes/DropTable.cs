@@ -20,5 +20,9 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             this.table = table;
         }
+        public string getTabla()
+        {
+            return table;
+        }
     }
 }
