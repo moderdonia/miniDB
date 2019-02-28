@@ -8,9 +8,9 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
     class Select : SQLtype
     {
-        private string table;
-        private string[] attb;         //columns
-        private string[] conds;    //where
+        public string table { get; set; }
+        public string[] attb { get; set; }         //columns
+        public string[] conds { get; set; }    //where
 
         public override string Execute(DB database)
         {
