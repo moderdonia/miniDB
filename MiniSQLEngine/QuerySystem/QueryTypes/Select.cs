@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Select : SQLtype
-    {
+        public class Select : SQLtype
+        {
         private string table;
         private string[] attb;         //columns
         private string[] conds;    //where
@@ -23,6 +23,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.table = table;
             this.attb = attb;
             this.conds = conds;
+        }
+        public string getTabla()
+        {
+            return table;
         }
     }
 }

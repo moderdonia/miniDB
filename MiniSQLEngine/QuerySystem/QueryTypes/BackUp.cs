@@ -21,5 +21,13 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.database = database;
             this.filepath = filepath;
         }
+        public string getDB()
+        {
+            return database;
+        }
+        public string getFile()
+        {
+            return filepath;
+        }
     }
 }

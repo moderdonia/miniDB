@@ -15,11 +15,11 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory("../../SGBD/"+database);
             if (di.Exists)
             {
-                return false;
+                return null;
             }
             else
             {
-                return true;
+                return null;
             }
         
         }
@@ -27,6 +27,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public CreateDB(string database)
         {
             this.database = database;
+        }
+        public string getDB()
+        {
+            return database;
         }
     }
 }

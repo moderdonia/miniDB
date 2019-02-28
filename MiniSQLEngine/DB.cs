@@ -10,7 +10,7 @@ namespace MiniSQLEngine
 {
     public class DB
     {
-        Hashtable ht;
+        private Hashtable ht;
 
         string name;
 
@@ -27,5 +27,6 @@ namespace MiniSQLEngine
             SQLtype sqltype = sqlparser.Parser(query);
             return sqltype.Execute(this);
         }
+        
     }
 }

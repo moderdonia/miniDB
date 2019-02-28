@@ -23,5 +23,14 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             //this.database = database;
             this.conds = conds;
         }
+
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getCond()
+        {
+            return conds;
+        }
     }
 }
