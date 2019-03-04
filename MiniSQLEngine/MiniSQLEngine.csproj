@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB.cs" />
+    <Compile Include="Messages.cs" />
     <Compile Include="QuerySystem\QueryTypes\BackUp.cs" />
     <Compile Include="QuerySystem\QueryTypes\CreateDB.cs" />
     <Compile Include="QuerySystem\QueryTypes\CreateTable.cs" />

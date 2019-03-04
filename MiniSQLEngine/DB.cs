@@ -10,16 +10,9 @@ namespace MiniSQLEngine
 {
     public class DB
     {
-        private Hashtable ht;
-
+        //private Dictionary<string,string> db;
+        private Hashtable db;
         string name;
-
-        public DB(string name)
-        {
-            ht = new Hashtable();
-
-            this.name = name;
-        }
 
         public string runQuery(string query)
         {
@@ -27,6 +20,46 @@ namespace MiniSQLEngine
             SQLtype sqltype = sqlparser.Parser(query);
             return sqltype.Execute(this);
         }
+
+        public DB(string name)
+        {
+            db = new Hashtable();
+
+            this.name = name;
+        }
+
+        public string addtable(string name, string[] attbs)
+        {
+            Hashtable table = new Hashtable();
+            foreach (string s in attbs)
+            {
+
+                List<string> list = new List<string>();
+                table.Add(s,list);
+
+            }
+                
+            db.Add(name, table);
+            return Messages.CreateTableSuccess;
+        }
+        public string insertData(string name, string[] data)
+        {
+            if (db.ContainsKey(name))
+            {
+                int i = 0;
+                foreach(string s in ((Hashtable) db[name]).Keys)
+                {
+                    ((List<string>)((Hashtable)db[name])[s]).Add(data[i]);
+                    i++;   
+                }
+            }
+            else
+            {
+                return "cannot insert data";
+            }
+            return "data inserted correctly";
+        }
+        
         
     }
 }
