@@ -10,15 +10,15 @@ namespace MiniSQLEngine.QuerySystem
     class Table
     {
         string name;
-        Dictionary<string,List<Column>> dc;
+        Dictionary<string,List<string>> dc;
 
         public Table(string name, List<Column> cols)
         {
             this.name = name;
             foreach (Column s in cols)
             {
-               // List<s.type> list = new List<>();
-              //  dc.Add(s.name, list);
+                List<string> list = new List<string>();
+                dc.Add(s.name, list);
                 
             } 
             

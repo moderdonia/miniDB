@@ -11,7 +11,7 @@ namespace MiniSQLEngine
 {
     public class DB
     {
-        //private Dictionary<string,string> db;
+        //private Dictionary<string,Table> db;
         private Hashtable db;
         string name;
 
@@ -33,8 +33,8 @@ namespace MiniSQLEngine
         {
             List<Column> listcol = attbs.OfType<Column>().ToList();
             
-          //  Table table = new Table(name,attbs);   
-          //  db.Add(name, table);
+            Table table = new Table(name,listcol);   
+            db.Add(name, table);
             return Messages.CreateTableSuccess;
         }
         public string insertData(string name, string[] data)
@@ -68,9 +68,22 @@ namespace MiniSQLEngine
             }
             
         }
-        public string Select(string table, Column[] c)
+        public string exeSelect(string pTable, Column[] cols,string[] conds)
         {
-            return null;
+            if (db.ContainsKey(pTable))
+            {
+                Table table = (Table) db[pTable];
+                foreach (Column s in cols)
+                {
+                    
+                }
+            }
+            else
+            {
+                return Messages.TableDoesNotExist;
+            }
+
+                return null;
         }
         
         
