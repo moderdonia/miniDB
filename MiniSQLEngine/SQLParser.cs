@@ -26,10 +26,10 @@ namespace MiniSQLEngine
             string select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
 
             //Insert
-            string insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\((\w+)\);"; //CON TODOS SUS VALUES(1)
-            string insert2 = @"INSERT\s + INTO\s + (\w +)\s + VALUES\s +\(*(\w +)(\,\s + (\w +))+\);"; //(CON TODOS SUS VALUES(+1))
-            string insert3 = @"INSERT\s + INTO\s + (\w +)\s +\((\w +)\)\s + VALUES\s +\((\w +)\);"; //(CON UN VALUE)
-            string insert4 = @"INSERT\s + INTO\s + (\w +)\s +\((\w +)(\,\s + (\w +))+\)\s + VALUES\s +\((\w +)(\,\s + (\w +))+\);"; //(completa)
+            string insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //CON TODOS SUS VALUES(1)
+            string insert2 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(*([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(CON TODOS SUS VALUES(+1))
+            string insert3 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)\)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //(CON UN VALUE)
+            string insert4 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)(\,\s+(\w+))+\)\s+VALUES\s+\(([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(completa)
 
             //Delete
             string delete = @"DELETE\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
@@ -66,8 +66,8 @@ namespace MiniSQLEngine
             if (matchcreate1.Success)
             {
                 ct1 = matchcreate1.Groups[1].Value;
-                ct2[0].nombre = matchcreate1.Groups[2].Value;
-                ct2[0].tipo = matchcreate1.Groups[2].Value;
+                ct2[0].name = matchcreate1.Groups[2].Value;
+                ct2[0].type = matchcreate1.Groups[2].Value;
 
                 SQLtype sentencia = new CreateTable(ct1, ct2);
 
@@ -77,13 +77,13 @@ namespace MiniSQLEngine
             else if (matchcreate2.Success)
             {
                 ct1 = matchcreate2.Groups[1].Value;
-                ct2[0].nombre = matchcreate2.Groups[2].Value;
-                ct2[0].tipo = matchcreate2.Groups[2].Value;
+                ct2[0].name = matchcreate2.Groups[2].Value;
+                ct2[0].type = matchcreate2.Groups[2].Value;
 
                 for (int i = 0; i < matchcreate2.Groups[5].Length; i++)
                 {
-                    ct2[i + 1].nombre = matchcreate2.Groups[5].Captures[i].Value;
-                    ct2[i + 1].tipo = matchcreate2.Groups[6].Captures[i].Value;
+                    ct2[i + 1].name = matchcreate2.Groups[5].Captures[i].Value;
+                    ct2[i + 1].type = matchcreate2.Groups[6].Captures[i].Value;
                 }
 
                 SQLtype sentencia = new CreateTable(ct1, ct2);
