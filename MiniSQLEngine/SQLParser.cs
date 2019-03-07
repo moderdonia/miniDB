@@ -76,10 +76,17 @@ namespace MiniSQLEngine
             }
             else if (matchcreate2.Success)
             {
-                ct1 = matchcreate1.Groups[1].Value;
-                ct2 = matchcreate1.Groups[2].Value;
+                ct1 = matchcreate2.Groups[1].Value;
+                ct2[0].nombre = matchcreate2.Groups[2].Value;
+                ct2[0].tipo = matchcreate2.Groups[2].Value;
 
-                SQLtype sentencia = new BackUp(backupDB1, backupDB2);
+                for (int i = 0; i < matchcreate2.Groups[5].Length; i++)
+                {
+                    ct2[i + 1].nombre = matchcreate2.Groups[5].Captures[i].Value;
+                    ct2[i + 1].tipo = matchcreate2.Groups[6].Captures[i].Value;
+                }
+
+                SQLtype sentencia = new CreateTable(ct1, ct2);
 
                 return sentencia;
             }
@@ -247,7 +254,7 @@ namespace MiniSQLEngine
                 camp1[0] = matchS5.Groups[1].Value;
                 for (int i = 0; i < matchS5.Groups[3].Length; i++)
                 {
-                    camp1[1] = matchS5.Groups[3].Captures[i].Value;
+                    camp1[i+1] = matchS5.Groups[3].Captures[i].Value;
 
                 }
                 camp2 = matchS5.Groups[4].Value;
@@ -262,7 +269,7 @@ namespace MiniSQLEngine
                 camp1[0] = matchS6.Groups[1].Value;
                 for (int i = 0; i < matchS6.Groups[3].Length; i++)
                 {
-                    camp1[1] = matchS6.Groups[3].Captures[i].Value;
+                    camp1[i+1] = matchS6.Groups[3].Captures[i].Value;
 
                 }
                 camp2 = matchS6.Groups[4].Value;
@@ -335,7 +342,7 @@ namespace MiniSQLEngine
                 cinsert3[0] = matchI2.Groups[2].Value;
                 for (int i = 0; i < matchI2.Groups[4].Length; i++)
                 {
-                    cinsert3[1] = matchI2.Groups[4].Captures[i].Value;
+                    cinsert3[i+1] = matchI2.Groups[4].Captures[i].Value;
 
                 }
 
@@ -359,13 +366,13 @@ namespace MiniSQLEngine
                 cinsert3[0] = matchI4.Groups[5].Value;
                 for (int i = 0; i < matchI4.Groups[7].Length; i++)
                 {
-                    cinsert3[1] = matchI4.Groups[7].Captures[i].Value;
+                    cinsert3[i+1] = matchI4.Groups[7].Captures[i].Value;
 
                 }
                 cinsert2[0] = matchI4.Groups[2].Value;
                 for (int i = 0; i < matchI4.Groups[4].Length; i++)
                 {
-                    cinsert2[1] = matchI4.Groups[4].Captures[i].Value;
+                    cinsert2[i+1] = matchI4.Groups[4].Captures[i].Value;
 
                 }
 
