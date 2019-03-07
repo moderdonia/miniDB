@@ -9,14 +9,14 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     class CreateTable : SQLtype
     {
         private string table;
-        private string[] attb;
+        private Column[] attb;
 
         public override string Execute(DB database)
         {
             return database.addtable(table, attb);
         }
 
-        public CreateTable(string table, string[] attb)
+        public CreateTable(string table, Column[] attb)
         {
             this.table = table;
             this.attb = attb;
@@ -26,7 +26,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             return table;
         }
-        public string[] getAttb()
+        public Column[] getAttb()
         {
             return attb;
         }

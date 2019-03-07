@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiniSQLEngine.QuerySystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +29,10 @@ namespace MiniSQLEngine
             this.name = name;
         }
 
-        public string addtable(string name, string[] attbs)
+        public string addtable(string name, Column[] attbs)
         {
             Hashtable table = new Hashtable();
-            foreach (string s in attbs)
+            foreach (Column s in attbs)
             {
 
                 List<string> list = new List<string>();
