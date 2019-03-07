@@ -1,4 +1,5 @@
-﻿using MiniSQLEngine.QuerySystem.QueryTypes;
+﻿using MiniSQLEngine.QuerySystem;
+using MiniSQLEngine.QuerySystem.QueryTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,33 @@ namespace MiniSQLEngine
             string createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
 
             //CREATE TABLE
+
+            Column[] ct2 = new Column[10];
+            string ct1 = "";
+
+            Match matchcreate1 = Regex.Match(query, createTable1);
+            Match matchcreate2 = Regex.Match(query, createTable2);
+
+            if (matchcreate1.Success)
+            {
+                ct1 = matchcreate1.Groups[1].Value;
+                ct2[0].nombre = matchcreate1.Groups[2].Value;
+                ct2[0].tipo = matchcreate1.Groups[2].Value;
+
+                SQLtype sentencia = new CreateTable(ct1, ct2);
+
+                return sentencia;
+
+            }
+            else if (matchcreate2.Success)
+            {
+                ct1 = matchcreate1.Groups[1].Value;
+                ct2 = matchcreate1.Groups[2].Value;
+
+                SQLtype sentencia = new BackUp(backupDB1, backupDB2);
+
+                return sentencia;
+            }
 
 
 
