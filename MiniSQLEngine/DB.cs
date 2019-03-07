@@ -31,16 +31,10 @@ namespace MiniSQLEngine
 
         public string addtable(string name, Column[] attbs)
         {
-            Hashtable table = new Hashtable();
-            foreach (Column s in attbs)
-            {
-
-                List<string> list = new List<string>();
-                table.Add(s,list);
-
-            }
-                
-            db.Add(name, table);
+            List<Column> listcol = attbs.OfType<Column>().ToList();
+            
+          //  Table table = new Table(name,attbs);   
+          //  db.Add(name, table);
             return Messages.CreateTableSuccess;
         }
         public string insertData(string name, string[] data)
@@ -53,12 +47,30 @@ namespace MiniSQLEngine
                     ((List<string>)((Hashtable)db[name])[s]).Add(data[i]);
                     i++;   
                 }
+                return Messages.InsertSuccess;
             }
             else
             {
-                return "cannot insert data";
+                return Messages.TableDoesNotExist;
             }
-            return "data inserted correctly";
+        }
+        public string deleteTable(string table)
+        {
+            if (db.ContainsKey(table))
+            {
+                db.Remove(table);
+                return Messages.DeleteTableSuccess;
+
+            }
+            else
+            {
+                return Messages.TableDoesNotExist;
+            }
+            
+        }
+        public string Select(string table, Column[] c)
+        {
+            return null;
         }
         
         

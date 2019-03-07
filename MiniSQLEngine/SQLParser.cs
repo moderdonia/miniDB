@@ -66,8 +66,8 @@ namespace MiniSQLEngine
             if (matchcreate1.Success)
             {
                 ct1 = matchcreate1.Groups[1].Value;
-                ct2[0].nombre = matchcreate1.Groups[2].Value;
-                ct2[0].tipo = matchcreate1.Groups[2].Value;
+     //           ct2[0].nombre = matchcreate1.Groups[2].Value;
+    //            ct2[0].tipo = matchcreate1.Groups[2].Value;
 
                 SQLtype sentencia = new CreateTable(ct1, ct2);
 
@@ -77,11 +77,12 @@ namespace MiniSQLEngine
             else if (matchcreate2.Success)
             {
                 ct1 = matchcreate1.Groups[1].Value;
-                ct2 = matchcreate1.Groups[2].Value;
+                //        ct2 = matchcreate1.Groups[2].Value;
 
-                SQLtype sentencia = new BackUp(backupDB1, backupDB2);
+                //        SQLtype sentencia = new BackUp(backupDB1, backupDB2);
 
-                return sentencia;
+                //       return sentencia;
+                return null;
             }
 
 

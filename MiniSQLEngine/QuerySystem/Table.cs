@@ -9,16 +9,16 @@ namespace MiniSQLEngine.QuerySystem
 {
     class Table
     {
-        SQLtype sql;
         string name;
-        Dictionary<string,List<string>> dc;
+        Dictionary<string,List<Column>> dc;
 
-        public Table(string name, List<string> list)
+        public Table(string name, List<Column> cols)
         {
             this.name = name;
-            foreach (string s in list)
+            foreach (Column s in cols)
             {
-                dc.Add(s, new List<string>());
+               // List<s.type> list = new List<>();
+              //  dc.Add(s.name, list);
                 
             } 
             

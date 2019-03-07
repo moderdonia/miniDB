@@ -16,6 +16,7 @@ namespace MiniSQLEngine
         public const string InsertSuccess = "Tuple added";
         public const string TupleDeleteSuccess = "Tuple(s) deleted";
         public const string TupleUpdateSuccess = "Tuple(s) updated";
+        public const string DeleteTableSuccess =  "Table deleted";
 
         public const string Error = "ERROR: ";
 
