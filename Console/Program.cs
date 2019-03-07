@@ -10,10 +10,14 @@ namespace Programa
         static void Main(string[] args)
         {
             DB db = new DB("db1");
-            string val;
-            Console.WriteLine("Inserte Sentencia:");
-            val = Console.ReadLine();
-            db.runQuery(val);
+            //string val;
+            //Console.WriteLine("Inserte Sentencia:");
+            //val = Console.ReadLine();
+            //db.runQuery(val);
+            System.IO.StreamReader file= new System.IO.StreamReader();  
+            while(){
+                    
+            }
         }
     }
 }
