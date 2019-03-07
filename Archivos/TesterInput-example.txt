@@ -1,0 +1,18 @@
+CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
+INSERT INTO MyTable VALUES ('Eva',18,'Calle Los Herran 16 2 Derecha. 01005 Vitoria-Gasteiz');
+INSERT INTO MyTable VALUES ('Ramon',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+DELETE FROM MyTable WHERE Age=18;
+SELECT Name,Age FROM MyTable;
+
+CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
+INSERT INTO MyTable VALUES ('Eva',18,'Calle Los Herran 16 2 Derecha. 01005 Vitoria-Gasteiz');
+INSERT INTO MyTable VALUES ('Ramon',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+SELECT Name,Age FROM MyTable WHERE Age=18;
+
+CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
+INSERT INTO MyTable2 VALUES ('Eva',18,'Calle Los Herran 16 2 Derecha. 01005 Vitoria-Gasteiz');
+INSERT INTO MyTable VALUES ('Ramon',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren',26,'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+SELECT Name,Age FROM MyTable WHERE Age=18;
