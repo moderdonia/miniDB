@@ -19,16 +19,16 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public CreateTable(string table, Column[] column)
         {
             this.table = table;
-            this.attb = attb;
+            this.column = column;
 
         }
         public string getTabla()
         {
             return table;
         }
-        public string[] getAttb()
+        public Column[] getColumn()
         {
-            return attb;
+            return column;
         }
     }
 }
