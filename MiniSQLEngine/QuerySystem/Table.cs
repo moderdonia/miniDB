@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem
 {
-    class Table
+    public class Table
     {
         string name;
-        Dictionary<string,List<string>> dc;
+        Dictionary<string, List<string>> dc;
 
         public Table(string name, List<Column> cols)
         {
@@ -22,6 +22,14 @@ namespace MiniSQLEngine.QuerySystem
                 
             } 
             
+        }
+        public string getName()
+        {
+            return name;
+        }
+        public Dictionary<string, List<string>> getTable()
+        {
+            return dc;
         }
     }
 }
