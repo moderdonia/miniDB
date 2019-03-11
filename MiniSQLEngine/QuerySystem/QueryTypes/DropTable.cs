@@ -13,7 +13,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.dropTable(table);
         }
 
         public DropTable(string table)

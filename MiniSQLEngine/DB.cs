@@ -55,7 +55,7 @@ namespace MiniSQLEngine
                 return Messages.TableDoesNotExist;
             }
         }
-        public string deleteTable(string table)
+        public string dropTable(string table)
         {
             if (db.ContainsKey(table))
             {
@@ -67,19 +67,51 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-            
         }
+
+        public string deleteTuple(Table pTable, string[] conds)
+        {
+            prepareConditions(pTable, conds);
+            for(int i=0; i < condsIndex.Count ;i=+2)
+            {
+                if (pTable.getTable().ContainsKey(conds[i]))
+                {
+                    foreach (int x in condsIndex)
+                    {
+                        pTable.getTable()[conds[i]].RemoveAt(x);
+                    }
+                }
+            }
+            if (db.ContainsKey(pTable))
+            {
+                if (pTable.getTable().ContainsKey(s.name))
+                {
+
+                }
+                else
+                {
+                    return Messages.ColumnDoesNotExist;
+                }
+            }
+            else
+            {
+                return Messages.TableDoesNotExist;
+            }
+                return Messages.TupleDeleteSuccess;
+        }
+
         public string exeSelect(string pTable, Column[] cols,string[] conds)
         {
             if (db.ContainsKey(pTable))
             {
                 Table table = (Table)db[pTable];
                 string[]  OutPut = new string[cols.Length];
+                string sk = "";
+                int skIndex = 0;
 
                 if (conds is null)
                 {
-                    string sk = "";
-                    int skIndex = 0;
+                    
                     bool ctrl = true;
 
                     foreach (Column s in cols)
@@ -119,9 +151,15 @@ namespace MiniSQLEngine
                     prepareConditions(table,conds);
                     foreach (Column s in cols)
                     {
+                        skIndex = 0;
+
                         if (table.getTable().ContainsKey(s.name))   //pendiente
                         {
-                            
+                            foreach(int i in condsIndex)
+                            {
+                                OutPut[skIndex] = table.getTable()[s.name][i];
+                                skIndex++;
+                            }
                         }
                         else
                         {
@@ -138,6 +176,9 @@ namespace MiniSQLEngine
 
         } 
         
+
+        //Internal Methods
+
         private void prepareConditions(Table table ,string[] conds)
         {
             for (int condsCols = 0; condsCols + 1 < conds.Length; condsCols += 2)

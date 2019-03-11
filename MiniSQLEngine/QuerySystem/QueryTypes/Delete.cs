@@ -8,13 +8,13 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
     class Delete : SQLtype
     {
-        private string table;
+        private Table table;
         //private string database;
         private string[] conds;    //where
 
         public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.deleteTuple(table,conds);
         }
 
         public Delete(string table, string[] conds)
