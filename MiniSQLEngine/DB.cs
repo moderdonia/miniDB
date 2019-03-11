@@ -15,6 +15,7 @@ namespace MiniSQLEngine
         private Hashtable db;
         string name;
         List<int> condsIndex = new List<int>();
+        List<Column> listColAux = new List<Column>();
 
         public string runQuery(string query)
         {
@@ -30,12 +31,12 @@ namespace MiniSQLEngine
             this.name = name;
         }
 
-        public string addtable(string name, Column[] attbs)
+        public string addtable(string name, string[] attbs)
         {
-            List<Column> listcol = attbs.OfType<Column>().ToList();
-            
-            Table table = new Table(name,listcol);   
+            prepareColumns(attbs);
+            Table table = new Table(name,listColAux);   
             db.Add(name, table);
+
             return Messages.CreateTableSuccess;
         }
         public string insertData(string name, string[] data)
@@ -69,39 +70,32 @@ namespace MiniSQLEngine
             }
         }
 
-        public string deleteTuple(Table pTable, string[] conds)
+        public string deleteTuple(string pTable, string[] conds)
         {
-            prepareConditions(pTable, conds);
+            Table table = (Table)db[pTable];
+
+            prepareConditions(table, conds);
             for(int i=0; i < condsIndex.Count ;i=+2)
             {
-                if (pTable.getTable().ContainsKey(conds[i]))
+                if (table.getTable().ContainsKey(conds[i]))
                 {
                     foreach (int x in condsIndex)
                     {
-                        pTable.getTable()[conds[i]].RemoveAt(x);
+                        table.getTable()[conds[i]].RemoveAt(x);
                     }
-                }
-            }
-            if (db.ContainsKey(pTable))
-            {
-                if (pTable.getTable().ContainsKey(s.name))
-                {
-
                 }
                 else
                 {
-                    return Messages.ColumnDoesNotExist;
+                    return Messages.TableDoesNotExist;
                 }
+                
             }
-            else
-            {
-                return Messages.TableDoesNotExist;
-            }
-                return Messages.TupleDeleteSuccess;
+            return Messages.TupleDeleteSuccess;
         }
 
-        public string exeSelect(string pTable, Column[] cols,string[] conds)
+        public string exeSelect(string pTable, string[] cols,string[] conds)
         {
+            prepareColumns(cols);
             if (db.ContainsKey(pTable))
             {
                 Table table = (Table)db[pTable];
@@ -114,7 +108,7 @@ namespace MiniSQLEngine
                     
                     bool ctrl = true;
 
-                    foreach (Column s in cols)
+                    foreach (Column s in listColAux)
                     {
                         skIndex = 0;
 
@@ -149,7 +143,7 @@ namespace MiniSQLEngine
                 else
                 {
                     prepareConditions(table,conds);
-                    foreach (Column s in cols)
+                    foreach (Column s in listColAux)
                     {
                         skIndex = 0;
 
@@ -178,7 +172,14 @@ namespace MiniSQLEngine
         
 
         //Internal Methods
-
+        private void prepareColumns(string[] cols)
+        {
+            foreach (string s in cols)
+            {
+                Column c = new Column(s, "string");
+                listColAux.Add(c);
+            }
+        }
         private void prepareConditions(Table table ,string[] conds)
         {
             for (int condsCols = 0; condsCols + 1 < conds.Length; condsCols += 2)

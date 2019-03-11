@@ -58,6 +58,7 @@ namespace MiniSQLEngine
             //CREATE TABLE
 
             Column[] ct2 = new Column[10];
+            string[] ct3 = new string[10];
             string ct1 = "";
 
             Match matchcreate1 = Regex.Match(query, createTable1);
@@ -66,10 +67,11 @@ namespace MiniSQLEngine
             if (matchcreate1.Success)
             {
                 ct1 = matchcreate1.Groups[1].Value;
+                ct3[0] = matchcreate1.Groups[2].Value;
                 ct2[0].name = matchcreate1.Groups[2].Value;
                 ct2[0].type = matchcreate1.Groups[2].Value;
 
-                SQLtype sentencia = new CreateTable(ct1, ct2);
+                SQLtype sentencia = new CreateTable(ct1, ct3); //tipos de momento sin implementar*
 
                 return sentencia;
 
@@ -77,16 +79,18 @@ namespace MiniSQLEngine
             else if (matchcreate2.Success)
             {
                 ct1 = matchcreate2.Groups[1].Value;
+                ct3[0] = matchcreate1.Groups[2].Value; //*
                 ct2[0].name = matchcreate2.Groups[2].Value;
                 ct2[0].type = matchcreate2.Groups[2].Value;
 
                 for (int i = 0; i < matchcreate2.Groups[5].Length; i++)
                 {
+                    ct3[i+1] = matchcreate2.Groups[5].Captures[i].Value; //*
                     ct2[i + 1].name = matchcreate2.Groups[5].Captures[i].Value;
                     ct2[i + 1].type = matchcreate2.Groups[6].Captures[i].Value;
                 }
 
-                SQLtype sentencia = new CreateTable(ct1, ct2);
+                SQLtype sentencia = new CreateTable(ct1, ct3);
 
                 //       return sentencia;
                 return null;

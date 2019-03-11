@@ -8,7 +8,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
     class Delete : SQLtype
     {
-        private Table table;
+        private string table;
         //private string database;
         private string[] conds;    //where
 
