@@ -47,6 +47,14 @@
   <ItemGroup>
     <Compile Include="SelectTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BackUpTest.cs" />
+    <Compile Include="CreateDBTest.cs" />
+    <Compile Include="CreateTableTest.cs" />
+    <Compile Include="DeleteTest.cs" />
+    <Compile Include="InsertTest.cs" />
+    <Compile Include="UpdateTest.cs" />
+    <Compile Include="DropDBTest.cs" />
+    <Compile Include="DropTableTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniSQLEngine\MiniSQLEngine.csproj">

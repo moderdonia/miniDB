@@ -13,7 +13,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         public override string Execute(DB database)
         {
-            return database.addtable(table, column);
+            return database.createTable(table, column);
         }
 
         public CreateTable(string table, string[] column)

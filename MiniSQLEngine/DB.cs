@@ -31,12 +31,11 @@ namespace MiniSQLEngine
             this.name = name;
         }
 
-        public string addtable(string name, string[] attbs)
+        public string createTable(string name, string[] attbs)
         {
             prepareColumns(attbs);
             Table table = new Table(name,listColAux);   
             db.Add(name, table);
-
             return Messages.CreateTableSuccess;
         }
         public string insertData(string name, string[] data)
