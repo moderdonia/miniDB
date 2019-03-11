@@ -1,22 +1,29 @@
 ﻿using MiniSQLEngine;
 using System;
-
+using System.Collections;
 
 namespace Programa
 {
     class Program
     {
-        
+
         static void Main(string[] args)
         {
             DB db = new DB("db1");
-            //string val;
+            
             //Console.WriteLine("Inserte Sentencia:");
             //val = Console.ReadLine();
-            //db.runQuery(val);
-            System.IO.StreamReader file= new System.IO.StreamReader();  
-            while(){
-                    
+            
+            string linea ="";
+            System.IO.StreamReader file = new System.IO.StreamReader(@"..\..\..\Archivos\TesterInput-example.txt");
+            
+            while (linea != null )
+            {
+                linea = file.ReadLine();
+                if (linea != "" && linea != null)
+                {
+                    Console.WriteLine(db.runQuery(linea));
+                }
             }
         }
     }
