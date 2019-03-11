@@ -1,6 +1,5 @@
 ﻿using MiniSQLEngine;
 using System;
-using System.Collections;
 
 namespace Programa
 {
@@ -11,7 +10,7 @@ namespace Programa
         {
             DB db = new DB("db1");
             
-            //Console.WriteLine("Inserte Sentencia:");
+           // Console.WriteLine(abc[0]);
             //val = Console.ReadLine();
             
             string linea ="";
