@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class BackUp : SQLtype
+    public class BackUp : SQLtype
     {
         private string database;
         private string filepath;

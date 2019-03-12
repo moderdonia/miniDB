@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Delete : SQLtype
+    public class Delete : SQLtype
     {
         private string table;
         //private string database;

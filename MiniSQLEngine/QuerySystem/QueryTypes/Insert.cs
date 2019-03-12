@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Insert : SQLtype
+    public class Insert : SQLtype
     {
         private string table;
         //private string database;

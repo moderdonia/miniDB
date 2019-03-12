@@ -335,7 +335,7 @@ namespace MiniSQLEngine
             if (Regex.Match(query, insert1).Success)
             {
                 cinsert1 = matchI1.Groups[1].Value;
-                cinsert3[0] = matchI1.Groups[2].Value;
+                //cinsert3[0] = matchI1.Groups[2].Value;
 
                 SQLtype sentencia = new Insert(cinsert1, cinsert2, cinsert3);
 
