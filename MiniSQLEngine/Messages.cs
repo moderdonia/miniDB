@@ -25,5 +25,7 @@ namespace MiniSQLEngine
         public const string TableDoesNotExist = Error + "Table does not exist";
         public const string ColumnDoesNotExist = Error + "Column does not exist";
         public const string IncorrectDataType = Error + "Incorrect data type";
+        public const string DatabaseExist = "Database is allready created";
+        public const string TableExist = "Table is allready created";
     }
 }

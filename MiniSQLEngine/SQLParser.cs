@@ -83,7 +83,7 @@ namespace MiniSQLEngine
                 //ct2[0].name = matchcreate2.Groups[2].Value;
                 //ct2[0].type = matchcreate2.Groups[2].Value;
 
-                for (int i = 0; i <= matchcreate2.Groups[5].Length; i++)
+                for (int i = 0; i < matchcreate2.Groups[5].Captures.Count; i++)
                 {
                     ct3[i+1] = matchcreate2.Groups[5].Captures[i].Value; //*
                     /*ct2[i + 1].name = matchcreate2.Groups[5].Captures[i].Value;
@@ -92,8 +92,8 @@ namespace MiniSQLEngine
 
                 SQLtype sentencia = new CreateTable(ct1, ct3);
 
-                //       return sentencia;
-                return null;
+                return sentencia;
+                
             }
 
 
@@ -257,7 +257,7 @@ namespace MiniSQLEngine
                 //Console.WriteLine(matchS5.Groups[2].Captures[1].Value);
 
                 camp1[0] = matchS5.Groups[1].Value;
-                for (int i = 0; i < matchS5.Groups[3].Length; i++)
+                for (int i = 0; i < matchS5.Groups[3].Captures.Count; i++)
                 {
                     camp1[i+1] = matchS5.Groups[3].Captures[i].Value;
 
@@ -272,7 +272,7 @@ namespace MiniSQLEngine
             {
 
                 camp1[0] = matchS6.Groups[1].Value;
-                for (int i = 0; i < matchS6.Groups[3].Length; i++)
+                for (int i = 0; i < matchS6.Groups[3].Captures.Count; i+=5)
                 {
                     camp1[i+1] = matchS6.Groups[3].Captures[i].Value;
 
@@ -280,7 +280,7 @@ namespace MiniSQLEngine
                 camp2 = matchS6.Groups[4].Value;
                 camp3[0] = matchS6.Groups[5].Value;
                 camp3[1] = matchS6.Groups[6].Value;
-                camp3[2] = matchS6.Groups[7].Value;
+                camp3[2] = matchS6.Groups[7].Value;  
 
                 SQLtype sentencia = new Select(camp2, camp1, camp3);
 
@@ -324,8 +324,8 @@ namespace MiniSQLEngine
             //Insert 
 
             string cinsert1;
-            string[] cinsert2 = null;
-            string[] cinsert3 = null;
+            string[] cinsert2 = new string[10];
+            string[] cinsert3 = new string[10];
 
             Match matchI1 = Regex.Match(query, insert1);
             Match matchI2 = Regex.Match(query, insert2);
@@ -345,7 +345,7 @@ namespace MiniSQLEngine
             {
                 cinsert1 = matchI2.Groups[1].Value;
                 cinsert3[0] = matchI2.Groups[2].Value;
-                for (int i = 0; i < matchI2.Groups[4].Length; i++)
+                for (int i = 0; i < matchI2.Groups[4].Captures.Count; i++)
                 {
                     cinsert3[i+1] = matchI2.Groups[4].Captures[i].Value;
 
@@ -369,13 +369,13 @@ namespace MiniSQLEngine
             {
                 cinsert1 = matchI4.Groups[1].Value;
                 cinsert3[0] = matchI4.Groups[5].Value;
-                for (int i = 0; i < matchI4.Groups[7].Length; i++)
+                for (int i = 0; i < matchI4.Groups[7].Captures.Count; i++)
                 {
                     cinsert3[i+1] = matchI4.Groups[7].Captures[i].Value;
 
                 }
                 cinsert2[0] = matchI4.Groups[2].Value;
-                for (int i = 0; i < matchI4.Groups[4].Length; i++)
+                for (int i = 0; i < matchI4.Groups[4].Captures.Count; i++)
                 {
                     cinsert2[i+1] = matchI4.Groups[4].Captures[i].Value;
 

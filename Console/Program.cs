@@ -24,6 +24,7 @@ namespace Programa
                     Console.WriteLine(db.runQuery(linea));
                 }
             }
+            Console.WriteLine("Querys Finished");
         }
     }
 }

@@ -11,22 +11,31 @@ namespace MiniSQLEngine
 {
     public class DB
     {
-        //private Dictionary<string,Table> db;
-        private Hashtable db;
+        private Dictionary<string,Table> db;
+        //private Hashtable db;
         string name;
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
+        
 
         public string runQuery(string query)
         {
             SQLParser sqlparser = new SQLParser();
             SQLtype sqltype = sqlparser.Parser(query);
-            return sqltype.Execute(this);
+            if(!(sqltype is null))
+            {
+                return sqltype.Execute(this);
+            }
+            else
+            {
+                return "Some issues happens";
+            }
+
         }
 
         public DB(string name)
         {
-            db = new Hashtable();
+            db = new Dictionary<string, Table>();
 
             this.name = name;
         }
@@ -34,18 +43,26 @@ namespace MiniSQLEngine
         public string createTable(string name, string[] attbs)
         {
             prepareColumns(attbs);
-            Table table = new Table(name,listColAux);   
-            db.Add(name, table);
-            return Messages.CreateTableSuccess;
+            Table table = new Table(name,listColAux);
+            if (!db.ContainsKey(name))
+            {
+                db.Add(name, table);
+                return Messages.CreateTableSuccess;
+            }
+            else
+            {
+                return Messages.DatabaseExist;
+            }
+            
         }
         public string insertData(string name, string[] data)
         {
             if (db.ContainsKey(name))
             {
                 int i = 0;
-                foreach(string s in ((Hashtable) db[name]).Keys)
+                foreach(string s in db[name].getTable().Keys)
                 {
-                    ((List<string>)((Hashtable)db[name])[s]).Add(data[i]);
+                    db[name].getTable()[s].Add(data[i]);
                     i++;   
                 }
                 return Messages.InsertSuccess;
@@ -71,16 +88,20 @@ namespace MiniSQLEngine
 
         public string deleteTuple(string pTable, string[] conds)
         {
-            Table table = (Table)db[pTable];
+            Table table = db[pTable];
 
             prepareConditions(table, conds);
-            for(int i=0; i < condsIndex.Count ;i=+2)
+            for(int i=0; i < condsIndex.Count ;i=+3)
             {
                 if (table.getTable().ContainsKey(conds[i]))
                 {
                     foreach (int x in condsIndex)
                     {
-                        table.getTable()[conds[i]].RemoveAt(x);
+                        foreach(List<string> h in table.getTable().Values)
+                        {
+                            h.RemoveAt(x);
+                        }
+                        
                     }
                 }
                 else
@@ -98,74 +119,83 @@ namespace MiniSQLEngine
             if (db.ContainsKey(pTable))
             {
                 Table table = (Table)db[pTable];
-                string[]  OutPut = new string[cols.Length];
+                //string[]  OutPut = new string[cols.Length];
                 string sk = "";
-                int skIndex = 0;
+                //int skIndex = 0;
 
-                if (conds is null)
+                if (conds.Count() > 0)
                 {
                     
-                    bool ctrl = true;
+                   // bool ctrl = true;
 
                     foreach (Column s in listColAux)
                     {
-                        skIndex = 0;
-
-                        if (table.getTable().ContainsKey(s.name))
+                        if (!(s.name is null))
                         {
-                            if (ctrl)
+                            //skIndex = 0;
+                            sk += "\n" + s.name + " : ";
+
+                            if (table.getTable().ContainsKey(s.name))
                             {
-                                sk = s.name + "\n";
-                                ctrl = false;
                                 foreach (string t in table.getTable()[s.name])
                                 {
-                                    sk += table.getTable()[s.name][skIndex];
-                                    OutPut[skIndex] = sk;
-                                    skIndex++;
+                                    sk += "| " + t + " |";
+                                    //skIndex++;
                                 }
+                                //if (ctrl)
+                                //{
+                                //sk = s.name + "\n";
+                                //ctrl = false;
+                                //}
+                                //else
+                                //{
+                                //    foreach (string t in table.getTable()[s.name])
+                                //    {
+                                //       OutPut[skIndex] += " " + table.getTable()[s.name][skIndex];
+                                //        skIndex++;
+                                //    }
+                                // }
                             }
                             else
                             {
-                                foreach (string t in table.getTable()[s.name])
-                                {
-                                    OutPut[skIndex] += " " + table.getTable()[s.name][skIndex];
-                                    skIndex++;
-                                }
+                                return Messages.ColumnDoesNotExist + " " + s.name; //saca error aun quitando correctamente los datos
                             }
-                        }
-                        else
-                        {
-                            return Messages.ColumnDoesNotExist + " " + s.name;
                         }
                     }
                 }
                 else
                 {
                     prepareConditions(table,conds);
-                    foreach (Column s in listColAux)
-                    {
-                        skIndex = 0;
+                    foreach (Column s in listColAux) //se crean demasiados espacios nulos
+                    {   
+                        if(!(s.name is null))
+                        {
+                            sk += "\n" + s.name + " : ";
+                            //skIndex = 0;
 
-                        if (table.getTable().ContainsKey(s.name))   //pendiente
-                        {
-                            foreach(int i in condsIndex)
+                            if (table.getTable().ContainsKey(s.name))   //pendiente
                             {
-                                OutPut[skIndex] = table.getTable()[s.name][i];
-                                skIndex++;
+                                foreach (int i in condsIndex)
+                                {
+                                    sk += "| " + table.getTable()[s.name][i] + " |";
+                                   //skIndex++;
+                                }
                             }
-                        }
-                        else
-                        {
-                            return Messages.ColumnDoesNotExist + " " + s.name;
-                        }
+                            else
+                            {
+                                return Messages.ColumnDoesNotExist + " " + s.name;
+                            }
+                        }    
                     }
                 }
+                sk += "\n";
+                return sk;
             }
             else
             {
                 return Messages.TableDoesNotExist;
             }
-            return null;
+            
 
         } 
         
@@ -173,6 +203,7 @@ namespace MiniSQLEngine
         //Internal Methods
         private void prepareColumns(string[] cols)
         {
+            listColAux.Clear();
             foreach (string s in cols)
             {
                 Column c = new Column(s, "string");
@@ -181,27 +212,34 @@ namespace MiniSQLEngine
         }
         private void prepareConditions(Table table ,string[] conds)
         {
+            condsIndex.Clear();
+
             for (int condsCols = 0; condsCols + 1 < conds.Length; condsCols += 2)
             {
-                string s = conds[condsCols];
-
-                if (table.getTable().ContainsKey(s))
+                if(!(conds[condsCols] is null))
                 {
-                    if (table.getTable()[s].Contains(conds[condsCols + 1]))
+                    string s = conds[condsCols];
+
+                    if (table.getTable().ContainsKey(s))
                     {
-                        for (int i = 0; i < table.getTable()[s].Count(); i++)   //sacar todas las coincidencias con la condicion dada REVISAR
+                        if (table.getTable()[s].Contains(conds[condsCols + 2]))
                         {
-                            if (table.getTable()[s][i].Equals(conds[condsCols + 1]))
+                            for (int i = 0; i < table.getTable()[s].Count(); i++)   //REVISAR
                             {
-                                condsIndex.Add(i);
+                                if (table.getTable()[s][i].Equals(conds[condsCols + 2]))
+                                {
+                                    
+                                    condsIndex.Add(i);
+                                }
                             }
                         }
-                    }                   
+                    }
+                    else
+                    {
+                        Console.WriteLine(Messages.ColumnDoesNotExist + " " + s);
+                    }
                 }
-                else
-                {
-                     Console.WriteLine(Messages.ColumnDoesNotExist + " " + s);
-                }
+                
             }
         }
     }
