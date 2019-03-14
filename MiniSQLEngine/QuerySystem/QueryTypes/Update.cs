@@ -15,7 +15,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.exeUpdate(table,attb,conds);
         }
 
         public Update(string table, string[] attb, string[] conds)

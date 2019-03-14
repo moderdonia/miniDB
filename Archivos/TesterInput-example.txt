@@ -48,7 +48,7 @@ INSERT INTO Employees VALUES (3, 'Benito', 'Kamelas', 1100);
 INSERT INTO Employees VALUES (4, 'Maria', 'Langostino', 1200);
 SELECT Id FROM Employees WHERE Salary>1150;
 UPDATE Employees SET Salary=1050 WHERE Id=2;
-SELECT Id FROM Employees WHERE Salary>1150;
+SELECT Id FROM Employees WHERE Salary=1050;
 DELETE FROM Employees WHERE Salary<1100;
 SELECT Id FROM Employees WHERE Salary<1100;
 

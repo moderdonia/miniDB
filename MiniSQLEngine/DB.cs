@@ -55,7 +55,7 @@ namespace MiniSQLEngine
             }
             
         }
-        public string insertData(string name, string[] data)
+        public string insertData(string name, string[] data) //name = table , data = values
         {
             if (db.ContainsKey(name))
             {
@@ -112,13 +112,85 @@ namespace MiniSQLEngine
             }
             return Messages.TupleDeleteSuccess;
         }
+        public string exeUpdate(string pTable, string[] cols,string[] conds)
+        {
+            prepareColumns(cols);
+
+            if (db.ContainsKey(pTable))
+            {
+                Table table = db[pTable];
+
+                if (conds[0] == null)
+                {
+                    foreach (Column s in listColAux)
+                    {
+                        if (!(s.name is null))
+                        {
+                            if (table.getTable().ContainsKey(s.name))
+                            {
+                                for (int t = 0; t < table.getTable().Count;t++)
+                                {
+                                    for (int g = 0; g < cols.Length; g += 2)
+                                    {
+                                        table.getTable()[s.name][t] = cols[g];
+                                    }
+                                }
+                                return Messages.TupleUpdateSuccess;
+                            }
+                            else
+                            {
+                                return Messages.ColumnDoesNotExist + " " + s.name; 
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    prepareConditions(table, conds);
+                    foreach (Column s in listColAux) //se crean demasiados espacios nulos
+                    {
+                        if (!(s.name is null))
+                        {
+
+                            if (table.getTable().ContainsKey(s.name))   //pendiente
+                            {
+                                foreach (int i in condsIndex)
+                                {
+                                    for(int g = 0; g < cols.Length; g += 2)
+                                    {
+                                        if(cols[g+1] != null)
+                                        {
+                                            table.getTable()[s.name][i] = cols[g + 2];
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                return Messages.TupleUpdateSuccess;
+                            }
+                            else
+                            {
+                                return Messages.ColumnDoesNotExist + " " + s.name;
+                            }
+                        }
+                    }
+                }
+                return Messages.InsertSuccess;
+            }
+            else
+            {
+                return Messages.TableDoesNotExist;
+            }
+        }
+
+
 
         public string exeSelect(string pTable, string[] cols,string[] conds)
         {
             prepareColumns(cols);
             if (db.ContainsKey(pTable))
             {
-                Table table = (Table)db[pTable];
+                Table table = db[pTable];
                 //string[]  OutPut = new string[cols.Length];
                 string sk = "";
                 //int skIndex = 0;
@@ -212,10 +284,10 @@ namespace MiniSQLEngine
                 listColAux.Add(c);
             }
         }
-        private void prepareConditions(Table table ,string[] conds)
+        private void prepareConditions(Table table ,string[] conds)     //saca error aun quitando correctamente los datos
         {
             condsIndex.Clear();
-
+            
             for (int condsCols = 0; condsCols + 1 < conds.Length; condsCols += 2)
             {
                 if(!(conds[condsCols] is null))
@@ -228,11 +300,13 @@ namespace MiniSQLEngine
                         {
                             for (int i = 0; i < table.getTable()[s].Count(); i++)   //REVISAR
                             {
-                                if (table.getTable()[s][i].Equals(conds[condsCols + 2]))
-                                {
-                                    
-                                    condsIndex.Add(i);
+                                if(int.Parse(conds[condsCols + 2]) < conds.Length){
+                                    if (table.getTable()[s][i].Equals(conds[condsCols + 2]))
+                                    {
+                                        condsIndex.Add(i);
+                                    }
                                 }
+                                
                             }
                         }
                     }
@@ -242,7 +316,7 @@ namespace MiniSQLEngine
                     }
                 }
                 
-            }
+            }       
         }
     }
 }
