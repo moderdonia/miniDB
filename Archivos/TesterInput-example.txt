@@ -1,18 +1,112 @@
+﻿CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
+INSERT INTO MyTable VALUES ('Eva', 18, 'Calle Los Herran 16 2 Derecha. 01005 Vitoria Gasteiz');
+INSERT INTO MyTable VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+DELETE FROM MyTable WHERE Age=18;
+SELECT Name, Age FROM MyTable;
+
+SELECT Name, Age FROM MyTable;
 CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
 INSERT INTO MyTable VALUES ('Eva', 18, 'Calle Los Herran 16 2 Derecha. 01005 Vitoria Gasteiz');
 INSERT INTO MyTable VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-INSERT INTO MyTable VALUES ('Miren', 32, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-DELETE FROM MyTable WHERE Age=18;
+INSERT INTO MyTable VALUES ('Miren', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
 SELECT Name, Age FROM MyTable WHERE Age=18;
 
-CREATE TABLE MyTable2 (Name TEXT, Age INT, Address TEXT);
+CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
 INSERT INTO MyTable2 VALUES ('Eva', 18, 'Calle Los Herran 16 2 Derecha. 01005 Vitoria Gasteiz');
-INSERT INTO MyTable2 VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-INSERT INTO MyTable2 VALUES ('Miren', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-SELECT Name, Age FROM MyTable2 WHERE Age=26;
+INSERT INTO MyTable VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+SELECT Name, Age FROM MyTable WHERE Age=18;
 
-CREATE TABLE MyTable3 (Name TEXT, Age INT, Address TEXT);
-INSERT INTO MyTable3 VALUES ('Eva', 18, 'Calle Los Herran 16 2 Derecha. 01005 Vitoria Gasteiz');
-INSERT INTO MyTable3 VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-INSERT INTO MyTable3 VALUES ('Miren', 32, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
-SELECT Name, Age FROM MyTable3;
+CREATE TABLE MyTable (Name TEXT, Age INT, Address TEXT);
+INSERT INTO MyTable2 VALUES ('Eva', 18, 'Calle Los Herran 16 2 Derecha. 01005 Vitoria Gasteiz');
+INSERT INTO MyTable VALUES ('Ramon', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+INSERT INTO MyTable VALUES ('Miren', 26, 'Larratxo kalea 23 2. Ezk. 20012 Donostia');
+SELECT Name, Age FROM MyTable WHERE Age=18;
+DROP TABLE MyTable;
+SELECT * FROM MyTable WHERE Age=18;
+
+CREATE TABLE MyTable(Name TEXT, Age INT)
+CREATE Table MyTable (Name TEXT, Age INT);
+cREATE TABLE MyTable (Name TEXT,  Age INT);
+CREATE TABLE MyTable (Name TEXT, Age INT;
+CREATE TABLE MyTable Name TEXT, Age INT);
+CREATE TABLE MyTable ();
+DROP TABLE;
+Drop Table MyTable;
+SELECT FROM Table;
+SELECT * FROM MyTable
+SELECT *, Age FROM MyTable;
+SELECT Name,  FROM MyTable;
+SELECT , Name FROM MyTable;
+SELECT Name FROM MyTable WHERE Name=';
+
+CREATE TABLE Employees(Id INT, Name TEXT, Surname TEXT, Salary DOUBLE);
+INSERT INTO Employees VALUES (1, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (2, 'Rodolfo', 'Langostino', 1200);
+INSERT INTO Employees VALUES (3, 'Benito', 'Kamelas', 1100);
+INSERT INTO Employees VALUES (4, 'Maria', 'Langostino', 1200);
+SELECT Id FROM Employees WHERE Salary>1150;
+UPDATE Employees SET Salary=1050 WHERE Id=2;
+SELECT Id FROM Employees WHERE Salary>1150;
+DELETE FROM Employees WHERE Salary<1100;
+SELECT Id FROM Employees WHERE Salary<1100;
+
+CREATE TABLE Employees(Id INT,  Name TEXT,  Surname TEXT,  Salary DOUBLE);
+INSERT INTO Employees(Name, Surname, Salary, Id) VALUES ('Maritxu', 'Norazoaz', 1300, 1);
+INSERT INTO Employees(Id, Surname, Name, Salary) VALUES (2, 'Langostino', 'Rodolfo', 1200);
+INSERT INTO Employees(Salary, Id, Name, Surname) VALUES (1100, 3, 'Benito', 'Kamelas');
+INSERT INTO Employees(Surname, Name, Salary) VALUES ('Langostino', 'Maria', 1200);
+SELECT Salary, Name, Surname WHERE Name='Maritxu'
+SELECT Surname WHERE Id=3
+
+CREATE TABLE Employees(Id INT, Name TEXT, Surname TEXT, Salary DOUBLE);
+INSERT INTO Employees VALUES (1, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (2, 'Rodolfo', 'Langostino', 1200);
+INSERT INTO Employees VALUES (3, 'Benito', 'Kamelas', 1100);
+INSERT INTO Employees VALUES (4, 'Maria', 'Langostino', 1200);
+UPDATE Employees SET Name='Patxi', Surname='Elorriaga' WHERE Id=2
+UPDATE Employees SET Name='Be�at' WHERE Id=2
+SELECT Surname, Name WHERE Salary=1200
+
+CREATE TABLE Employees(Id INT, Name TEXT, Surname TEXT, Salary DOUBLE);
+INSERT INTO Employees VALUES (1, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (2, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (3, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (4, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (5, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (6, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (7, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (8, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (9, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (10, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (11, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (12, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (13, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (14, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (15, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (16, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (17, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (18, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (19, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (20, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (21, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (22, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (23, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (24, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (25, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (26, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (27, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (28, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (29, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (30, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (31, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (32, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (33, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (34, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (35, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (36, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (37, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (38, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (39, 'Maritxu', 'Norazoaz', 1300);
+INSERT INTO Employees VALUES (40, 'Maritxu', 'Norazoaz', 1300);
