@@ -123,7 +123,7 @@ namespace MiniSQLEngine
                 string sk = "";
                 //int skIndex = 0;
 
-                if (conds.Count() > 0)
+                if (conds[0]==null)
                 {
                     
                    // bool ctrl = true;
@@ -137,6 +137,7 @@ namespace MiniSQLEngine
 
                             if (table.getTable().ContainsKey(s.name))
                             {
+                                
                                 foreach (string t in table.getTable()[s.name])
                                 {
                                     sk += "| " + t + " |";
@@ -203,6 +204,7 @@ namespace MiniSQLEngine
         //Internal Methods
         private void prepareColumns(string[] cols)
         {
+            condsIndex.Clear();
             listColAux.Clear();
             foreach (string s in cols)
             {
