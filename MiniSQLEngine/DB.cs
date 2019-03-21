@@ -206,8 +206,9 @@ namespace MiniSQLEngine
                     {
                         if (!(s.name is null))
                         {
+                            s.name.
                             //skIndex = 0;
-                            sk += "{" + s.name + "}";
+                            sk += "{" + s.name + ",";
 
                             if (table.getTable().ContainsKey(s.name))
                             {   
@@ -282,8 +283,11 @@ namespace MiniSQLEngine
             listColAux.Clear();
             foreach (string s in cols)
             {
-                Column c = new Column(s, "string");
-                listColAux.Add(c);
+                if (s != null)
+                {
+                    Column c = new Column(s, "string");
+                    listColAux.Add(c);
+                }
             }
         }
 
