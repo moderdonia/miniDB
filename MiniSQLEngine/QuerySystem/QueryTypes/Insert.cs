@@ -16,7 +16,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public override string Execute(DB database)
         {
  
-            return database.insertData(table, values);
+            return database.insertData(table,attb,values);
         }
 
         public Insert(string table, string[] attb, string[] values)

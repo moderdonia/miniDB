@@ -54,7 +54,7 @@ namespace MiniSQLEngine
             }
             
         }
-     /*   public string insertData(string pTable, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
+        public string insertData(string pTable,string[]cols, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
         {
             prepareColumns(data);
             if (db.ContainsKey(pTable))
@@ -65,7 +65,7 @@ namespace MiniSQLEngine
                     {
                         foreach (string s in data)
                         {
-                            db[pTable].getTable()[s].Add(data[i]);
+                            db[pTable].getTable()[s].Add(data[0]); // revisar [0]
                         }
                         return Messages.InsertSuccess;
                     }
@@ -76,7 +76,7 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-        }*/
+        }
 
         public string dropTable(string table)
         {
