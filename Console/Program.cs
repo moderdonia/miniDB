@@ -10,22 +10,25 @@ namespace Programa
         {
             DB db = new DB("db1");
             
-           // Console.WriteLine(abc[0]);
-            //val = Console.ReadLine();
-            
-            string linea ="";
-            System.IO.StreamReader file = new System.IO.StreamReader(@"..\..\..\Archivos\TesterInput-example.txt");
-            
-            while (linea != null )
-            {
-                linea = file.ReadLine();
-                if (linea != "" && linea != null)
-                {
-                    Console.WriteLine(db.runQuery(linea));
-                }
-            }
+            Console.WriteLine("Inserte sentencia");
+            string val = Console.ReadLine();
 
-            Console.WriteLine("Querys Finished");
+            Console.WriteLine(db.runQuery(val));
+
+            Console.ReadLine();
+            //string linea ="";
+            //System.IO.StreamReader file = new System.IO.StreamReader(@"..\..\..\Archivos\TesterInput-example.txt");
+
+            //while (linea != null )
+            //{
+            //   linea = file.ReadLine();
+            //   if (linea != "" && linea != null)
+            //   {
+            //       Console.WriteLine(db.runQuery(linea));
+            //   }
+            // }
+
+            // Console.WriteLine("Querys Finished");
         }
     }
 }
