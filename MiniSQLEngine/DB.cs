@@ -282,8 +282,12 @@ namespace MiniSQLEngine
             listColAux.Clear();
             foreach (string s in cols)
             {
-                Column c = new Column(s, "string");
-                listColAux.Add(c);
+                if(s != null)
+                {
+                    Column c = new Column(s, "string");
+                    listColAux.Add(c);
+                }
+                
             }
         }
 
