@@ -11,56 +11,80 @@ namespace MiniSQLEngine
 {
     public class SQLParser
     {
+        string select1;
+        string select2;
+        string select3;
+        string select4;
+        string select5;
+        string select6;
+        string insert1;
+        string insert2;
+        string insert3;
+        string insert4;
+        string delete;
+        string update1;
+        string update2;
+        string dropTable;
+        string dropDB;
+        string createDB;
+        string backupDB;
+        string createTable1;
+        string createTable2;
 
-        public SQLtype Parser(string query)
+        public SQLParser()
         {
             //SELECT
             //Con *:
-            string select1 = @"SELECT\s+(\*)\s+FROM\s+(\w+);";
-            string select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select1 = @"SELECT\s+(\*)\s+FROM\s+(\w+);";
+            select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
             //Con una tabla:
-            string select3 = @"SELECT\s+(\w+)\s+FROM\s+(\w+);";
-            string select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select3 = @"SELECT\s+(\w+)\s+FROM\s+(\w+);";
+            select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
             //Con mas de una tabla:
-            string select5 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+);";
-            string select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select5 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+);";
+            select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
 
             //Insert
-            string insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //CON TODOS SUS VALUES(1)
-            string insert2 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(*([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(CON TODOS SUS VALUES(+1))
-            string insert3 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)\)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //(CON UN VALUE)
-            string insert4 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)(\,\s+(\w+))+\)\s+VALUES\s+\(([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(completa)
+            insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //CON TODOS SUS VALUES(1)
+            insert2 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(*([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(CON TODOS SUS VALUES(+1))
+            insert3 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)\)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //(CON UN VALUE)
+            insert4 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)(\,\s+(\w+))+\)\s+VALUES\s+\(([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(completa)
 
             //Delete
-            string delete = @"DELETE\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            delete = @"DELETE\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
 
             //Update
-            string update1 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
-            string update2 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)(\,\s+(\w+)\s*(\=)\s*(\w+)\s+)WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);"; //no traga comillas en los attbs ni espacios
+            update1 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            update2 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)(\,\s+(\w+)\s*(\=)\s*(\w+)\s+)WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);"; //no traga comillas en los attbs ni espacios
 
             //Drop Table
-            string dropTable = @"DROP\s+TABLE\s+(\w+);";
+            dropTable = @"DROP\s+TABLE\s+(\w+);";
 
             //Drop DB
-            string dropDB = @"DROP\s+DATABASE\s+(\w+);";
+            dropDB = @"DROP\s+DATABASE\s+(\w+);";
 
             //Create DB
-            string createDB = @"CREATE\s+DATABASE\s+(\w+);";
+            createDB = @"CREATE\s+DATABASE\s+(\w+);";
 
             //Backup DB
-            string backupDB = @"BACKUP\s+DATABASE\s+(\w+)\s+TO\s+DISK\s*\=\s*\'([^\']+)\';";
+            backupDB = @"BACKUP\s+DATABASE\s+(\w+)\s+TO\s+DISK\s*\=\s*\'([^\']+)\';";
 
             //Create Table
             //string createTable = @"(CREATE\s+TABLE)\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\s+|\,\s+\w+\s+(INT|DOUBLE|TEXT))+)\,\s+(PRIMARY\s+KEY)\s+\((\w+)\)\,\s+(FOREIGN\s+KEY)\s+\((\w+)\)\s+REFERENCES\s+(\w+)\s+\((\w+)\);";
-            string createTable1 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)\);";
-            string createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
+            createTable1 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)\);";
+            createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
 
+           
+        }
+        public SQLtype Parser(string query)
+        {
+            
             //CREATE TABLE
-
             Column[] ct2 = new Column[10];
             string[] ct3 = new string[10]; //*
             string ct1 = "";
 
+           
             Match matchcreate1 = Regex.Match(query, createTable1);
             Match matchcreate2 = Regex.Match(query, createTable2);
 
