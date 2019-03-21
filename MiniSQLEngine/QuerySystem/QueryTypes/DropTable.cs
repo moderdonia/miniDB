@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class DropTable : SQLtype
+    public class DropTable : SQLtype
     {
         private string table;
 
-        bool Execute()
+
+        public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.dropTable(table);
         }
 
         public DropTable(string table)
         {
             this.table = table;
+        }
+        public string getTabla()
+        {
+            return table;
         }
     }
 }

@@ -6,21 +6,29 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class CreateTable : SQLtype
+    public class CreateTable : SQLtype
     {
         private string table;
-        private string[] attb;
+        private string[] column;
 
-        bool Execute()
+        public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.createTable(table, column);
         }
 
-        public CreateTable(string table, string[] attb)
+        public CreateTable(string table, string[] column)
         {
             this.table = table;
-            this.attb = attb;
+            this.column = column;
 
+        }
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getColumn()
+        {
+            return column;
         }
     }
 }

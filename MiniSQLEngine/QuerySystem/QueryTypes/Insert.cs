@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Insert : SQLtype
+    public class Insert : SQLtype
     {
         private string table;
         //private string database;
         private string[] attb;         //columns
         private string[] values;    
 
-        bool Execute()
+        public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+ 
+            return database.insertData(table,attb,values);
         }
 
         public Insert(string table, string[] attb, string[] values)
@@ -24,6 +25,18 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             //this.database = database;
             this.attb = attb;
             this.values = values;
+        }
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getAttb()
+        {
+            return attb;
+        }
+        public string[] getValues()
+        {
+            return values;
         }
     }
 }

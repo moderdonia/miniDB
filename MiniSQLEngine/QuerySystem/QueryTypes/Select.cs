@@ -6,25 +6,27 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Select : SQLtype
-    {
+        public class Select : SQLtype
+        {
         private string table;
-        private string database;
         private string[] attb;         //columns
         private string[] conds;    //where
 
-        bool Execute()
+        public override string Execute(DB database)
         {
 
-            throw new NotImplementedException();
+            return database.exeSelect(table, attb, conds);
         }
 
-        public Select(string table,string database, string[] attb, string[] conds)
+        public Select(string table, string[] attb, string[] conds)
         {
             this.table = table;
-            this.database = database;
             this.attb = attb;
-            this.conds = conds; 
+            this.conds = conds;
+        }
+        public string getTabla()
+        {
+            return table;
         }
     }
 }

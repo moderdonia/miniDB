@@ -9,10 +9,7 @@ namespace MiniSQLEngine
     public abstract class SQLtype    
     {
 
-        bool Execute()
-        {
-            return false;
-        }
-
+        public abstract string Execute(DB database);
+        
     }
 }

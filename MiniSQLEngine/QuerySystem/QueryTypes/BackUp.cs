@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class BackUp : SQLtype
+    public class BackUp : SQLtype
     {
         private string database;
         private string filepath;
 
-        bool Execute()
+        public override string Execute(DB database)
         {
             throw new NotImplementedException();
         }
@@ -20,6 +20,14 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             this.database = database;
             this.filepath = filepath;
+        }
+        public string getDB()
+        {
+            return database;
+        }
+        public string getFile()
+        {
+            return filepath;
         }
     }
 }

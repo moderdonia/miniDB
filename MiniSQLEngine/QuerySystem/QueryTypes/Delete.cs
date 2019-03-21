@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Delete : SQLtype
+    public class Delete : SQLtype
     {
         private string table;
         //private string database;
         private string[] conds;    //where
 
-        bool Execute()
+        public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.deleteTuple(table,conds);
         }
 
         public Delete(string table, string[] conds)
@@ -22,6 +22,15 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.table = table;
             //this.database = database;
             this.conds = conds;
+        }
+
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getCond()
+        {
+            return conds;
         }
     }
 }

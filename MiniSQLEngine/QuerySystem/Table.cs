@@ -7,21 +7,39 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem
 {
-    class Table
+    public class Table
     {
-        SQLtype sql;
         string name;
-        Dictionary<string,List<string>> dc;
+        Dictionary<string, List<string>> dc = new Dictionary<string, List<string>>();
 
-        public Table(string name, List<string> list)
+        public Table(string name, List<Column> cols)
         {
             this.name = name;
-            foreach (string s in list)
+            foreach (Column s in cols)
             {
-                dc.Add(s, new List<string>());
-                
+                if(!(s.name is null))
+                {
+                    List<string> list = new List<string>();
+                    if (!dc.ContainsKey(s.name))
+                    {
+                        dc.Add(s.name, list);
+                    }
+                    else
+                    {
+                        Console.WriteLine(Messages.TableExist);
+                    }
+                    
+                }          
             } 
             
+        }
+        public string getName()
+        {
+            return name;
+        }
+        public Dictionary<string, List<string>> getTable()
+        {
+            return dc;
         }
     }
 }

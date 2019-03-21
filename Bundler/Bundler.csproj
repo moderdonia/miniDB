@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6501D45-57E5-4003-ACA0-F6CDF8705190}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniSQLEngine</RootNamespace>
-    <AssemblyName>MiniSQLEngine</AssemblyName>
+    <ProjectGuid>{117A13E0-7E78-4689-9F75-02379B817AC7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Bundler</RootNamespace>
+    <AssemblyName>Bundler</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,23 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB.cs" />
-    <Compile Include="Messages.cs" />
-    <Compile Include="QuerySystem\Column.cs" />
-    <Compile Include="QuerySystem\QueryTypes\BackUp.cs" />
-    <Compile Include="QuerySystem\QueryTypes\CreateDB.cs" />
-    <Compile Include="QuerySystem\QueryTypes\CreateTable.cs" />
-    <Compile Include="QuerySystem\QueryTypes\Delete.cs" />
-    <Compile Include="QuerySystem\QueryTypes\DropDB.cs" />
-    <Compile Include="QuerySystem\QueryTypes\DropTable.cs" />
-    <Compile Include="QuerySystem\QueryTypes\Insert.cs" />
-    <Compile Include="QuerySystem\QueryTypes\Select.cs" />
-    <Compile Include="QuerySystem\QueryTypes\Update.cs" />
-    <Compile Include="QuerySystem\SQLtype.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuerySystem\Table.cs" />
-    <Compile Include="SQLParser.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

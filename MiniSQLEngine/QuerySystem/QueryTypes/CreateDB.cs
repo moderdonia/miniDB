@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class CreateDB : SQLtype
+    public class CreateDB : SQLtype
     {
         private string database;
 
-        bool Execute()
+        public override string Execute(DB database)
         {
             System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory("../../SGBD/"+database);
             if (di.Exists)
             {
-                return false;
+                return null;
             }
             else
             {
-                return true;
+                return null;
             }
         
         }
@@ -27,6 +27,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public CreateDB(string database)
         {
             this.database = database;
+        }
+        public string getDB()
+        {
+            return database;
         }
     }
 }

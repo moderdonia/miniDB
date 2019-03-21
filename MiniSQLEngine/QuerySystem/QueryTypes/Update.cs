@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Update : SQLtype
+    public class Update : SQLtype
     {
         private string table;
         //private string database;
         private string[] attb;         //columns
         private string[] conds;    //where
 
-        bool Execute()
+        public override string Execute(DB database)
         {
-            throw new NotImplementedException();
+            return database.exeUpdate(table,attb,conds);
         }
 
         public Update(string table, string[] attb, string[] conds)
@@ -25,5 +25,18 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             this.attb = attb;
             this.conds = conds;
         }
+        public string getTabla()
+        {
+            return table;
+        }
+        public string[] getAttb()
+        {
+            return attb;
+        }
+        public string[] getConds()
+        {
+            return conds;
+        }
+
     }
 }
