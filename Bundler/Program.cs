@@ -17,7 +17,7 @@ namespace Portable_Badger
             List<string> files = new List<string>();
             string version;
 
-            string mainExe = @"C:\Users\docencia\Source\Repos\moderdonia\Console\bin\Release\Console.exe";
+            string mainExe = @"Console\bin\Release\Console.exe";
             string mainExeRelPath = inBaseRelPath + mainExe;
 
             version = GetVersion(mainExeRelPath);
@@ -25,7 +25,7 @@ namespace Portable_Badger
             outBaseFolder = ProjectName + "-" + version + @"/"; //name of the folder created inside the zip file
 
             files.Add(mainExeRelPath);
-            files.Add(inBaseRelPath + @"C:\Users\docencia\Source\Repos\moderdonia\MiniSQLEngine\bin\Release\MiniSQLEngine.dll");
+            files.Add(inBaseRelPath + @"MiniSQLEngine\bin\Release\MiniSQLEngine.dll");
             //Add any other files you need to add
             //files.Add(inBaseRelPath + ...);
             //files.Add(inBaseRelPath + ...);
@@ -90,7 +90,7 @@ namespace Portable_Badger
                     {
                         if (System.IO.File.Exists(file))
                         {
-                            archive.CreateEntryFromFile(file, outBaseFolder + file.Substring(inBaseRelPath.Length));
+                            archive.CreateEntryFromFile(file, outBaseFolder + Path.GetFileName(file));
                             numFilesAdded++;
                         }
                         else Console.WriteLine("Couldn't find file: {0}", file);
