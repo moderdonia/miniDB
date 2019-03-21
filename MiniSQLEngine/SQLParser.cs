@@ -36,7 +36,7 @@ namespace MiniSQLEngine
 
             //Update
             string update1 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
-            string update2 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)(\,\s+(\w+)\s*(\=)\s*(\w+)\s+)WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            string update2 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)(\,\s+(\w+)\s*(\=)\s*(\w+)\s+)WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);"; //no traga comillas en los attbs ni espacios
 
             //Drop Table
             string dropTable = @"DROP\s+TABLE\s+(\w+);";
@@ -254,7 +254,6 @@ namespace MiniSQLEngine
             }
             else if (Regex.Match(query, select5).Success)
             {
-                //Console.WriteLine(matchS5.Groups[2].Captures[1].Value);
 
                 camp1[0] = matchS5.Groups[1].Value;
                 for (int i = 0; i < matchS5.Groups[3].Captures.Count; i++)

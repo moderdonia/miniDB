@@ -36,7 +36,6 @@ namespace MiniSQLEngine
         public DB(string name)
         {
             db = new Dictionary<string, Table>();
-
             this.name = name;
         }
 
@@ -55,15 +54,21 @@ namespace MiniSQLEngine
             }
             
         }
-        public string insertData(string name, string[] data) //name = table , data = values
+     /*   public string insertData(string pTable, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
         {
-            if (db.ContainsKey(name))
+            prepareColumns(data);
+            if (db.ContainsKey(pTable))
             {
-                int i = 0;
-                foreach(string s in db[name].getTable().Keys)
+               foreach(Column d in listColAux)
                 {
-                    db[name].getTable()[s].Add(data[i]);
-                    i++;   
+                    if (!(d.name is null))
+                    {
+                        foreach (string s in data)
+                        {
+                            db[pTable].getTable()[s].Add(data[i]);
+                        }
+                        return Messages.InsertSuccess;
+                    }
                 }
                 return Messages.InsertSuccess;
             }
@@ -71,14 +76,14 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-        }
+        }*/
+
         public string dropTable(string table)
         {
             if (db.ContainsKey(table))
             {
                 db.Remove(table);
                 return Messages.DeleteTableSuccess;
-
             }
             else
             {
@@ -91,7 +96,7 @@ namespace MiniSQLEngine
             Table table = db[pTable];
 
             prepareConditions(table, conds);
-            for(int i=0; i < condsIndex.Count ;i=+3)
+            for(int i=0; i < condsIndex.Count ; i=+2)
             {
                 if (table.getTable().ContainsKey(conds[i]))
                 {
@@ -102,16 +107,16 @@ namespace MiniSQLEngine
                             h.RemoveAt(x);
                         }
                         
-                    }
+                    }   
                 }
                 else
                 {
                     return Messages.TableDoesNotExist;
-                }
-                
+                }         
             }
             return Messages.TupleDeleteSuccess;
         }
+
         public string exeUpdate(string pTable, string[] cols,string[] conds)
         {
             prepareColumns(cols);
@@ -151,8 +156,7 @@ namespace MiniSQLEngine
                     {
                         if (!(s.name is null))
                         {
-
-                            if (table.getTable().ContainsKey(s.name))   //pendiente
+                            if (table.getTable().ContainsKey(s.name))   
                             {
                                 foreach (int i in condsIndex)
                                 {
@@ -191,15 +195,13 @@ namespace MiniSQLEngine
             if (db.ContainsKey(pTable))
             {
                 Table table = db[pTable];
+                
                 //string[]  OutPut = new string[cols.Length];
                 string sk = "";
                 //int skIndex = 0;
 
                 if (conds[0]==null)
-                {
-                    
-                   // bool ctrl = true;
-
+                { 
                     foreach (Column s in listColAux)
                     {
                         if (!(s.name is null))
@@ -208,8 +210,7 @@ namespace MiniSQLEngine
                             sk += "\n" + s.name + " : ";
 
                             if (table.getTable().ContainsKey(s.name))
-                            {
-                                
+                            {   
                                 foreach (string t in table.getTable()[s.name])
                                 {
                                     sk += "| " + t + " |";
@@ -238,7 +239,7 @@ namespace MiniSQLEngine
                 }
                 else
                 {
-                    prepareConditions(table,conds);
+                    prepareConditions(table, conds);
                     foreach (Column s in listColAux) //se crean demasiados espacios nulos
                     {   
                         if(!(s.name is null))
@@ -251,13 +252,15 @@ namespace MiniSQLEngine
                                 foreach (int i in condsIndex)
                                 {
                                     sk += "| " + table.getTable()[s.name][i] + " |";
-                                   //skIndex++;
+                                    //skIndex++;
                                 }
                             }
                             else
                             {
                                 return Messages.ColumnDoesNotExist + " " + s.name;
                             }
+                            break;
+                            
                         }    
                     }
                 }
@@ -268,12 +271,11 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-            
-
         } 
         
 
         //Internal Methods
+
         private void prepareColumns(string[] cols)
         {
             condsIndex.Clear();
@@ -284,38 +286,91 @@ namespace MiniSQLEngine
                 listColAux.Add(c);
             }
         }
+
         private void prepareConditions(Table table ,string[] conds)     //saca error aun quitando correctamente los datos
         {
-            condsIndex.Clear();
-            
-            for (int condsCols = 0; condsCols + 1 < conds.Length; condsCols += 2)
+            condsIndex.Clear();           
+            for (int condsCols = 0; condsCols < conds.Length; condsCols += 1)
             {
-                if(!(conds[condsCols] is null))
+                if(conds[condsCols]!=null)
                 {
                     string s = conds[condsCols];
 
-                    if (table.getTable().ContainsKey(s))
+                    switch (s)
                     {
-                        if (table.getTable()[s].Contains(conds[condsCols + 2]))
-                        {
-                            for (int i = 0; i < table.getTable()[s].Count(); i++)   //REVISAR
+                        case "<":
+                            if (table.getTable().ContainsKey(conds[condsCols-1]))
                             {
-                                if(int.Parse(conds[condsCols + 2]) < conds.Length){
-                                    if (table.getTable()[s][i].Equals(conds[condsCols + 2]))
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                {
+                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) < Int32.Parse(conds[condsCols+1]))
                                     {
                                         condsIndex.Add(i);
                                     }
                                 }
-                                
                             }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine(Messages.ColumnDoesNotExist + " " + s);
-                    }
-                }
-                
+                            break;
+
+                        case "<=":
+                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            {
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                {
+                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) <= Int32.Parse(conds[condsCols + 1]))
+                                    {
+                                        condsIndex.Add(i);
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ">":
+                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            {
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                {
+                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) > Int32.Parse(conds[condsCols + 1]))
+                                    {
+                                        condsIndex.Add(i);
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ">=":
+                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            {
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                {
+                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) >= Int32.Parse(conds[condsCols + 1]))
+                                    {
+                                        condsIndex.Add(i);
+                                    }
+                                }
+                            }
+                            break;
+
+                        default:
+                            try
+                            {
+                                if (table.getTable().ContainsKey(s))
+                                {
+                                    for (int i = 0; i < table.getTable()[s].Count(); i++)   //REVISAR
+                                    {
+                                        if (table.getTable()[s][i].Equals(conds[condsCols+2]))
+                                        {
+                                            condsIndex.Add(i);
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            catch
+                            {
+                                break;
+                            }
+                    }                     
+                }               
             }       
         }
     }
