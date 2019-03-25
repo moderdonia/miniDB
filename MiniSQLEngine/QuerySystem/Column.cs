@@ -16,5 +16,6 @@ namespace MiniSQLEngine.QuerySystem
             this.name = name;
             this.type = type;
         }
+
     }
 }

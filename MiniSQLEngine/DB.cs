@@ -54,20 +54,38 @@ namespace MiniSQLEngine
             }
             
         }
-        public string insertData(string pTable,string[]cols, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
+
+        public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
         {
-            prepareColumns(data);
+            int i =0;
+            int x = data.Length;
+            List<string> ordenAux = new List<string>();
+            prepareColumns(cols);
+            foreach (Column k in listColAux)
+            {
+                ordenAux.Add(k.name);
+            }
+            
             if (db.ContainsKey(pTable))
             {
-               foreach(Column d in listColAux)
+               foreach(string d in db[pTable].getTable().Keys)
                 {
-                    if (!(d.name is null))
+                    x--;
+                    if (!(d is null))
                     {
-                        foreach (string s in data)
+                       while(i < data.Length-x)
                         {
-                            db[pTable].getTable()[s].Add(data[0]); // revisar [0]
+                            if( data[i] != null && db[pTable].getTable().ContainsKey(d))
+                            {
+                                string aux = data[i].ToString();
+                                if (!ordenAux.Contains(d))
+                                {
+                                    db[pTable].getTable()[d].Add("");
+                                }
+                                db[pTable].getTable()[d].Add(aux); 
+                            }
+                            i++;
                         }
-                        return Messages.InsertSuccess;
                     }
                 }
                 return Messages.InsertSuccess;

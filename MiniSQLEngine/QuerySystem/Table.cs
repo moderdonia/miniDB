@@ -37,6 +37,7 @@ namespace MiniSQLEngine.QuerySystem
         {
             return name;
         }
+        
         public Dictionary<string, List<string>> getTable()
         {
             return dc;
