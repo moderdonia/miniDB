@@ -1,18 +1,15 @@
 ﻿using MiniSQLEngine.QuerySystem;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
 
 namespace MiniSQLEngine
 {
     public class DB
     {
         private Dictionary<string,Table> db;
-        //private Hashtable db;
+        Boolean ctrl;
         string name;
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
@@ -28,7 +25,7 @@ namespace MiniSQLEngine
             }
             else
             {
-                return "Some issues happens";
+                return "Query unrecognized";
             }
 
         }
@@ -55,45 +52,87 @@ namespace MiniSQLEngine
             
         }
 
-        public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values // Cambiar metodo, tiene que recibir tambien las columnas sobre las que insertar
+        public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
             int i =0;
             int x = data.Length;
+            ctrl = true;
             List<string> ordenAux = new List<string>();
+            IEnumerable<string> missCols;
             prepareColumns(cols);
-            foreach (Column k in listColAux)
+
+            if (listColAux.Count == 0)
             {
-                ordenAux.Add(k.name);
-            }
-            
-            if (db.ContainsKey(pTable))
-            {
-               foreach(string d in db[pTable].getTable().Keys)
+                if (db.ContainsKey(pTable))
                 {
-                    x--;
-                    if (!(d is null))
+                    foreach (string d in db[pTable].getTable().Keys)
                     {
-                       while(i < data.Length-x)
+
+                        if (!(d is null))
                         {
-                            if( data[i] != null && db[pTable].getTable().ContainsKey(d))
+                            ctrl = true;
+                            while (ctrl && i < data.Length)
                             {
-                                string aux = data[i].ToString();
-                                if (!ordenAux.Contains(d))
+                                if (data[i] != null && db[pTable].getTable().ContainsKey(d))
                                 {
-                                    db[pTable].getTable()[d].Add("");
+                                    string aux = data[i].ToString();
+                                    db[pTable].getTable()[d].Add(aux);                                   
                                 }
-                                db[pTable].getTable()[d].Add(aux); 
+                                i++;
+                                ctrl = false;
                             }
-                            i++;
                         }
                     }
+                    return Messages.InsertSuccess;
                 }
-                return Messages.InsertSuccess;
+                else
+                {
+                    return Messages.TableDoesNotExist;
+                }
             }
             else
-            {
-                return Messages.TableDoesNotExist;
-            }
+            { 
+                foreach (Column k in listColAux)
+                {
+                    ordenAux.Add(k.name);    
+                }
+
+                missCols = db[pTable].getTable().Keys.Except(ordenAux);
+                IEnumerator<string> it = missCols.GetEnumerator();
+
+                if (db.ContainsKey(pTable))
+                {
+                    foreach (Column d in listColAux)
+                    {
+                        if (!(d is null))
+                        {
+                            ctrl = true;
+                            while (ctrl)
+                            {
+                                if (data[i] != null && db[pTable].getTable().ContainsKey(d.name))
+                                {
+                                    string aux = data[i].ToString();
+                                    db[pTable].getTable()[d.name].Add(aux);
+                                }
+                                i++;
+                                ctrl = false;
+                            }
+                        }
+                    }
+                    if (missCols.Count() != 0)
+                    {
+                        while (it.MoveNext())
+                        {
+                            db[pTable].getTable()[it.Current].Add("null");
+                        }
+                    }
+                    return Messages.InsertSuccess;
+                }
+                else
+                {
+                    return Messages.TableDoesNotExist;
+                }
+            }        
         }
 
         public string dropTable(string table)
@@ -170,7 +209,7 @@ namespace MiniSQLEngine
                 else
                 {
                     prepareConditions(table, conds);
-                    foreach (Column s in listColAux) //se crean demasiados espacios nulos
+                    foreach (Column s in listColAux) 
                     {
                         if (!(s.name is null))
                         {
@@ -192,7 +231,7 @@ namespace MiniSQLEngine
                             }
                             else
                             {
-                                return Messages.ColumnDoesNotExist + " " + s.name;
+                                return Messages.ColumnDoesNotExist;
                             }
                         }
                     }

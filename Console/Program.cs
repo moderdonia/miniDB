@@ -1,5 +1,6 @@
 ﻿using MiniSQLEngine;
 using System;
+using System.Diagnostics;
 
 namespace Programa
 {
@@ -21,10 +22,14 @@ namespace Programa
                 linea = file.ReadLine();
                 if (linea != "" && linea != null)
                 {
-                    Console.WriteLine(db.runQuery(linea));
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    string output = db.runQuery(linea) + "(";
+                    output += sw.Elapsed.TotalMilliseconds + ")";
+                    Console.WriteLine(output);
+                    sw.Stop();
                 }
             }
-
             Console.WriteLine("Querys Finished");
         }
     }
