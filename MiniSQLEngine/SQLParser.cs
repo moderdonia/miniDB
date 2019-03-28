@@ -36,13 +36,13 @@ namespace MiniSQLEngine
             //SELECT
             //Con *:
             select1 = @"SELECT\s+(\*)\s+FROM\s+(\w+);";
-            select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
             //Con una tabla:
             select3 = @"SELECT\s+(\w+)\s+FROM\s+(\w+);";
-            select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
             //Con mas de una tabla:
             select5 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+);";
-            select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
 
             //Insert
             insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //CON TODOS SUS VALUES(1)
@@ -295,7 +295,7 @@ namespace MiniSQLEngine
             {
 
                 camp1[0] = matchS6.Groups[1].Value;
-                for (int i = 0; i < matchS6.Groups[3].Captures.Count; i+=5)
+                for (int i = 0; i < matchS6.Groups[3].Captures.Count; i++)
                 {
                     camp1[i+1] = matchS6.Groups[3].Captures[i].Value;
 

@@ -316,8 +316,6 @@ namespace MiniSQLEngine
                             {
                                 return Messages.ColumnDoesNotExist + " " + s.name;
                             }
-                            break;
-                            
                         }    
                     }
                 }
@@ -355,7 +353,7 @@ namespace MiniSQLEngine
             {
                 if(conds[condsCols]!=null)
                 {
-                    string s = conds[condsCols];
+                    string s = conds[condsCols+1];
 
                     switch (s)
                     {
@@ -414,11 +412,11 @@ namespace MiniSQLEngine
                         default:
                             try
                             {
-                                if (table.getTable().ContainsKey(s))
+                                if (table.getTable().ContainsKey(conds[condsCols]))
                                 {
-                                    for (int i = 0; i < table.getTable()[s].Count(); i++)   //REVISAR
+                                    for (int i = 0; i < table.getTable()[conds[condsCols]].Count(); i++)   //REVISAR
                                     {
-                                        if (table.getTable()[s][i].Equals(conds[condsCols+2]))
+                                        if (table.getTable()[conds[condsCols]][i].Equals(conds[condsCols+2]))
                                         {
                                             condsIndex.Add(i);
                                         }
