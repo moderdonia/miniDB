@@ -326,7 +326,7 @@ namespace MiniSQLEngine
                             {
                                 foreach (int i in condsIndex)
                                 {
-                                    sk += "| " + table.getTable()[s.name][i] + " |";
+                                    sk +=  table.getTable()[s.name][i] + ", " ;
                                     //skIndex++;
                                 }
                             }
