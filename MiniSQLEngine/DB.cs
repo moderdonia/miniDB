@@ -246,7 +246,7 @@ namespace MiniSQLEngine
 
 
 
-        public string exeSelect(string pTable, string[] cols,string[] conds)
+        public string exeSelect(string pTable, string[] cols, string[] conds)
         {
             prepareColumns(cols);
             if (db.ContainsKey(pTable))
@@ -254,8 +254,9 @@ namespace MiniSQLEngine
                 Table table = db[pTable];
                 
                 //string[]  OutPut = new string[cols.Length];
-                string sk = "";
+                string sk = "{";
                 //int skIndex = 0;
+
 
                 if (conds[0]==null)
                 { 
@@ -263,16 +264,24 @@ namespace MiniSQLEngine
                     {
                         if (!(s.name is null))
                         {
+
                             //skIndex = 0;
-                            sk += "\n" + s.name + " : ";
+                            sk += s.name + ",";
 
                             if (table.getTable().ContainsKey(s.name))
                             {   
                                 foreach (string t in table.getTable()[s.name])
                                 {
-                                    sk += "| " + t + " |";
+                                    sk += t + ",";
                                     //skIndex++;
+
+                                    //sk.Remove(sk.LastIndexOf(','));
+                                    //sk += "}";
                                 }
+
+                                //sk.Remove(0, sk.LastIndexOf(','));
+                                //sk += '}';
+
                                 //if (ctrl)
                                 //{
                                 //sk = s.name + "\n";
@@ -291,8 +300,17 @@ namespace MiniSQLEngine
                             {
                                 return Messages.ColumnDoesNotExist + " " + s.name; //saca error aun quitando correctamente los datos
                             }
+
+                            
+
                         }
                     }
+
+                    int index = sk.LastIndexOf(',');
+                    sk = sk.Substring(0, index);
+
+                    sk += "}";
+
                 }
                 else
                 {
@@ -301,7 +319,7 @@ namespace MiniSQLEngine
                     {   
                         if(!(s.name is null))
                         {
-                            sk += "\n" + s.name + " : ";
+                            sk += s.name + ",";
                             //skIndex = 0;
 
                             if (table.getTable().ContainsKey(s.name))   //pendiente
@@ -318,8 +336,13 @@ namespace MiniSQLEngine
                             }
                         }    
                     }
+
+                    int index = sk.LastIndexOf(',');
+                    sk = sk.Substring(0, index);
+                    sk += "}";
+
                 }
-                sk += "\n";
+                
                 return sk;
             }
             else
