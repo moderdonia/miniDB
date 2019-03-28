@@ -255,62 +255,54 @@ namespace MiniSQLEngine
                 
                 //string[]  OutPut = new string[cols.Length];
                 string sk = "{";
+                string ss = "{";
                 //int skIndex = 0;
+                int k = 0;
 
+                string[] sm = new string[cols.Length];
 
                 if (conds[0]==null)
-                { 
+                {
+                    Dictionary<string, List<string>> columnDic = table.getTable();
+                    string column1Name = columnDic.Keys.ToArray()[0];
+                    int numTuples= columnDic[column1Name].Count;
+
+                    for(int j= 0; j<numTuples; j++)
+                    {
+                        foreach(List<string> column in columnDic.Values)
+                        {
+                            
+                        }
+                    }
                     foreach (Column s in listColAux)
                     {
                         if (!(s.name is null))
-                        {
-
-                            //skIndex = 0;
-                            sk += s.name + ",";
+                        {                            
+                            sk += s.name + ", ";
 
                             if (table.getTable().ContainsKey(s.name))
-                            {   
+                            {
+                                int cent = 0;
                                 foreach (string t in table.getTable()[s.name])
                                 {
-                                    sk += t + ",";
-                                    //skIndex++;
-
-                                    //sk.Remove(sk.LastIndexOf(','));
-                                    //sk += "}";
+                                    cent++;
+                                    sm[k] = t + ",";
+                                    k++;
                                 }
-
-                                //sk.Remove(0, sk.LastIndexOf(','));
-                                //sk += '}';
-
-                                //if (ctrl)
-                                //{
-                                //sk = s.name + "\n";
-                                //ctrl = false;
-                                //}
-                                //else
-                                //{
-                                //    foreach (string t in table.getTable()[s.name])
-                                //    {
-                                //       OutPut[skIndex] += " " + table.getTable()[s.name][skIndex];
-                                //        skIndex++;
-                                //    }
-                                // }
+                                
                             }
                             else
                             {
                                 return Messages.ColumnDoesNotExist + " " + s.name; //saca error aun quitando correctamente los datos
                             }
-
-                            
-
                         }
                     }
-
+                    int indes = ss.LastIndexOf(',');
+                    ss = ss.Substring(0, indes);
+                    ss += "}";
                     int index = sk.LastIndexOf(',');
                     sk = sk.Substring(0, index);
-
                     sk += "}";
-
                 }
                 else
                 {
@@ -326,9 +318,10 @@ namespace MiniSQLEngine
                             {
                                 foreach (int i in condsIndex)
                                 {
-                                    sk +=  table.getTable()[s.name][i] + ", " ;
+                                    ss +=  table.getTable()[s.name][i] + ", " ;
                                     //skIndex++;
                                 }
+                                
                             }
                             else
                             {
@@ -336,14 +329,17 @@ namespace MiniSQLEngine
                             }
                         }    
                     }
-
+                    int indes = ss.LastIndexOf(',');
+                    ss = ss.Substring(0, indes);
+                    ss += "}";
                     int index = sk.LastIndexOf(',');
                     sk = sk.Substring(0, index);
                     sk += "}";
+        
 
                 }
                 
-                return sk;
+                return sk+=ss;
             }
             else
             {
