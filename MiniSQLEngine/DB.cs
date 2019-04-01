@@ -1,6 +1,7 @@
 ﻿using MiniSQLEngine.QuerySystem;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 
@@ -54,6 +55,8 @@ namespace MiniSQLEngine
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
+            string fileName = @"..\..\..\Archivos\" + pTable + ".txt";
+            string texto = File.ReadAllText(fileName);
             int i =0;
             int x = data.Length;
             ctrl = true;
@@ -76,7 +79,8 @@ namespace MiniSQLEngine
                                 if (data[i] != null && db[pTable].getTable().ContainsKey(d))
                                 {
                                     string aux = data[i].ToString();
-                                    db[pTable].getTable()[d].Add(aux);                                   
+                                    db[pTable].getTable()[d].Add(aux);
+                                    texto += aux + " ";
                                 }
                                 i++;
                                 ctrl = false;
@@ -87,6 +91,9 @@ namespace MiniSQLEngine
                 }
                 else
                 {
+                    texto += Environment.NewLine;
+                    File.Delete(fileName);
+                    File.WriteAllText(fileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }
@@ -113,6 +120,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d.name].Add(aux);
+                                    texto += aux + " ";
                                 }
                                 i++;
                                 ctrl = false;
@@ -130,6 +138,9 @@ namespace MiniSQLEngine
                 }
                 else
                 {
+                    texto += Environment.NewLine;
+                    File.Delete(fileName);
+                    File.WriteAllText(fileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }        
