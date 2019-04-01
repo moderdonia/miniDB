@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,20 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
 
         public CreateTable(string table, string[] column)
         {
+            //string fileName = @"..\..\Files\tabla.txt";
+            string fileName = @"..\..\..\Archivos\"+table+".txt";
+            try
+            {
+                if (!File.Exists(fileName))
+                {
+                    File.Create(fileName);
+                }
+                    
+            }
+            catch (Exception ex)
+            {
+
+            }
             this.table = table;
             this.column = column;
 
