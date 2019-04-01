@@ -21,13 +21,20 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             //string fileName = @"..\..\Files\tabla.txt";
             string fileName = @"..\..\..\Archivos\"+table+".txt";
+            string aux = "";
             try
             {
-                if (!File.Exists(fileName))
+               /* if (!File.Exists(fileName))
                 {
                     File.Create(fileName);
                 }
-                    
+                */
+                foreach(string s in column)
+                {
+                    aux += s + " ";
+                }
+                aux += Environment.NewLine;
+                File.WriteAllText(fileName, aux);
             }
             catch (Exception ex)
             {
