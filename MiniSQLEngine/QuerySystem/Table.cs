@@ -42,5 +42,12 @@ namespace MiniSQLEngine.QuerySystem
         {
             return dc;
         }
+
+        /*
+        public Boolean compareQuerys(int index, )
+        {
+
+        }
+        */
     }
 }

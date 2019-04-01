@@ -8,12 +8,14 @@ namespace MiniSQLEngine
 {
     public class DB
     {
+        
         private Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
-        
+        List<string> ordenAux = new List<string>();
+
 
         public string runQuery(string query)
         {
@@ -57,8 +59,8 @@ namespace MiniSQLEngine
             int i =0;
             int x = data.Length;
             ctrl = true;
-            List<string> ordenAux = new List<string>();
-            IEnumerable<string> missCols;
+            
+            
             prepareColumns(cols);
 
             if (listColAux.Count == 0)
@@ -96,7 +98,7 @@ namespace MiniSQLEngine
                 {
                     ordenAux.Add(k.name);    
                 }
-
+                IEnumerable<string> missCols;
                 missCols = db[pTable].getTable().Keys.Except(ordenAux);
                 IEnumerator<string> it = missCols.GetEnumerator();
 
@@ -248,33 +250,44 @@ namespace MiniSQLEngine
 
         public string exeSelect(string pTable, string[] cols, string[] conds)
         {
+           
             prepareColumns(cols);
             if (db.ContainsKey(pTable))
             {
                 Table table = db[pTable];
                 
                 //string[]  OutPut = new string[cols.Length];
-                string sk = "{";
-                string ss = "{";
+                string sk = "{";               
+                string sss = "{";
                 //int skIndex = 0;
                 int k = 0;
 
                 string[] sm = new string[cols.Length];
 
-                if (conds[0]==null)
+                if (conds[0] == null)
                 {
                     Dictionary<string, List<string>> columnDic = table.getTable();
                     string column1Name = columnDic.Keys.ToArray()[0];
-                    int numTuples= columnDic[column1Name].Count;
+                    int numTuples = columnDic[column1Name].Count;
+                    sss = "";
 
-                    for(int j= 0; j<numTuples; j++)
+
+                    for (int j = 0; j < numTuples; j++)
                     {
-                        foreach(List<string> column in columnDic.Values)
+                        sss += "{";
+
+                        foreach (List<string> column in columnDic.Values)
                         {
-                            
+
+                            sss += column[j] + ", ";
                         }
+
+                        int indes = sss.LastIndexOf(',');
+                        sss = sss.Substring(0, indes);
+                        sss += "}";
                     }
-                    foreach (Column s in listColAux)
+
+                    /* foreach (Column s in listColAux)
                     {
                         if (!(s.name is null))
                         {                            
@@ -303,11 +316,73 @@ namespace MiniSQLEngine
                     int index = sk.LastIndexOf(',');
                     sk = sk.Substring(0, index);
                     sk += "}";
+                    */
+                    
                 }
                 else
                 {
                     prepareConditions(table, conds);
-                    foreach (Column s in listColAux) //se crean demasiados espacios nulos
+
+                    Dictionary<string, List<string>> columnDic = table.getTable();
+                    string column1Name = columnDic.Keys.ToArray()[0];
+                    int numTuples = columnDic[column1Name].Count;
+                    sss = "";
+                    
+                    foreach (Column f in listColAux)
+                    {
+                        ordenAux.Add(f.name);
+                    }
+                    IEnumerable<string> missCols;
+                    missCols = db[pTable].getTable().Keys.Except(ordenAux);
+                    IEnumerator<string> it = missCols.GetEnumerator();
+                    
+
+                    int p = 0;
+                    if(it.MoveNext() == true)
+                    {
+                        it.Reset();
+                        foreach (int w in condsIndex)
+                        { 
+                            //for (int j = 0; j < numTuples; j++)
+                            //{
+                                sss += "{";
+                                foreach (List<string> column in columnDic.Values)
+                                {
+                                    while (it.MoveNext())
+                                    {
+                                        if (!it.Current.Equals(columnDic.Keys.ToArray()[p]))
+                                        {
+                                            sss += column[w] + ", ";
+                                        }
+                                    p++;
+                                    }
+
+                                }
+                                int n = sss.LastIndexOf(',');
+                                sss = sss.Substring(0, n);
+                                sss += "}";
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        foreach (int w in condsIndex)
+                        {
+                            //for (int j = 0; j < numTuples; j++)
+                            //{
+                            sss += "{";
+                            foreach (List<string> column in columnDic.Values)
+                            {                              
+                                sss += column[w] + ", ";
+                            }
+                            int n = sss.LastIndexOf(',');
+                            sss = sss.Substring(0, n);
+                            sss += "}";
+                            //}
+                        }
+                    }
+
+                    /* foreach (Column s in listColAux) //se crean demasiados espacios nulos
                     {   
                         if(!(s.name is null))
                         {
@@ -336,10 +411,13 @@ namespace MiniSQLEngine
                     sk = sk.Substring(0, index);
                     sk += "}";
         
-
+                    */
+                    int indes = sss.LastIndexOf(',');
+                    sss = sss.Substring(0, indes);
+                    sss += "}";
                 }
                 
-                return sk+=ss;
+                return sss;
             }
             else
             {
