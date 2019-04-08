@@ -25,6 +25,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                 {
                     return true;
                 }
+                i++;
             }
             return false;
         }
@@ -40,11 +41,11 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                 string[] nombres = Directory.GetFiles(ruta);
                 bool existe = esta(nombres, fileName);
                 Console.WriteLine(existe);
-                /* if (!File.Exists(fileName))
+                if (!File.Exists(fileName))
                  {
                      File.Create(fileName);
                  }
-                 */
+                 
                 foreach (string s in column)
                     {
                     if (s != null)

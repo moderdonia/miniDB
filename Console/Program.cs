@@ -15,9 +15,9 @@ namespace Programa
             string linea;
 
             string fileName = @"..\..\..\Archivos\";
-            string[] nombres = Directory.GetFiles(fileName);
+            //string[] nombres = Directory.GetFiles(fileName);
             int i = 0;
-            while (i < nombres.Length)
+            /*while (i < nombres.Length)
             {
                 Console.WriteLine(nombres[i]);
                 Console.WriteLine(nombres[i].Length);
@@ -30,7 +30,7 @@ namespace Programa
                 i++;
                 
             }
-            
+            */
 
             while (bucle)
             {

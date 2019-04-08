@@ -44,6 +44,7 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
+                
                 return Messages.CreateTableSuccess;
             }
             else
