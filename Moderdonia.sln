@@ -8,13 +8,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSQLEngine", "MiniSQLEngine\MiniSQLEngine.csproj", "{C6501D45-57E5-4003-ACA0-F6CDF8705190}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D09D5824-7234-4696-8D1D-51FDD1A94D26}"
+	ProjectSection(SolutionItems) = preProject
+		Archivos\TesterInput-example.txt = Archivos\TesterInput-example.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{6AAA6736-9241-4D19-B144-27A23C0E0A2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1603B5D-C779-4709-9F80-0A5F1FC75291}"
-	ProjectSection(SolutionItems) = preProject
-		Archivos\TesterInput-example.txt = Archivos\TesterInput-example.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bundler", "Bundler\Bundler.csproj", "{117A13E0-7E78-4689-9F75-02379B817AC7}"
 EndProject

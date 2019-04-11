@@ -46,6 +46,7 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
+                
                 return Messages.CreateTableSuccess;
             }
             else
@@ -82,13 +83,17 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d].Add(aux);
-                                    texto += aux + " ";
+                                    texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
                             }
+                            
                         }
                     }
+                    texto += Environment.NewLine;
+                    File.Delete(fileName);
+                    File.WriteAllText(fileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
@@ -122,11 +127,12 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d.name].Add(aux);
-                                    texto += aux + " ";
+                                    texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
                             }
+                            
                         }
                     }
                     if (missCols.Count() != 0)
@@ -136,6 +142,9 @@ namespace MiniSQLEngine
                             db[pTable].getTable()[it.Current].Add("null");
                         }
                     }
+                    texto += Environment.NewLine;
+                    File.Delete(fileName);
+                    File.WriteAllText(fileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
