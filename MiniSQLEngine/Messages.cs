@@ -24,7 +24,7 @@ namespace MiniSQLEngine
         public const string SecurityUserDeleted = "Security user deleted";
         public const string SecurityPrivilegeGranted = "Security privilege granted";
         public const string SecurityPrivilegeRevoked = "Security privilege revoked";
-        public const string SecurityPrivilegeRevoked = "User added to security profile";
+//        public const string SecurityPrivilegeRevoked = "User added to security profile";
 
         public const string Error = "ERROR: ";
 
