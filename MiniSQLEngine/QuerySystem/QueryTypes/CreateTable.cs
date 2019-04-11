@@ -39,28 +39,29 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                 string ruta = @"..\..\..\Archivos\";
                 string aux = "";
                 string[] nombres = Directory.GetFiles(ruta);
-                bool existe = esta(nombres, fileName);
-                Console.WriteLine(existe);
+                //bool existe = esta(nombres, fileName);
+                //Console.WriteLine(existe);
                 if (!File.Exists(fileName))
-                 {
-                     File.Create(fileName);
-                 }
+                {
+                    File.Create(fileName);
+                }
                  
                 foreach (string s in column)
-                    {
+                {
                     if (s != null)
                     {
                         aux += s + ";";
                     }
                        
-                    }
+                }
                     aux += Environment.NewLine;
+                    File.Delete(fileName);
                     File.WriteAllText(fileName, aux);
                 }
-                catch (Exception ex)
-                {
-
-                }
+            catch (Exception ex)
+            {
+                
+            }
                 this.table = table;
                 this.column = column;
             

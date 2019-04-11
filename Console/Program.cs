@@ -15,22 +15,29 @@ namespace Programa
             string linea;
 
             string fileName = @"..\..\..\Archivos\";
-            //string[] nombres = Directory.GetFiles(fileName);
+            string[] nombres = Directory.GetFiles(fileName);
+            string[] columnas;
+            string nombre;
             int i = 0;
-            /*while (i < nombres.Length)
+
+            //----------Codigo para leer linea
+            StreamReader archivo;
+            //--------------------------------
+            while (i < nombres.Length)
             {
-                Console.WriteLine(nombres[i]);
-                Console.WriteLine(nombres[i].Length);
+                
+                //Console.WriteLine(nombres[i]);
+                //Console.WriteLine(nombres[i].Length);
                 int aux = nombres[i].Length-4;
-                Console.WriteLine(aux);
+                //Console.WriteLine(aux);
                 string nom = nombres[i].Substring(18);
                 nom = nom.Replace(".txt","");
-                Console.WriteLine(nom);
-                
+                //archivo = File.OpenText()
+                //Console.WriteLine(nom);
                 i++;
-                
             }
-            */
+
+
 
             while (bucle)
             {
