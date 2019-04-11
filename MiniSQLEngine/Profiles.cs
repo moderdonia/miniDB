@@ -27,14 +27,14 @@ namespace MiniSQLEngine
             List<bool> privileges;
             //List<DB> dbAccessList;
 
-            Admin(string pass)
+            Admin()
             {
                 profileName = "Admin";
                 for(int i=0; i < Allprivileges.Count; i++)
                 {
                     privileges.Add(true);
                 }
-                password = pass;
+                password = "admin";
             }
             
             public void CreateProfile(string profile,List<bool> privileges)
@@ -63,9 +63,9 @@ namespace MiniSQLEngine
             string profileName;
             string password;
             List<bool> privileges;
-            Client(string pass)
+            Client(string name, string pass)
             {
-                profileName = "client";
+                profileName = name;
                 password = pass;
                 foreach(string s in Allprivileges)
                 {
