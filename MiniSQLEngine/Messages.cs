@@ -12,6 +12,8 @@ namespace MiniSQLEngine
         public const string DeleteDatabaseSuccess = "Database deleted";
         public const string BackupDatabaseSuccess = "Database backed up";
 
+        public const string CreateDatabaseError = "Error: Not sufficient privileges";
+
         public const string CreateTableSuccess = "Table created";
         public const string InsertSuccess = "Tuple added";
         public const string TupleDeleteSuccess = "Tuple(s) deleted";
