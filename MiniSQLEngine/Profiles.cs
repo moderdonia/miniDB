@@ -9,72 +9,69 @@ namespace MiniSQLEngine
     public class Profiles
     {
         List<string> Allprivileges = new List<string>();
+        Dictionary<string, string> userList;
+        Dictionary<string, List<bool>> secProfiles;
+        Dictionary<string, string> userSecProfiles;
+
         Profiles()
         {
-            Allprivileges.Add("Access");
-            Allprivileges.Add("createProfile");
-            Allprivileges.Add("deleteProfile");
-            Allprivileges.Add("givePivileges");
-            Allprivileges.Add("revokePivileges");
-            Allprivileges.Add("changeAccess");
+            Allprivileges.Add("delete");
+            Allprivileges.Add("insert");
+            Allprivileges.Add("select");
+            Allprivileges.Add("update");
         }
-       
+        
 
-        class Admin : Profiles
+        public class Admin : Profiles
         {
-            string profileName;
-            string password;
-            List<bool> privileges;
-            //List<DB> dbAccessList;
+            private string profileName;
+            private string password;
+            private List<bool> privileges;
 
             Admin()
             {
-                profileName = "Admin";
+                profileName = "admin";
                 for(int i=0; i < Allprivileges.Count; i++)
                 {
                     privileges.Add(true);
                 }
                 password = "admin";
+                userList.Add(profileName, password);
+                secProfiles.Add()
             }
-            
-            public void CreateProfile(string profile,List<bool> privileges)
-            {
 
-            }
-            public void DeleteProfile(string profile)
+            private void CreateProfile(string profile,List<bool> privileges)
             {
+                secProfiles.Add(profile, privileges);
+            }
+            private void DeleteProfile(string profile)
+            {
+                userList.Remove(profile);
+            }
 
-            }
-            public void GivePrivileges(string profile, List<string> privileges)
+            //change privileges
+            private void GivePrivileges(string profile, List<bool> privileges)
             {
-
-            }
-            public void RevokePrivileges(string profile, List<string> privileges)
-            {
-
-            }
-            public void ChangeAccesList(string profile, List<DB> databases)
-            {
-
-            }
-        }
-        public class Client : Profiles
-        {
-            string profileName;
-            string password;
-            List<bool> privileges;
-            Client(string name, string pass)
-            {
-                profileName = name;
-                password = pass;
-                foreach(string s in Allprivileges)
+                userList[profile].Clear();
+                foreach(bool b in privileges)
                 {
-                    if (s.Equals("Access"))
-                    {
-                        privileges.Add(true);
-                    }
-                    privileges.Add(false);
+                    userList[profile].Add(b);
                 }
+            }
+            private void RevokePrivileges(string profile, List<bool> privileges)
+            {
+                userList[profile].Clear();
+                foreach(bool b in privileges)
+                {
+                    userList[profile].Add(b);
+                }
+            }
+            private void addUser()
+            {
+
+            } 
+            private void deleteUser()
+            {
 
             }
         }
