@@ -31,6 +31,8 @@ namespace MiniSQLEngine
         string createTable1;
         string createTable2;
 
+        string login;
+
         public SQLParser()
         {
             //SELECT
@@ -64,7 +66,7 @@ namespace MiniSQLEngine
             dropDB = @"DROP\s+DATABASE\s+(\w+);";
 
             //Create DB
-            createDB = @"CREATE\s+DATABASE\s+(\w+);";
+            //createDB = @"CREATE\s+DATABASE\s+(\w+);";
 
             //Backup DB
             backupDB = @"BACKUP\s+DATABASE\s+(\w+)\s+TO\s+DISK\s*\=\s*\'([^\']+)\';";
@@ -74,7 +76,10 @@ namespace MiniSQLEngine
             createTable1 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)\);";
             createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
 
-           
+            //Login
+            login = @"(\w+),(\w+),(\w+)";
+
+
         }
         public SQLtype Parser(string query)
         {
@@ -139,7 +144,7 @@ namespace MiniSQLEngine
 
             }
 
-
+            /*
             //CREATE DB
             string createDB1 = "";
 
@@ -154,6 +159,7 @@ namespace MiniSQLEngine
                 return sentencia;
 
             }
+            */
 
 
             //UPDATE
@@ -409,9 +415,12 @@ namespace MiniSQLEngine
                 return sentencia;
             }
 
+
+            
             return null;
 
         }
+
        
     }
 }
