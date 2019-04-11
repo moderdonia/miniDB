@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Programa
 {
-    class Program
+    class Program 
     {
 
         static void Main(string[] args)
