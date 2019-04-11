@@ -1,1 +1,1 @@
-Id;Name;Surname;Salary;
+Id;Name;Surname;Salary

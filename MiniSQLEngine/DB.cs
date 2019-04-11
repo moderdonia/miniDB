@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MiniSQLEngine
 {
-    public class DB
+    public class DB: IDisposable
     {
         private Dictionary<string,Table> db;
         Boolean ctrl;
@@ -56,8 +56,8 @@ namespace MiniSQLEngine
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
-            string fileName = @"..\..\..\Archivos\" + pTable + ".txt";
-            string texto = File.ReadAllText(fileName);
+            //string //FileName = @"..\..\..\Archivos\" + pTable + ".txt";
+            //string texto = //File.ReadAllText(//FileName);
             int i =0;
             int x = data.Length;
             ctrl = true;
@@ -81,7 +81,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d].Add(aux);
-                                    texto += aux + ";";
+                                    //texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -89,16 +89,16 @@ namespace MiniSQLEngine
                             
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                   // texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }
@@ -125,7 +125,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d.name].Add(aux);
-                                    texto += aux + ";";
+                                   // texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -140,16 +140,16 @@ namespace MiniSQLEngine
                             db[pTable].getTable()[it.Current].Add("null");
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }        
@@ -474,6 +474,12 @@ namespace MiniSQLEngine
                     }                     
                 }               
             }       
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Aquí tenemos que salvar la base de datos");
+            
         }
     }
 }

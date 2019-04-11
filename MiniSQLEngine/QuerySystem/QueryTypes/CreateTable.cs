@@ -41,10 +41,10 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                 string[] nombres = Directory.GetFiles(ruta);
                 //bool existe = esta(nombres, fileName);
                 //Console.WriteLine(existe);
-                if (!File.Exists(fileName))
-                {
-                    File.Create(fileName);
-                }
+                //if (!File.Exists(fileName))
+                //{
+                //    File.Create(fileName);
+               // }
                  
                 foreach (string s in column)
                 {
@@ -54,9 +54,14 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                     }
                        
                 }
+                    aux = aux.Remove(aux.Length-1);
                     aux += Environment.NewLine;
-                    File.Delete(fileName);
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
                     File.WriteAllText(fileName, aux);
+                    
                 }
             catch (Exception ex)
             {
