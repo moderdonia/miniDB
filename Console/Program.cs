@@ -25,7 +25,7 @@ namespace Programa
             //--------------------------------
             while (i < nombres.Length)
             {
-                
+                nombre = nombres[i];
                 //Console.WriteLine(nombres[i]);
                 //Console.WriteLine(nombres[i].Length);
                 int aux = nombres[i].Length-4;
