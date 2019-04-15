@@ -10,7 +10,7 @@ namespace MiniSQLEngine
     public class DB
     {
         
-        private Dictionary<string,Table> db;
+        public Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
         List<int> condsIndex = new List<int>();
@@ -403,6 +403,12 @@ namespace MiniSQLEngine
         
 
         //Internal Methods
+        public Dictionary<string, Table> getDB()
+        {
+  
+                return db;
+            
+        }
 
         private void prepareColumns(string[] cols)
         {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MiniSQLEngine.QuerySystem;
+using MiniSQLEngine.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +10,20 @@ namespace MiniSQLEngine
 {
     public class Profiles
     {
+        
         List<string> Allprivileges = new List<string>();
-        Dictionary<string, string> userList;
-        Dictionary<string, List<bool>> secProfiles;
-        Dictionary<string, string> userSecProfiles;
+        Dictionary<string, string> userList; // username - password
+        Dictionary<string, Dictionary<Table,List<bool>>> secProfiles; // secProfileName - Privileges (Table - PrivilegeList)
+        Dictionary<string, string> userSecProfiles; // userName - secProfile   binds privileges with users 
+
+
+        private string profileName;
+        private string password;
+        Dictionary<Table, List<bool>> privileges;
+        List<bool> adminPrivileges;
+        //We gonna consider that de userName and secProfileName will be the same.
+
+
 
         Profiles()
         {
@@ -19,61 +31,52 @@ namespace MiniSQLEngine
             Allprivileges.Add("insert");
             Allprivileges.Add("select");
             Allprivileges.Add("update");
+
+            for (int i = 0; i < Allprivileges.Count; i++)
+            {
+                foreach (Table tableName in DB.)
+                {
+                    privileges.Add(tableName, adminPrivileges);
+                }
+
+            }
+            userList.Add("admin", "admin");
+            secProfiles.Add("admin", privileges);
+            userSecProfiles.Add("admin",)
         }
         
 
-        public class Admin : Profiles
-        {
-            private string profileName;
-            private string password;
-            private List<bool> privileges;
 
-            Admin()
+            private void CreateProfile(string profile)
             {
-                profileName = "admin";
-                for(int i=0; i < Allprivileges.Count; i++)
-                {
-                    privileges.Add(true);
-                }
-                password = "admin";
-                userList.Add(profileName, password);
-                secProfiles.Add()
-            }
-
-            private void CreateProfile(string profile,List<bool> privileges)
-            {
-                secProfiles.Add(profile, privileges);
+                secProfiles.Add(profile, null);              
             }
             private void DeleteProfile(string profile)
             {
-                userList.Remove(profile);
+                secProfiles.Remove(profile);
             }
 
-            //change privileges
-            private void GivePrivileges(string profile, List<bool> privileges)
+            //change privileges of secProfiles on Tables 
+            private void GivePrivileges(string profile, List<bool> privileges,Table table)
             {
-                userList[profile].Clear();
-                foreach(bool b in privileges)
-                {
-                    userList[profile].Add(b);
-                }
+                secProfiles[profile].Clear();
+                secProfiles[profile].Add(table,privileges);
             }
-            private void RevokePrivileges(string profile, List<bool> privileges)
+            private void RevokePrivileges(string profile, List<bool> privileges, Table table)
             {
-                userList[profile].Clear();
-                foreach(bool b in privileges)
-                {
-                    userList[profile].Add(b);
-                }
+                secProfiles[profile].Clear();
+                secProfiles[profile].Add(table, privileges);
             }
-            private void addUser()
+            private void addUser(string userName, string pass, string secProf)
             {
+                userList.Add(userName, pass);
+                userSecProfiles.Add(userName, secProf);
 
             } 
-            private void deleteUser()
+            private void deleteUser(string userName)
             {
-
+                userList.Remove(userName);
             }
-        }
+        
     }
 }
