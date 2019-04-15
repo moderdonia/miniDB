@@ -39,26 +39,25 @@ namespace Programa
                     //Console.WriteLine(aux);
                     string nom = nombres[i].Substring(18);
                     nom = nom.Replace(".txt", "");
-                    archivo = File.OpenText(nombre);
-                    //Console.WriteLine(nom);
-                    //File.Delete(fileName);
-                    while (!archivo.EndOfStream)
+                    using (archivo = File.OpenText(nombre))
                     {
-                        row = archivo.ReadLine();
-                        if (++k == 0)
+                        //Console.WriteLine(nom);
+                        //File.Delete(fileName);
+                        while (!archivo.EndOfStream)
                         {
-                            break;
+                            row = archivo.ReadLine();
+                            if (++k == 0)
+                            {
+                                break;
+                            }
                         }
+                        //codigo para lectura con pattern
+                        columnas = row.Split(';');
+                        db.createTable(nom, columnas);
+                        //-------------------------------
+                        i++;
                     }
-                    //codigo para lectura con pattern
-                    columnas = row.Split(';');
-                    db.createTable(nom, columnas);
-                    //-------------------------------
-                    i++;
                 }
-
-
-
                 while (bucle)
                 {
                     Console.WriteLine("Inserte sentencia o escriba 'exit' para salir");
@@ -79,7 +78,6 @@ namespace Programa
 
                     }
                 }
-
                 /*
                     Console.WriteLine(abc[0]);
                     val = Console.ReadLine();

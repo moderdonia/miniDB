@@ -16,7 +16,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             return database.createTable(table, column);
         }
-        private Boolean esta(string[] pNombres,string pName)
+        private bool esta(string[] pNombres,string pName)
         {
             int i = 0;
             while (i <= pNombres.Length)
@@ -61,7 +61,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
                         File.Delete(fileName);
                     }
                     File.WriteAllText(fileName, aux);
-                    
+
                 }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using MiniSQLEngine.QuerySystem;
+using MiniSQLEngine.QuerySystem.QueryTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -478,8 +479,38 @@ namespace MiniSQLEngine
 
         public void Dispose()
         {
-            Console.WriteLine("Aquí tenemos que salvar la base de datos");
-            
+            //Guardado de todas las tablas
+            string fileName = @"..\..\..\Archivos\";
+            string[] nombres = Directory.GetFiles(fileName);
+            string[] cols;
+            int i = 0;
+            int j = 0;
+            while (i < nombres.Length)
+            {
+                File.Delete(nombres[i]);
+                i++;
+            }
+
+            Dictionary<string, Table>.KeyCollection keys = db.Keys;
+            foreach (string key in keys)
+            {
+                cols = new string[db[key].getTable().Keys.Count];
+                foreach (string a in db[key].getTable().Keys)
+                {
+                    cols[j] = a;
+                    j++;
+                   
+                }
+                new CreateTable(key, cols);
+                string name = @"..\..\..\Archivos\" + key + ".txt";
+                string aux = "";
+                aux += File.ReadAllText(name);
+                File.Delete(name);
+
+
+
+            }
         }
     }
 }
+ 
