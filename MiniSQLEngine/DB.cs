@@ -10,12 +10,14 @@ namespace MiniSQLEngine
 {
     public class DB: IDisposable
     {
+        
         private Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
-        
+        List<string> ordenAux = new List<string>();
+
 
         public string runQuery(string query)
         {
@@ -62,8 +64,8 @@ namespace MiniSQLEngine
             int i =0;
             int x = data.Length;
             ctrl = true;
-            List<string> ordenAux = new List<string>();
-            IEnumerable<string> missCols;
+            
+            
             prepareColumns(cols);
 
             if (listColAux.Count == 0)
@@ -109,7 +111,7 @@ namespace MiniSQLEngine
                 {
                     ordenAux.Add(k.name);    
                 }
-
+                IEnumerable<string> missCols;
                 missCols = db[pTable].getTable().Keys.Except(ordenAux);
                 IEnumerator<string> it = missCols.GetEnumerator();
 
@@ -269,102 +271,130 @@ namespace MiniSQLEngine
 
         public string exeSelect(string pTable, string[] cols, string[] conds)
         {
+           
             prepareColumns(cols);
             if (db.ContainsKey(pTable))
             {
                 Table table = db[pTable];
+                     
+                string outPut;
                 
-                //string[]  OutPut = new string[cols.Length];
-                string sk = "{";
-                //int skIndex = 0;
+                string[] sm = new string[cols.Length];
 
+                
+                if (conds[0] == null)
+                {
+                    
+                    Dictionary<string, List<string>> columnDic = table.getTable();
+                    string column1Name = columnDic.Keys.ToArray()[0];
+                    int numTuples = columnDic[column1Name].Count;
+                    outPut = "{";
 
-                if (conds[0]==null)
-                { 
                     foreach (Column s in listColAux)
                     {
                         if (!(s.name is null))
                         {
-
-                            //skIndex = 0;
-                            sk += s.name + ",";
-
-                            if (table.getTable().ContainsKey(s.name))
-                            {   
-                                foreach (string t in table.getTable()[s.name])
-                                {
-                                    sk += t + ",";
-                                    //skIndex++;
-
-                                    //sk.Remove(sk.LastIndexOf(','));
-                                    //sk += "}";
-                                }
-
-                                //sk.Remove(0, sk.LastIndexOf(','));
-                                //sk += '}';
-
-                                //if (ctrl)
-                                //{
-                                //sk = s.name + "\n";
-                                //ctrl = false;
-                                //}
-                                //else
-                                //{
-                                //    foreach (string t in table.getTable()[s.name])
-                                //    {
-                                //       OutPut[skIndex] += " " + table.getTable()[s.name][skIndex];
-                                //        skIndex++;
-                                //    }
-                                // }
-                            }
-                            else
-                            {
-                                return Messages.ColumnDoesNotExist + " " + s.name; //saca error aun quitando correctamente los datos
-                            }
-
-                            
-
+                            outPut += s.name + ", ";
                         }
                     }
 
-                    int index = sk.LastIndexOf(',');
-                    sk = sk.Substring(0, index);
+                    int n = outPut.LastIndexOf(',');
+                    outPut = outPut.Substring(0, n);
+                    outPut += "}";
 
-                    sk += "}";
+                    for (int j = 0; j < numTuples; j++)
+                    {
+                        outPut += "{";
 
+                        foreach (Column column in listColAux)
+                        {
+
+                            outPut += db[pTable].getTable()[column.name][j] + ", ";
+                        }
+
+                        int indes = outPut.LastIndexOf(',');
+                        outPut = outPut.Substring(0, indes);
+                        outPut += "}";
+                    }
+ 
                 }
                 else
                 {
                     prepareConditions(table, conds);
-                    foreach (Column s in listColAux) //se crean demasiados espacios nulos
-                    {   
-                        if(!(s.name is null))
-                        {
-                            sk += s.name + ",";
-                            //skIndex = 0;
 
-                            if (table.getTable().ContainsKey(s.name))   //pendiente
-                            {
-                                foreach (int i in condsIndex)
-                                {
-                                    sk +=  table.getTable()[s.name][i] + ", " ;
-                                    //skIndex++;
-                                }
-                            }
-                            else
-                            {
-                                return Messages.ColumnDoesNotExist + " " + s.name;
-                            }
-                        }    
+                    Dictionary<string, List<string>> columnDic = table.getTable();
+                    string column1Name = columnDic.Keys.ToArray()[0];
+                    int numTuples = columnDic[column1Name].Count;
+                    outPut = "{";
+
+                    foreach (Column s in listColAux)
+                    {
+                        if (!(s.name is null))
+                        {
+                            outPut += s.name + ", ";
+                        }
                     }
 
-                    int index = sk.LastIndexOf(',');
-                    sk = sk.Substring(0, index);
-                    sk += "}";
+                    int n = outPut.LastIndexOf(',');
+                    outPut = outPut.Substring(0, n);
+                    outPut += "}";
 
+                    foreach (Column f in listColAux)
+                    {
+                        ordenAux.Add(f.name);
+                    }
+                    IEnumerable<string> missCols;
+                    missCols = db[pTable].getTable().Keys.Except(ordenAux);
+                    IEnumerator<string> it = missCols.GetEnumerator();
+                    
+
+                    int p = 0;
+                    if(it.MoveNext() == true)
+                    {
+                        it.Reset();
+                        foreach (int w in condsIndex)
+                        {
+
+                            outPut += "{";
+                                foreach (Column column in listColAux)
+                                {
+                                    while (it.MoveNext())
+                                    {
+                                        if (!it.Current.Equals(columnDic.Keys.ToArray()[p]))
+                                        {
+                                        outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                        }
+                                    p++;
+                                    }
+
+                                }
+                                int n2 = outPut.LastIndexOf(',');
+                                outPut = outPut.Substring(0, n2);
+                                outPut += "}";
+                            
+                        }
+                    }
+                    else
+                    {
+                        foreach (int w in condsIndex)
+                        {
+
+                            outPut += "{";
+                            foreach (Column column in listColAux)
+                            {
+                                outPut += db[pTable].getTable()[column.name][w] + ", ";
+                            }
+                            int n3 = outPut.LastIndexOf(',');
+                            outPut = outPut.Substring(0, n3);
+                            outPut += "}";
+                            
+                        }
+                    }
+                    
+                    
                 }
                 
-                return sk;
+                return outPut;
             }
             else
             {
