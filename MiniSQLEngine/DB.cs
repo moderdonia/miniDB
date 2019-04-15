@@ -513,6 +513,7 @@ namespace MiniSQLEngine
             string fileName = @"..\..\..\Archivos\";
             string[] nombres = Directory.GetFiles(fileName);
             string[] cols;
+            string salida ="";
             int i = 0;
             int j = 0;
             while (i < nombres.Length)
@@ -537,8 +538,24 @@ namespace MiniSQLEngine
                 aux += File.ReadAllText(name);
                 File.Delete(name);
 
+                Table table = db[key];
+                Dictionary<string, List<string>> columnDic = table.getTable();
+                string column1Name = columnDic.Keys.ToArray()[0];
+                int numTuples = columnDic[column1Name].Count;
+                for (int k = 0; k < numTuples; k++)
+                {
 
+                    foreach (Column column in listColAux)
+                    {
 
+                        salida += db[key].getTable()[column.name][k] + ";";
+                    }
+
+                    int indes = salida.LastIndexOf(';');
+                    salida = salida.Substring(0, indes)+Environment.NewLine;
+                }
+                aux += salida;
+                File.WriteAllText(name, aux);
             }
         }
     }
