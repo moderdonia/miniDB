@@ -51,7 +51,7 @@ namespace MiniSQLEngine
             }
             else
             {
-                return Messages.DatabaseExist;
+                return Messages.TableAlreadyExists;
             }
             
         }
@@ -162,7 +162,7 @@ namespace MiniSQLEngine
             if (db.ContainsKey(table))
             {
                 db.Remove(table);
-                return Messages.DeleteTableSuccess;
+                return Messages.TupleDeleteSuccess;
             }
             else
             {
