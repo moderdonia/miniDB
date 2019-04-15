@@ -93,10 +93,10 @@ namespace MiniSQLEngine
             drop = @"DROP\s*SECURITY\s*PROFILE\s*(\w+);";
 
             //Grant
-            grant = @"GRANT\s*(\w+)\s*ON\s*(\w+)\s*TO\s*(\w+);";
+            grant = @"GRANT\s*(DELETE|INSERT|SELECT|UPDATE)\s*ON\s*(\w+)\s*TO\s*(\w+);";
 
             //Revoke
-            revoke = @"REVOKE\s*(\w+)\s*ON\s*(\w+)\s*TO\s*(\w+);";
+            revoke = @"REVOKE\s*(DELETE|INSERT|SELECT|UPDATE)\s*ON\s*(\w+)\s*TO\s*(\w+);";
 
             //Add User
             addUser = @"ADD\s*USER\s*\((\w+),\s*(\w+),\s*(\w+)\);";

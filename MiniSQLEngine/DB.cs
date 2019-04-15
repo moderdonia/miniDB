@@ -401,7 +401,12 @@ namespace MiniSQLEngine
             }
         } 
         
+        //Security Methods
 
+        public void createSP(string profile)
+        {
+            
+        }
         //Internal Methods
 
         private void prepareColumns(string[] cols)
