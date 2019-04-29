@@ -10,7 +10,9 @@ namespace Programa
 
         static void Main(string[] args)
         {
-            DB db = new DB("db1");
+            DB db = new DB("db1"); // catch from SQLParser
+            Profiles prof = new Profiles();
+            prof.SetDB(db);
             bool bucle = true;
             string linea;
 

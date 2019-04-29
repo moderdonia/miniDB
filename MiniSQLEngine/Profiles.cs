@@ -1,5 +1,4 @@
 ﻿using MiniSQLEngine.QuerySystem;
-using MiniSQLEngine.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,72 +9,91 @@ namespace MiniSQLEngine
 {
     public class Profiles
     {
+        DB database;
+        Table tables;
+        List<string> AllPrivileges = new List<string>();
+        Dictionary<string, string> userList= new Dictionary<string, string>(); // username - password
+        Dictionary<string, Dictionary<string, List<bool>>> secProfiles = new Dictionary<string, Dictionary<string, List<bool>>>(); // secProfileName - Privileges (TableName - PrivilegeList)
+        List<bool> adminPrivileges = new List<bool>();
+        List<bool> falsePrivileges = new List<bool>();
+
+        //Dictionary<string, string> userSecProfiles; // userName - secProfile   binds privileges with users 
+
+        //We gonna consider userName and secProfileName must be the same.
+
         
-        List<string> Allprivileges = new List<string>();
-        Dictionary<string, string> userList; // username - password
-        Dictionary<string, Dictionary<Table,List<bool>>> secProfiles; // secProfileName - Privileges (Table - PrivilegeList)
-        Dictionary<string, string> userSecProfiles; // userName - secProfile   binds privileges with users 
 
-
-        private string profileName;
-        private string password;
-        Dictionary<Table, List<bool>> privileges;
-        List<bool> adminPrivileges;
-        //We gonna consider that de userName and secProfileName will be the same.
-
-
-
-        Profiles()
+        public Profiles()
         {
-            Allprivileges.Add("delete");
-            Allprivileges.Add("insert");
-            Allprivileges.Add("select");
-            Allprivileges.Add("update");
+            
+            tables = database.db[database.getNameDB()];
+            AllPrivileges.Add("DELETE");
+            AllPrivileges.Add("INSERT");
+            AllPrivileges.Add("SELECT");
+            AllPrivileges.Add("UPDATE");
 
-            for (int i = 0; i < Allprivileges.Count; i++)
+            adminPrivileges.Add(true);
+            adminPrivileges.Add(true);
+            adminPrivileges.Add(true);
+            adminPrivileges.Add(true);
+
+            falsePrivileges.Add(false);
+            falsePrivileges.Add(false);
+            falsePrivileges.Add(false);
+            falsePrivileges.Add(false);
+
+            secProfiles.Add("admin",null);
+
+            foreach(string t in tables.dc.Keys)
             {
-                foreach (Table tableName in DB.)
-                {
-                    privileges.Add(tableName, adminPrivileges);
-                }
-
+               secProfiles["admin"].Add(t, adminPrivileges);
             }
+
             userList.Add("admin", "admin");
-            secProfiles.Add("admin", privileges);
-            userSecProfiles.Add("admin",)
         }
         
+        public void SetDB(DB db) //invoked in Program Class
+        {
+            database = db;
+        }
 
-
-            private void CreateProfile(string profile)
+            private void CreateSecProfile(string profile)
             {
                 secProfiles.Add(profile, null);              
             }
-            private void DeleteProfile(string profile)
+            private void DeleteSecProfile(string profile)
             {
+                userList.Remove(profile);
                 secProfiles.Remove(profile);
             }
 
             //change privileges of secProfiles on Tables 
-            private void GivePrivileges(string profile, List<bool> privileges,Table table)
+            private void GivePrivileges(string privilege,string table, string secProf)
             {
-                secProfiles[profile].Clear();
-                secProfiles[profile].Add(table,privileges);
+                int index = 0;
+                index = AllPrivileges.IndexOf(privilege);
+                secProfiles[secProf][table].Insert(index, true);
             }
-            private void RevokePrivileges(string profile, List<bool> privileges, Table table)
+            private void RevokePrivileges(string privilege, string table, string secProf)
             {
-                secProfiles[profile].Clear();
-                secProfiles[profile].Add(table, privileges);
+                int index = 0;
+                index = AllPrivileges.IndexOf(privilege);
+                secProfiles[secProf][table].Insert(index, false);
             }
             private void addUser(string userName, string pass, string secProf)
             {
                 userList.Add(userName, pass);
-                userSecProfiles.Add(userName, secProf);
+                secProfiles.Add(userName, null);
+                foreach (string t in tables.dc.Keys)
+                {
+                    secProfiles[userName].Add(t, falsePrivileges);
+                }
 
             } 
             private void deleteUser(string userName)
             {
                 userList.Remove(userName);
+                secProfiles.Remove(userName);
             }
         
     }

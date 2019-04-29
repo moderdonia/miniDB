@@ -10,7 +10,7 @@ namespace MiniSQLEngine.QuerySystem
     public class Table
     {
         string name;
-        Dictionary<string, List<string>> dc = new Dictionary<string, List<string>>();
+        public Dictionary<string, List<string>> dc = new Dictionary<string, List<string>>(); // TableName - TableColumnNames
 
         public Table(string name, List<Column> cols)
         {
