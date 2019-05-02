@@ -10,9 +10,10 @@ namespace MiniSQLEngine
     public class DB
     {
         
-        private Dictionary<string,Table> db;
+        public Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
+        List<string> DBlist = new List<string>();
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
         List<string> ordenAux = new List<string>();
@@ -28,7 +29,7 @@ namespace MiniSQLEngine
             }
             else
             {
-                return "Query unrecognized";
+                return Messages.WrongSyntax;
             }
 
         }
@@ -37,6 +38,8 @@ namespace MiniSQLEngine
         {
             db = new Dictionary<string, Table>();
             this.name = name;
+            DBlist.Add(name);
+            
         }
 
         public string createTable(string name, string[] attbs)
@@ -408,6 +411,10 @@ namespace MiniSQLEngine
             
         }
         //Internal Methods
+        public string getNameDB()
+        {
+            return name;
+        }
 
         private void prepareColumns(string[] cols)
         {
@@ -424,7 +431,7 @@ namespace MiniSQLEngine
             }
         }
 
-        private void prepareConditions(Table table ,string[] conds)     //saca error aun quitando correctamente los datos
+        private void prepareConditions(Table table ,string[] conds)     
         {
             condsIndex.Clear();           
             for (int condsCols = 0; condsCols < conds.Length; condsCols += 1)
@@ -438,7 +445,7 @@ namespace MiniSQLEngine
                         case "<":
                             if (table.getTable().ContainsKey(conds[condsCols-1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) < Int32.Parse(conds[condsCols+1]))
                                     {
@@ -451,7 +458,7 @@ namespace MiniSQLEngine
                         case "<=":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) <= Int32.Parse(conds[condsCols + 1]))
                                     {
@@ -464,7 +471,7 @@ namespace MiniSQLEngine
                         case ">":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) > Int32.Parse(conds[condsCols + 1]))
                                     {
@@ -477,7 +484,7 @@ namespace MiniSQLEngine
                         case ">=":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) >= Int32.Parse(conds[condsCols + 1]))
                                     {

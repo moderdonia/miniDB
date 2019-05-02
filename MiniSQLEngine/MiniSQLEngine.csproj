@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DB.cs" />
     <Compile Include="Messages.cs" />
+    <Compile Include="Profiles.cs" />
     <Compile Include="QuerySystem\Column.cs" />
     <Compile Include="QuerySystem\QueryTypes\BackUp.cs" />
     <Compile Include="QuerySystem\QueryTypes\CreateDB.cs" />
