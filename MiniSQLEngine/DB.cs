@@ -49,7 +49,7 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
-                
+                prof.getTables();
                 return Messages.CreateTableSuccess;
             }
             else
@@ -402,14 +402,95 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-        } 
-        
-        //Security Methods
+        }
 
-        public void createSP(string profile)
+        // Security methods 
+
+        DB database;
+        Table tables;
+        Profiles prof = Profiles.getInstance();
+
+       
+
+        public string CreateSecProfile(string profile)
         {
+            prof.secProfiles.Add(profile, null);
+            if (prof.userList.ContainsKey(profile))
+            {
+                return Messages.SecurityProfileAlreadyExists;
+            }
+            else
+            {
+                return Messages.SecurityProfileCreated;
+            }
+        }
+        public string DeleteSecProfile(string profile)
+        {
+            prof.userList.Remove(profile);
+            prof.secProfiles.Remove(profile);
+
+            if (prof.userList.ContainsKey(profile))
+            {
+                return Messages.SecurityProfileDeleted;
+            }
+            else
+            {
+                return Messages.SecurityProfileDoesNotExist;
+            }
+        }
+
+        //change privileges of secProfiles on Tables 
+        public string GivePrivileges(string privilege, string table, string secProf)
+        {
+            int index = 0;
+            index = prof.AllPrivileges.IndexOf(privilege);
+            prof.secProfiles[secProf][table].Insert(index, true);
+
+            return Messages.SecurityPrivilegeGranted;
+        }
+        public string RevokePrivileges(string privilege, string table, string secProf)
+        {
+            int index = 0;
+            index = prof.AllPrivileges.IndexOf(privilege);
+            prof.secProfiles[secProf][table].Insert(index, false);
+
+            return Messages.SecurityPrivilegeRevoked;
+        }
+        public string addUser(string userName, string pass, string secProf)
+        {
+            prof.userList.Add(userName, pass);
+            prof.secProfiles.Add(userName, null);
+
+            if (prof.userList.ContainsKey(userName))
+            {
+                return Messages.SecurityUserAlreadyExists;
+            }
+            else
+            {
+                foreach (string t in tables.dc.Keys)
+                {
+                    prof.secProfiles[userName].Add(t, prof.falsePrivileges);
+                }
+
+                return Messages.SecurityUserAdded;
+            }
+        }
+        public string deleteUser(string userName)
+        {
+            prof.userList.Remove(userName);
+            prof.secProfiles.Remove(userName);
+
+            if (prof.userList.ContainsKey(userName))
+            {
+                return Messages.SecurityUserDeleted;
+            }
+            else
+            {
+                return Messages.SecurityUserDoesNotExist;
+            }
             
         }
+
         //Internal Methods
         public string getNameDB()
         {

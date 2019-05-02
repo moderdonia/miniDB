@@ -466,9 +466,9 @@ namespace MiniSQLEngine
             {
                 security = matchCS.Groups[1].Value;
                 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new CreateSP(security);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
@@ -481,9 +481,9 @@ namespace MiniSQLEngine
             {
                 securityD = matchDS.Groups[1].Value;
 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new DropSP(securityD);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
@@ -500,9 +500,9 @@ namespace MiniSQLEngine
                 table = matchG.Groups[2].Value;
                 profile = matchG.Groups[3].Value;
 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new Grant(type, table, profile);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
@@ -519,9 +519,9 @@ namespace MiniSQLEngine
                 tableR = matchR.Groups[2].Value;
                 profileR = matchR.Groups[3].Value;
 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new Login(typeR, tableR, profileR);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
@@ -538,9 +538,9 @@ namespace MiniSQLEngine
                 pass = matchU.Groups[2].Value;
                 profileU = matchU.Groups[3].Value;
 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new AddUser(user, pass, profileU);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
@@ -553,9 +553,9 @@ namespace MiniSQLEngine
             {
                 userD = matchDU.Groups[1].Value;
 
-                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+                SQLtype sentencia = new DeleteUser(userD);
 
-                //return sentencia;
+                return sentencia;
 
             }
 
