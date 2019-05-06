@@ -1,4 +1,5 @@
 ﻿using MiniSQLEngine.QuerySystem;
+using MiniSQLEngine.QuerySystem.QueryTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ namespace MiniSQLEngine
 {
     public class DB
     {
-        
+        Login login;
         public Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
@@ -27,8 +28,11 @@ namespace MiniSQLEngine
             {
                 return sqltype.Execute(this);
             }
-            else
+            else if(sqltype.GetType().Equals(login))
             {
+                return sqltype.Execute(this);
+            }
+            else{
                 return Messages.WrongSyntax;
             }
 
@@ -39,7 +43,12 @@ namespace MiniSQLEngine
             db = new Dictionary<string, Table>();
             this.name = name;
             DBlist.Add(name);
-            
+            prof.SetDB(this);
+        }
+
+        public DB(string name,int num)
+        {
+            prof.SetDB(this);
         }
 
         public string createTable(string name, string[] attbs)
@@ -50,6 +59,7 @@ namespace MiniSQLEngine
             {
                 db.Add(name, table);
                 prof.getTables();
+                
                 return Messages.CreateTableSuccess;
             }
             else
