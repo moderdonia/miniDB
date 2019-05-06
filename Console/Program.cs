@@ -46,7 +46,6 @@ namespace Programa
                         while (!archivo.EndOfStream)
                         {
                             row = archivo.ReadLine();
-                            Console.WriteLine(row);
                             if (++k == 0)
                             {
                                 break;

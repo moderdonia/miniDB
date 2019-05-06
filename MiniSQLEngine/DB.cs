@@ -507,7 +507,7 @@ namespace MiniSQLEngine
             }       
         }
 
-        private void createFile(string table, string[] column)
+        private string createFile(string table, string[] column)
         {
             try
             {
@@ -532,16 +532,12 @@ namespace MiniSQLEngine
                 }
                 aux = aux.Remove(aux.Length - 1);
                 aux += Environment.NewLine;
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-                File.WriteAllText(fileName, aux);
+                return aux;
 
             }
             catch (Exception ex)
             {
-
+                return null;
             }
         }
 
@@ -554,11 +550,11 @@ namespace MiniSQLEngine
             string salida ="";
             int i = 0;
             int j = 0;
-            while (i < nombres.Length)
-            {
-                File.Delete(nombres[i]);
-                i++;
-            }
+            //while (i < nombres.Length)
+            //{
+              // File.Delete(nombres[i]);
+               // i++;
+           // }
 
             Dictionary<string, Table>.KeyCollection keys = db.Keys;
             foreach (string key in keys)
@@ -569,24 +565,35 @@ namespace MiniSQLEngine
                     cols[j] = a;
                     j++;
                 }
-                createFile(key, cols);
+
                 string name = @"..\..\..\Archivos\" + key + ".txt";
                 string aux = "";
-                aux += File.ReadAllText(name);
-                File.Delete(name);
-
-                //Table table = db[key];
-                //Dictionary<string, List<string>> columnDic = table.getTable();
-                //string column1Name = columnDic.Keys.ToArray()[0];
-                //int numTuples = columnDic[column1Name].Count;
-                int numTuples = db[key].getTable().Keys.Count;
+                if (nombres.Contains(key + ".txt"))
+                {
+                    StreamReader archivo = File.OpenText(key);
+                    //aux += File.ReadAllText(name);
+                    //File.Delete(name);
+                    while (!archivo.EndOfStream)
+                    {
+                        aux+= archivo.ReadLine();
+                    }
+                }
+                else {
+                    aux += createFile(key, cols);
+                }
+                
+                Table table = db[key];
+                Dictionary<string, List<string>> columnDic = table.getTable();
+                string column1Name = columnDic.Keys.ToArray()[0];
+                int numTuples = columnDic[column1Name].Count;
+                //int numTuples = db[key].getTable().Keys.Count;
                 for (int k = 0; k < numTuples; k++)
                 {
 
-                    foreach (Column column in listColAux)
+                    foreach (string column in cols)
                     {
 
-                        salida += db[key].getTable()[column.name][k] + ";";
+                        salida += db[key].getTable()[column][k] + ";";
                     }
 
                     int indes = salida.LastIndexOf(';');
