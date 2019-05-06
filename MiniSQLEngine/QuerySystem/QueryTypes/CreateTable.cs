@@ -32,44 +32,8 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public CreateTable(string table, string[] column)
         {
             //string fileName = @"..\..\Files\tabla.txt";
-            
-            try
-                {
-                string fileName = @"..\..\..\Archivos\" + table + ".txt";
-                string ruta = @"..\..\..\Archivos\";
-                string aux = "";
-                string[] nombres = Directory.GetFiles(ruta);
-                //bool existe = esta(nombres, fileName);
-                //Console.WriteLine(existe);
-                //if (!File.Exists(fileName))
-                //{
-                //    File.Create(fileName);
-               // }
-                 
-                foreach (string s in column)
-                {
-                    if (s != null)
-                    {
-                        aux += s + ";";
-                    }
-                       
-                }
-                    aux = aux.Remove(aux.Length-1);
-                    aux += Environment.NewLine;
-                    if (File.Exists(fileName))
-                    {
-                        File.Delete(fileName);
-                    }
-                    File.WriteAllText(fileName, aux);
-
-                }
-            catch (Exception ex)
-            {
-                
-            }
                 this.table = table;
                 this.column = column;
-            
         }
         public string getTabla()
         {

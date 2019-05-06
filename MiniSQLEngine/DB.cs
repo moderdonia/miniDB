@@ -47,7 +47,7 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
-                
+
                 return Messages.CreateTableSuccess;
             }
             else
@@ -507,6 +507,44 @@ namespace MiniSQLEngine
             }       
         }
 
+        private void createFile(string table, string[] column)
+        {
+            try
+            {
+                string fileName = @"..\..\..\Archivos\" + table + ".txt";
+                string ruta = @"..\..\..\Archivos\";
+                string aux = "";
+                string[] nombres = Directory.GetFiles(ruta);
+                //bool existe = esta(nombres, fileName);
+                //Console.WriteLine(existe);
+                //if (!File.Exists(fileName))
+                //{
+                //    File.Create(fileName);
+                // }
+
+                foreach (string s in column)
+                {
+                    if (s != null)
+                    {
+                        aux += s + ";";
+                    }
+
+                }
+                aux = aux.Remove(aux.Length - 1);
+                aux += Environment.NewLine;
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+                File.WriteAllText(fileName, aux);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         public void Dispose()
         {
             //Guardado de todas las tablas
@@ -530,18 +568,18 @@ namespace MiniSQLEngine
                 {
                     cols[j] = a;
                     j++;
-                   
                 }
-                new CreateTable(key, cols);
+                createFile(key, cols);
                 string name = @"..\..\..\Archivos\" + key + ".txt";
                 string aux = "";
                 aux += File.ReadAllText(name);
                 File.Delete(name);
 
-                Table table = db[key];
-                Dictionary<string, List<string>> columnDic = table.getTable();
-                string column1Name = columnDic.Keys.ToArray()[0];
-                int numTuples = columnDic[column1Name].Count;
+                //Table table = db[key];
+                //Dictionary<string, List<string>> columnDic = table.getTable();
+                //string column1Name = columnDic.Keys.ToArray()[0];
+                //int numTuples = columnDic[column1Name].Count;
+                int numTuples = db[key].getTable().Keys.Count;
                 for (int k = 0; k < numTuples; k++)
                 {
 
