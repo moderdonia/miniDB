@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MiniSQLEngine
 {
-    public class DB
+    public class DB: IDisposable
     {
         Login login;
         public Dictionary<string,Table> db;
@@ -64,15 +64,15 @@ namespace MiniSQLEngine
             }
             else
             {
-                return Messages.DatabaseExist;
+                return Messages.TableAlreadyExists;
             }
             
         }
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
-            string fileName = @"..\..\..\Archivos\" + pTable + ".txt";
-            string texto = File.ReadAllText(fileName);
+            //string //FileName = @"..\..\..\Archivos\" + pTable + ".txt";
+            //string texto = //File.ReadAllText(//FileName);
             int i =0;
             int x = data.Length;
             ctrl = true;
@@ -96,7 +96,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d].Add(aux);
-                                    texto += aux + ";";
+                                    //texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -104,16 +104,16 @@ namespace MiniSQLEngine
                             
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                   // texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }
@@ -140,7 +140,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d.name].Add(aux);
-                                    texto += aux + ";";
+                                   // texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -155,16 +155,16 @@ namespace MiniSQLEngine
                             db[pTable].getTable()[it.Current].Add("null");
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }        
@@ -175,7 +175,7 @@ namespace MiniSQLEngine
             if (db.ContainsKey(table))
             {
                 db.Remove(table);
-                return Messages.DeleteTableSuccess;
+                return Messages.TupleDeleteSuccess;
             }
             else
             {
@@ -608,5 +608,105 @@ namespace MiniSQLEngine
                 }               
             }       
         }
+
+        private string createFile(string table, string[] column)
+        {
+            try
+            {
+                string fileName = @"..\..\..\Archivos\" + table + ".txt";
+                string ruta = @"..\..\..\Archivos\";
+                string aux = "";
+                string[] nombres = Directory.GetFiles(ruta);
+                //bool existe = esta(nombres, fileName);
+                //Console.WriteLine(existe);
+                //if (!File.Exists(fileName))
+                //{
+                //    File.Create(fileName);
+                // }
+
+                foreach (string s in column)
+                {
+                    if (s != null)
+                    {
+                        aux += s + ";";
+                    }
+
+                }
+                aux = aux.Remove(aux.Length - 1);
+                aux += Environment.NewLine;
+                return aux;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public void Dispose()
+        {
+            //Guardado de todas las tablas
+            string fileName = @"..\..\..\Archivos\";
+            string[] nombres = Directory.GetFiles(fileName);
+            string[] cols;
+            string salida ="";
+            int i = 0;
+            int j = 0;
+            //while (i < nombres.Length)
+            //{
+              // File.Delete(nombres[i]);
+               // i++;
+           // }
+
+            Dictionary<string, Table>.KeyCollection keys = db.Keys;
+            foreach (string key in keys)
+            {
+                cols = new string[db[key].getTable().Keys.Count];
+                foreach (string a in db[key].getTable().Keys)
+                {
+                    cols[j] = a;
+                    j++;
+                }
+                j = 0;
+                string name = @"..\..\..\Archivos\" + key + ".txt";
+                string aux = "";
+                if (nombres.Contains(key + ".txt"))
+                {
+                    StreamReader archivo = File.OpenText(key);
+                    //aux += File.ReadAllText(name);
+                    //File.Delete(name);
+                    while (!archivo.EndOfStream)
+                    {
+                        aux+= archivo.ReadLine();
+                    }
+                }
+                else {
+                    aux += createFile(key, cols);
+                }
+                
+                Table table = db[key];
+                Dictionary<string, List<string>> columnDic = table.getTable();
+                string column1Name = columnDic.Keys.ToArray()[0];
+                int numTuples = columnDic[column1Name].Count;
+                //int numTuples = db[key].getTable().Keys.Count;
+                for (int k = 0; k < numTuples; k++)
+                {
+
+                    foreach (string column in cols)
+                    {
+
+                        salida += db[key].getTable()[column][k] + ";";
+                    }
+
+                    int indes = salida.LastIndexOf(';');
+                    salida = salida.Substring(0, indes)+Environment.NewLine;
+                }
+                aux += salida;
+                File.WriteAllText(name, aux);
+                aux = "";
+                salida = "";
+            }
+        }
     }
 }
+ 
