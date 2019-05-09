@@ -1,4 +1,5 @@
 ﻿using MiniSQLEngine.QuerySystem;
+using MiniSQLEngine.QuerySystem.QueryTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,9 +8,9 @@ using System.Linq;
 
 namespace MiniSQLEngine
 {
-    public class DB
+    public class DB: IDisposable
     {
-        
+        Login login;
         public Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
@@ -27,8 +28,11 @@ namespace MiniSQLEngine
             {
                 return sqltype.Execute(this);
             }
-            else
+            else if(sqltype.GetType().Equals(login))
             {
+                return sqltype.Execute(this);
+            }
+            else{
                 return Messages.WrongSyntax;
             }
 
@@ -39,7 +43,11 @@ namespace MiniSQLEngine
             db = new Dictionary<string, Table>();
             this.name = name;
             DBlist.Add(name);
-            
+        }
+
+        public DB(string name,int num)
+        {
+            prof.SetDB(this);
         }
 
         public string createTable(string name, string[] attbs)
@@ -49,20 +57,21 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
+                prof.getTables();
                 
                 return Messages.CreateTableSuccess;
             }
             else
             {
-                return Messages.DatabaseExist;
+                return Messages.TableAlreadyExists;
             }
             
         }
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
-            string fileName = @"..\..\..\Archivos\" + pTable + ".txt";
-            string texto = File.ReadAllText(fileName);
+            //string //FileName = @"..\..\..\Archivos\" + pTable + ".txt";
+            //string texto = //File.ReadAllText(//FileName);
             int i =0;
             int x = data.Length;
             ctrl = true;
@@ -86,7 +95,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d].Add(aux);
-                                    texto += aux + ";";
+                                    //texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -94,16 +103,16 @@ namespace MiniSQLEngine
                             
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                   // texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }
@@ -130,7 +139,7 @@ namespace MiniSQLEngine
                                 {
                                     string aux = data[i].ToString();
                                     db[pTable].getTable()[d.name].Add(aux);
-                                    texto += aux + ";";
+                                   // texto += aux + ";";
                                 }
                                 i++;
                                 ctrl = false;
@@ -145,16 +154,16 @@ namespace MiniSQLEngine
                             db[pTable].getTable()[it.Current].Add("null");
                         }
                     }
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.InsertSuccess;
                 }
                 else
                 {
-                    texto += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, texto);
+                    //texto += Environment.NewLine;
+                    //File.Delete(//FileName);
+                    //File.WriteAllText(//FileName, texto);
                     return Messages.TableDoesNotExist;
                 }
             }        
@@ -165,7 +174,7 @@ namespace MiniSQLEngine
             if (db.ContainsKey(table))
             {
                 db.Remove(table);
-                return Messages.DeleteTableSuccess;
+                return Messages.TupleDeleteSuccess;
             }
             else
             {
@@ -402,14 +411,95 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-        } 
-        
-        //Security Methods
+        }
 
-        public void createSP(string profile)
+        // Security methods 
+
+        //DB database;
+        //Table tables;
+        Profiles prof = Profiles.getInstance();
+
+       
+
+        public string CreateSecProfile(string profile)
         {
+            prof.secProfiles.Add(profile, null);
+            if (prof.userList.ContainsKey(profile))
+            {
+                return Messages.SecurityProfileAlreadyExists;
+            }
+            else
+            {
+                return Messages.SecurityProfileCreated;
+            }
+        }
+        public string DeleteSecProfile(string profile)
+        {
+            prof.userList.Remove(profile);
+            prof.secProfiles.Remove(profile);
+
+            if (prof.userList.ContainsKey(profile))
+            {
+                return Messages.SecurityProfileDeleted;
+            }
+            else
+            {
+                return Messages.SecurityProfileDoesNotExist;
+            }
+        }
+
+        //change privileges of secProfiles on Tables 
+        public string GivePrivileges(string privilege, string table, string secProf)
+        {
+            int index = 0;
+            index = prof.AllPrivileges.IndexOf(privilege);
+            prof.secProfiles[secProf][table].Insert(index, true);
+
+            return Messages.SecurityPrivilegeGranted;
+        }
+        public string RevokePrivileges(string privilege, string table, string secProf)
+        {
+            int index = 0;
+            index = prof.AllPrivileges.IndexOf(privilege);
+            prof.secProfiles[secProf][table].Insert(index, false);
+
+            return Messages.SecurityPrivilegeRevoked;
+        }
+        public string addUser(string userName, string pass, string secProf)
+        {
+            prof.userList.Add(userName, pass);
+            prof.secProfiles.Add(userName, null);
+
+            if (prof.userList.ContainsKey(userName))
+            {
+                return Messages.SecurityUserAlreadyExists;
+            }
+            else
+            {
+                foreach (string t in prof.getTables().dc.Keys)
+                {
+                    prof.secProfiles[userName].Add(t, prof.falsePrivileges);
+                }
+
+                return Messages.SecurityUserAdded;
+            }
+        }
+        public string deleteUser(string userName)
+        {
+            prof.userList.Remove(userName);
+            prof.secProfiles.Remove(userName);
+
+            if (prof.userList.ContainsKey(userName))
+            {
+                return Messages.SecurityUserDeleted;
+            }
+            else
+            {
+                return Messages.SecurityUserDoesNotExist;
+            }
             
         }
+
         //Internal Methods
         public string getNameDB()
         {
@@ -517,5 +607,105 @@ namespace MiniSQLEngine
                 }               
             }       
         }
+
+        private string createFile(string table, string[] column)
+        {
+            try
+            {
+                string fileName = @"..\..\..\Archivos\" + table + ".txt";
+                string ruta = @"..\..\..\Archivos\";
+                string aux = "";
+                string[] nombres = Directory.GetFiles(ruta);
+                //bool existe = esta(nombres, fileName);
+                //Console.WriteLine(existe);
+                //if (!File.Exists(fileName))
+                //{
+                //    File.Create(fileName);
+                // }
+
+                foreach (string s in column)
+                {
+                    if (s != null)
+                    {
+                        aux += s + ";";
+                    }
+
+                }
+                aux = aux.Remove(aux.Length - 1);
+                aux += Environment.NewLine;
+                return aux;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public void Dispose()
+        {
+            //Guardado de todas las tablas
+            string fileName = @"..\..\..\Archivos\";
+            string[] nombres = Directory.GetFiles(fileName);
+            string[] cols;
+            string salida ="";
+            int i = 0;
+            int j = 0;
+            //while (i < nombres.Length)
+            //{
+              // File.Delete(nombres[i]);
+               // i++;
+           // }
+
+            Dictionary<string, Table>.KeyCollection keys = db.Keys;
+            foreach (string key in keys)
+            {
+                cols = new string[db[key].getTable().Keys.Count];
+                foreach (string a in db[key].getTable().Keys)
+                {
+                    cols[j] = a;
+                    j++;
+                }
+                j = 0;
+                string name = @"..\..\..\Archivos\" + key + ".txt";
+                string aux = "";
+                if (nombres.Contains(key + ".txt"))
+                {
+                    StreamReader archivo = File.OpenText(key);
+                    //aux += File.ReadAllText(name);
+                    //File.Delete(name);
+                    while (!archivo.EndOfStream)
+                    {
+                        aux+= archivo.ReadLine();
+                    }
+                }
+                else {
+                    aux += createFile(key, cols);
+                }
+                
+                Table table = db[key];
+                Dictionary<string, List<string>> columnDic = table.getTable();
+                string column1Name = columnDic.Keys.ToArray()[0];
+                int numTuples = columnDic[column1Name].Count;
+                //int numTuples = db[key].getTable().Keys.Count;
+                for (int k = 0; k < numTuples; k++)
+                {
+
+                    foreach (string column in cols)
+                    {
+
+                        salida += db[key].getTable()[column][k] + ";";
+                    }
+
+                    int indes = salida.LastIndexOf(';');
+                    salida = salida.Substring(0, indes)+Environment.NewLine;
+                }
+                aux += salida;
+                File.WriteAllText(name, aux);
+                aux = "";
+                salida = "";
+            }
+        }
     }
 }
+ 

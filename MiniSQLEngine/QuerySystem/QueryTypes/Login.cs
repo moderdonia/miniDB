@@ -6,22 +6,28 @@ using System.Threading.Tasks;
 
 namespace MiniSQLEngine.QuerySystem.QueryTypes
 {
-    class Login : SQLtype
+    public class Login : SQLtype
     {
         private string db;
         private string user;
         private string password;
-        
+        public List<string> dbList = new List<string>();
+
         public override string Execute(DB database)
         {
             if (!user.Equals("admin") && !password.Equals("admin"))
             {
                 return Messages.CreateDatabaseError;
             }
+            else if(!dbList.Contains(db))
+            {                
+                new CreateDB(db, user, password);
+                dbList.Add(db);
+                return Messages.CreateDatabaseSuccess;
+            }
             else
             {
-                new CreateDB(db, user, password);
-                return Messages.CreateDatabaseSuccess;
+                return Messages.SecurityNotSufficientPrivileges;
             }
             
         }

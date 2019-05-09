@@ -26,7 +26,7 @@ namespace MiniSQLEngine.QuerySystem
                     }
                     else
                     {
-                        Console.WriteLine(Messages.TableExist);
+                        Console.WriteLine(Messages.TableAlreadyExists);
                     }
                     
                 }          

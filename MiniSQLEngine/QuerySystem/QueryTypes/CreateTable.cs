@@ -16,7 +16,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         {
             return database.createTable(table, column);
         }
-        private Boolean esta(string[] pNombres,string pName)
+        private bool esta(string[] pNombres,string pName)
         {
             int i = 0;
             while (i <= pNombres.Length)
@@ -32,39 +32,8 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public CreateTable(string table, string[] column)
         {
             //string fileName = @"..\..\Files\tabla.txt";
-            
-            try
-                {
-                string fileName = @"..\..\..\Archivos\" + table + ".txt";
-                string ruta = @"..\..\..\Archivos\";
-                string aux = "";
-                string[] nombres = Directory.GetFiles(ruta);
-                //bool existe = esta(nombres, fileName);
-                //Console.WriteLine(existe);
-                if (!File.Exists(fileName))
-                {
-                    File.Create(fileName);
-                }
-                 
-                foreach (string s in column)
-                {
-                    if (s != null)
-                    {
-                        aux += s + ";";
-                    }
-                       
-                }
-                    aux += Environment.NewLine;
-                    File.Delete(fileName);
-                    File.WriteAllText(fileName, aux);
-                }
-            catch (Exception ex)
-            {
-                
-            }
                 this.table = table;
                 this.column = column;
-            
         }
         public string getTabla()
         {
