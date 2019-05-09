@@ -58,10 +58,10 @@ namespace MiniSQLEngine
         {
             database = db;
         }
-        public Table getTables()
+        public Table getTables(string nomTable)
         {
             
-            tables = database.db[database.getNameDB()];
+            tables = database.db[nomTable];
             
             foreach (string t in tables.dc.Keys)
             {

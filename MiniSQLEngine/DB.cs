@@ -57,7 +57,7 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
-                prof.getTables();
+                prof.getTables(name);
                 
                 return Messages.CreateTableSuccess;
             }
@@ -476,7 +476,7 @@ namespace MiniSQLEngine
             }
             else
             {
-                foreach (string t in prof.getTables().dc.Keys)
+                foreach (string t in db.Keys)
                 {
                     prof.secProfiles[userName].Add(t, prof.falsePrivileges);
                 }
