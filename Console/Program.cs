@@ -44,6 +44,7 @@ namespace Programa
                     {
                         //Console.WriteLine(nom);
                         //File.Delete(fileName);
+                        k = 0;
                         while (!archivo.EndOfStream)
                         {
                             row = archivo.ReadLine();
@@ -53,6 +54,7 @@ namespace Programa
                                 db.createTable(nom, columnas);
                                 k++;
                             }
+                            
                             else {
 
                                 db.insertData(nom, columnas, row.Split(';'));
