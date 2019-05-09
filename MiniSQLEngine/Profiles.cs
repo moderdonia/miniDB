@@ -58,14 +58,16 @@ namespace MiniSQLEngine
         {
             database = db;
         }
-        public void getTables()
+        public Table getTables()
         {
+            
             tables = database.db[database.getNameDB()];
-
+            
             foreach (string t in tables.dc.Keys)
             {
                 secProfiles["admin"].Add(t, adminPrivileges);
             }
+            return tables;
         }
     }
 }

@@ -43,7 +43,6 @@ namespace MiniSQLEngine
             db = new Dictionary<string, Table>();
             this.name = name;
             DBlist.Add(name);
-            prof.SetDB(this);
         }
 
         public DB(string name,int num)
@@ -416,8 +415,8 @@ namespace MiniSQLEngine
 
         // Security methods 
 
-        DB database;
-        Table tables;
+        //DB database;
+        //Table tables;
         Profiles prof = Profiles.getInstance();
 
        
@@ -477,7 +476,7 @@ namespace MiniSQLEngine
             }
             else
             {
-                foreach (string t in tables.dc.Keys)
+                foreach (string t in prof.getTables().dc.Keys)
                 {
                     prof.secProfiles[userName].Add(t, prof.falsePrivileges);
                 }
