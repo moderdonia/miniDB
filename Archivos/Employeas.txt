@@ -1,5 +1,1 @@
 Id;Name;Surname;Salary
-1;'Maritxu';'Norazoaz';1300
-2;'Rodolfo';'Langostino';1200
-3;'Benito';'Kamelas';1100
-1;'Maritxu';'Norazoaz';1300

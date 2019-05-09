@@ -602,6 +602,7 @@ namespace MiniSQLEngine
                 aux += salida;
                 File.WriteAllText(name, aux);
                 aux = "";
+                salida = "";
             }
         }
     }
