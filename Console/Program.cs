@@ -39,6 +39,7 @@ namespace Programa
                     //Console.WriteLine(aux);
                     string nom = nombres[i].Substring(18);
                     nom = nom.Replace(".txt", "");
+                    
                     using (archivo = File.OpenText(nombre))
                     {
                         //Console.WriteLine(nom);
@@ -46,14 +47,18 @@ namespace Programa
                         while (!archivo.EndOfStream)
                         {
                             row = archivo.ReadLine();
-                            if (++k == 0)
+                            if (k == 0)
                             {
-                                break;
+                                columnas = row.Split(';');
+                                db.createTable(nom, columnas);
+                                k++;
+                            }
+                            else {
+
+                                db.insertData(nom, columnas, row.Split(';'));
                             }
                         }
                         //codigo para lectura con pattern
-                        columnas = row.Split(';');
-                        db.createTable(nom, columnas);
                         //-------------------------------
                         i++;
                     }

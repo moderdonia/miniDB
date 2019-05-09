@@ -565,7 +565,7 @@ namespace MiniSQLEngine
                     cols[j] = a;
                     j++;
                 }
-
+                j = 0;
                 string name = @"..\..\..\Archivos\" + key + ".txt";
                 string aux = "";
                 if (nombres.Contains(key + ".txt"))
@@ -601,6 +601,7 @@ namespace MiniSQLEngine
                 }
                 aux += salida;
                 File.WriteAllText(name, aux);
+                aux = "";
             }
         }
     }
