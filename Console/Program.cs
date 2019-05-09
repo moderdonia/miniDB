@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Programa
 {
-    class Program
+    class Program 
     {
 
         static void Main(string[] args)

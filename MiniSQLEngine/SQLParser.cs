@@ -26,10 +26,19 @@ namespace MiniSQLEngine
         string update2;
         string dropTable;
         string dropDB;
-        string createDB;
+        //string createDB;
         string backupDB;
         string createTable1;
         string createTable2;
+        string login;
+
+        //Security strings
+        string create;
+        string drop;
+        string grant;
+        string revoke;
+        string addUser;
+        string deleteUser;
 
         public SQLParser()
         {
@@ -64,7 +73,7 @@ namespace MiniSQLEngine
             dropDB = @"DROP\s+DATABASE\s+(\w+);";
 
             //Create DB
-            createDB = @"CREATE\s+DATABASE\s+(\w+);";
+            //createDB = @"CREATE\s+DATABASE\s+(\w+);";
 
             //Backup DB
             backupDB = @"BACKUP\s+DATABASE\s+(\w+)\s+TO\s+DISK\s*\=\s*\'([^\']+)\';";
@@ -74,7 +83,26 @@ namespace MiniSQLEngine
             createTable1 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)\);";
             createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
 
-           
+            //Login
+            login = @"(\w+),(\w+),(\w+)";
+
+            //Create Security
+            create = @"CREATE\s*SECURITY\s*PROFILE\s*(\w+);";
+
+            //Delete Security
+            drop = @"DROP\s*SECURITY\s*PROFILE\s*(\w+);";
+
+            //Grant
+            grant = @"GRANT\s*(DELETE|INSERT|SELECT|UPDATE)\s*ON\s*(\w+)\s*TO\s*(\w+);";
+
+            //Revoke
+            revoke = @"REVOKE\s*(DELETE|INSERT|SELECT|UPDATE)\s*ON\s*(\w+)\s*TO\s*(\w+);";
+
+            //Add User
+            addUser = @"ADD\s*USER\s*\((\w+),\s*(\w+),\s*(\w+)\);";
+
+            //Delete User
+            deleteUser = @"DELETE\s*USER\s*(\w+);";
         }
         public SQLtype Parser(string query)
         {
@@ -139,7 +167,7 @@ namespace MiniSQLEngine
 
             }
 
-
+            /*
             //CREATE DB
             string createDB1 = "";
 
@@ -154,6 +182,7 @@ namespace MiniSQLEngine
                 return sentencia;
 
             }
+            */
 
 
             //UPDATE
@@ -409,9 +438,131 @@ namespace MiniSQLEngine
                 return sentencia;
             }
 
+            //CREATE DB
+            string createDB1 = "";
+            string createDB2 = "";
+            string createDB3 = "";
+
+            Match matchcDB = Regex.Match(query, login);
+
+            if (matchcDB.Success)
+            {
+                createDB1 = matchcDB.Groups[1].Value;
+                createDB2 = matchcDB.Groups[2].Value;
+                createDB3 = matchcDB.Groups[3].Value;
+                
+                SQLtype sentencia = new Login(createDB1,createDB2,createDB3);
+
+                return sentencia;
+
+            }
+
+            //CREATE SECURITY PROFILE
+            string security ="";
+
+            Match matchCS = Regex.Match(query, create);
+
+            if (matchCS.Success)
+            {
+                security = matchCS.Groups[1].Value;
+                
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
+            //DROP SECURITY PROFILE
+            string securityD = "";
+
+            Match matchDS = Regex.Match(query, drop);
+
+            if (matchDS.Success)
+            {
+                securityD = matchDS.Groups[1].Value;
+
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
+            //GRANT
+            string type = "";
+            string table = "";
+            string profile = "";
+
+            Match matchG = Regex.Match(query, grant);
+
+            if (matchG.Success)
+            {
+                type = matchG.Groups[1].Value;
+                table = matchG.Groups[2].Value;
+                profile = matchG.Groups[3].Value;
+
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
+            //REVOKE
+            string typeR = "";
+            string tableR = "";
+            string profileR = "";
+
+            Match matchR = Regex.Match(query, revoke);
+
+            if (matchR.Success)
+            {
+                typeR = matchR.Groups[1].Value;
+                tableR = matchR.Groups[2].Value;
+                profileR = matchR.Groups[3].Value;
+
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
+            //ADD USER
+            string user = "";
+            string pass = "";
+            string profileU = "";
+
+            Match matchU = Regex.Match(query, addUser);
+
+            if (matchU.Success)
+            {
+                user = matchU.Groups[1].Value;
+                pass = matchU.Groups[2].Value;
+                profileU = matchU.Groups[3].Value;
+
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
+            //DELETE USER
+            string userD = "";
+
+            Match matchDU = Regex.Match(query, deleteUser);
+
+            if (matchDU.Success)
+            {
+                userD = matchDU.Groups[1].Value;
+
+                //SQLtype sentencia = new Login(createDB1, createDB2, createDB3);
+
+                //return sentencia;
+
+            }
+
             return null;
 
         }
+
        
     }
 }

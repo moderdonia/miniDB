@@ -52,6 +52,7 @@
     <Compile Include="QuerySystem\QueryTypes\DropDB.cs" />
     <Compile Include="QuerySystem\QueryTypes\DropTable.cs" />
     <Compile Include="QuerySystem\QueryTypes\Insert.cs" />
+    <Compile Include="QuerySystem\QueryTypes\Login.cs" />
     <Compile Include="QuerySystem\QueryTypes\Select.cs" />
     <Compile Include="QuerySystem\QueryTypes\Update.cs" />
     <Compile Include="QuerySystem\SQLtype.cs" />

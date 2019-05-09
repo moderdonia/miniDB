@@ -404,7 +404,12 @@ namespace MiniSQLEngine
             }
         } 
         
+        //Security Methods
 
+        public void createSP(string profile)
+        {
+            
+        }
         //Internal Methods
         public string getNameDB()
         {
