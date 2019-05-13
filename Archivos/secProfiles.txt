@@ -1,0 +1,2 @@
+rosa;rosa;manager;EmployeesPersonal;False;False;False;False;
+pepe;pepe;manager;EmployeesPersonal;False;False;False;False;

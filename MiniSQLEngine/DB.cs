@@ -514,6 +514,7 @@ namespace MiniSQLEngine
             {
                 prof.userList.Add(userName, pass);
                 prof.secProfiles.Add(userName, new Dictionary<string, List<bool>>());
+                prof.AddUserProf(userName, secProf);
 
                 //if (prof.userList.ContainsKey(userName))
                 //{

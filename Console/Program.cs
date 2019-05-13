@@ -47,6 +47,7 @@ namespace Programa
                 DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
                 using (DB db = new DB(line))
                 {
+                    db.user = line2;
                     Profiles prof = Profiles.getInstance();
                     prof.SetDB(db);
                     bool bucle = true;

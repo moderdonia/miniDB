@@ -19,8 +19,7 @@ namespace MiniSQLEngine
         public Dictionary<string, Dictionary<string, List<bool>>> secProfiles = new Dictionary<string, Dictionary<string, List<bool>>>(); // secProfileName - Privileges (TableName - PrivilegeList)
         public List<bool> adminPrivileges = new List<bool>();
         public List<bool> falsePrivileges = new List<bool>();
-
-        //Dictionary<string, string> userSecProfiles; // userName - secProfile   binds privileges with users 
+        public Dictionary<string, string> userSecProfiles= new Dictionary<string, string>(); // userName - secProfile   binds privileges with users 
 
         //We gonna consider userName and secProfileName must be the same.
 
@@ -78,21 +77,41 @@ namespace MiniSQLEngine
         {
             userList.Add(name, password);
 
-            secProfiles.Add(secProfile, new Dictionary<string, List<bool>>());
+            secProfiles.Add(name, new Dictionary<string, List<bool>>());
 
-            secProfiles[secProfile].Add(table, booleans);
+            secProfiles[name].Add(table, booleans);
+
+            AddUserProf(name, secProfile);
         }
 
         public void SaveProfiles()
         {
             string aux = "";
+            List<bool> booleans;
             //Código para guardar todos los perfiles y sus permisos en el fichero
             foreach(KeyValuePair<string, string> user in userList)
             {
-                
+                if (user.Key != "admin") {
+                    foreach (string tableName in secProfiles[user.Key].Keys) //Foreach table in secProfiles
+                    {
+                        aux += user.Key + ";" + user.Value + ";";
+                        aux += userSecProfiles[user.Key] + ";"; //Add secProf to string
+                        aux += tableName + ";"; //Add tableName to string
+                        booleans = secProfiles[user.Key][tableName];
+                        foreach (bool b in booleans)
+                        {
+                            aux += b + ";"; //Adding the boolean values
+                        }
+                        aux += Environment.NewLine;
+                    }
+                }
             }
             File.WriteAllText(@"..\..\..\Archivos\secProfiles.txt", aux);
+        }
 
+        public void AddUserProf(string userName, string secProf)
+        {
+            userSecProfiles.Add(userName, secProf);
         }
     }
 }
