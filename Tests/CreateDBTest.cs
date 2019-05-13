@@ -10,10 +10,8 @@ namespace Tests
         public void CreateDB()
         {
             SQLParser par = new SQLParser();
-            CreateDB sbres = (CreateDB)par.Parser("CREATE DATABASE database;");
-            CreateDB sel = new CreateDB("database");
-            Assert.AreEqual(sbres.GetType(), sel.GetType());
-            Assert.AreEqual(sbres.getDB(), sel.getDB());
+            CreateDB sel = new CreateDB("database", "admin", "admin");
+            Assert.AreEqual("database", sel.getDB());
         }
     }
 }
