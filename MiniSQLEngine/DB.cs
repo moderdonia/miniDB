@@ -18,7 +18,7 @@ namespace MiniSQLEngine
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
         List<string> ordenAux = new List<string>();
-
+        public string user = "";
 
         public string runQuery(string query)
         {
@@ -423,90 +423,138 @@ namespace MiniSQLEngine
 
         public string CreateSecProfile(string profile)
         {
-            prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
-            if (prof.userList.ContainsKey(profile))
+
+            if (user == "admin")
             {
-                return Messages.SecurityProfileAlreadyExists;
+                prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
+                if (prof.userList.ContainsKey(profile))
+                {
+                    return Messages.SecurityProfileAlreadyExists;
+                }
+                else
+                {
+                    return Messages.SecurityProfileCreated;
+                }
             }
             else
             {
-                return Messages.SecurityProfileCreated;
+                return Messages.SecurityNotSufficientPrivileges;
             }
+            
         }
+
         public string DeleteSecProfile(string profile)
         {
-            prof.userList.Remove(profile);
-            prof.secProfiles.Remove(profile);
+            if(user=="admin"){
+                prof.userList.Remove(profile);
+                prof.secProfiles.Remove(profile);
 
-            if (prof.userList.ContainsKey(profile))
-            {
-                return Messages.SecurityProfileDeleted;
+                if (prof.userList.ContainsKey(profile))
+                {
+                    return Messages.SecurityProfileDeleted;
+                }
+                else
+                {
+                    return Messages.SecurityProfileDoesNotExist;
+                }
             }
             else
             {
-                return Messages.SecurityProfileDoesNotExist;
+                return Messages.SecurityNotSufficientPrivileges;
             }
+            
         }
 
         //change privileges of secProfiles on Tables 
         public string GivePrivileges(string privilege, string table, string secProf)
         {
-            int index = 0;
-            index = prof.AllPrivileges.IndexOf(privilege);
-            if (!prof.secProfiles[secProf].ContainsKey(table))
+            if (user=="admin")
             {
-                prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
-                prof.secProfiles[secProf][table].Insert(index, true);
+                int index = 0;
+                index = prof.AllPrivileges.IndexOf(privilege);
+                if (!prof.secProfiles[secProf].ContainsKey(table))
+                {
+                    prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
+                    prof.secProfiles[secProf][table].Insert(index, true);
+                    return Messages.SecurityPrivilegeGranted;
+                }
+                else
+                {
+                    return Messages.TableAlreadyExists;
+                }
             }
             else
             {
-                return Messages.TableAlreadyExists;
+                return Messages.SecurityNotSufficientPrivileges;
             }
             
+            
 
-            return Messages.SecurityPrivilegeGranted;
+            
         }
         public string RevokePrivileges(string privilege, string table, string secProf)
         {
-            int index = 0;
-            index = prof.AllPrivileges.IndexOf(privilege);
-            prof.secProfiles[secProf][table].Insert(index, false);
-
-            return Messages.SecurityPrivilegeRevoked;
-        }
-        public string addUser(string userName, string pass, string secProf)
-        {
-            prof.userList.Add(userName, pass);
-            prof.secProfiles.Add(userName, null);
-
-            if (prof.userList.ContainsKey(userName))
+            if (user=="admin")
             {
-                return Messages.SecurityUserAlreadyExists;
+                int index = 0;
+                index = prof.AllPrivileges.IndexOf(privilege);
+                prof.secProfiles[secProf][table].Insert(index, false);
+
+                return Messages.SecurityPrivilegeRevoked;
             }
             else
             {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+        }
+        public string addUser(string userName, string pass, string secProf)
+        {
+            if (user=="admin")
+            {
+                prof.userList.Add(userName, pass);
+                prof.secProfiles.Add(userName, new Dictionary<string, List<bool>>());
+
+                //if (prof.userList.ContainsKey(userName))
+                //{
+                //    return Messages.SecurityUserAlreadyExists;
+                //}
+                //else
+                //{
                 foreach (string t in db.Keys)
                 {
                     prof.secProfiles[userName].Add(t, prof.falsePrivileges);
                 }
 
                 return Messages.SecurityUserAdded;
-            }
-        }
-        public string deleteUser(string userName)
-        {
-            prof.userList.Remove(userName);
-            prof.secProfiles.Remove(userName);
-
-            if (prof.userList.ContainsKey(userName))
-            {
-                return Messages.SecurityUserDeleted;
+                //}
             }
             else
             {
-                return Messages.SecurityUserDoesNotExist;
+                return Messages.SecurityNotSufficientPrivileges;
             }
             
+        }
+        public string deleteUser(string userName)
+        {
+            if (user=="admin")
+            {
+                prof.userList.Remove(userName);
+                prof.secProfiles.Remove(userName);
+
+                if (prof.userList.ContainsKey(userName))
+                {
+                    return Messages.SecurityUserDeleted;
+                }
+                else
+                {
+                    return Messages.SecurityUserDoesNotExist;
+                }
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }     
         }
 
         //Internal Methods
