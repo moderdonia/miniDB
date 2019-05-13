@@ -13,6 +13,8 @@ namespace MiniSQLEngine
         public const string DeleteDatabaseSuccess = "Database deleted";
         public const string BackupDatabaseSuccess = "Database backed up";
 
+        public const string CreateDatabaseError = "Error: Not sufficient privileges";
+
         public const string CreateTableSuccess = "Table created";
         public const string InsertSuccess = "Tuple added";
         public const string TupleDeleteSuccess = "Tuple(s) deleted";
@@ -24,7 +26,7 @@ namespace MiniSQLEngine
         public const string SecurityUserDeleted = "Security user deleted";
         public const string SecurityPrivilegeGranted = "Security privilege granted";
         public const string SecurityPrivilegeRevoked = "Security privilege revoked";
-//        public const string SecurityPrivilegeRevoked = "User added to security profile";
+        public const string SecurityUserAdded = "User added to security profile";
 
         public const string Error = "ERROR: ";
 
@@ -34,6 +36,9 @@ namespace MiniSQLEngine
         public const string TableAlreadyExists = Error + "Table exists already";
         public const string ColumnDoesNotExist = Error + "Column does not exist";
         public const string IncorrectDataType = Error + "Incorrect data type";
+        public const string DatabaseExist = "Database is allready created";
+        public const string TableExist = "Table is allready created";
+
 
         public const string SecurityIncorrectLogin = Error + "Incorrect login";
         public const string SecurityNotSufficientPrivileges = Error + "Not sufficient privileges";
@@ -41,5 +46,6 @@ namespace MiniSQLEngine
         public const string SecurityUserAlreadyExists = Error + "Security user already exists";
         public const string SecurityProfileDoesNotExist = Error + "Security profile does not exist";
         public const string SecurityUserDoesNotExist = Error + "Security user does not exist";
+
     }
 }

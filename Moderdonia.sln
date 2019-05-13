@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniSQLEngine", "MiniSQLEng
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D09D5824-7234-4696-8D1D-51FDD1A94D26}"
 	ProjectSection(SolutionItems) = preProject
+		Tests\TesterInput-example 2.txt = Tests\TesterInput-example 2.txt
 		Archivos\TesterInput-example.txt = Archivos\TesterInput-example.txt
 	EndProjectSection
 EndProject

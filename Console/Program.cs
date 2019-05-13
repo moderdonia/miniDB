@@ -1,5 +1,7 @@
 ﻿using MiniSQLEngine;
+using MiniSQLEngine.QuerySystem.QueryTypes;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,104 +14,124 @@ namespace Programa
 
         static void Main(string[] args)
         {
-            //no se puede cerrar pulsando la X
-            DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
-            using (DB db = new DB("db1"))
+
+            string line;
+            string line2;
+            string line3;
+            List<string> dbList = new List<string>();
+
+            Console.WriteLine("What database you wanna open bro?");
+            line = Console.ReadLine();
+
+            Console.WriteLine("What's your name mate?");
+            line2 = Console.ReadLine();
+
+            Console.WriteLine("And your password dude?");
+            line3 = Console.ReadLine();
+
+
+            if (!line2.Equals("admin") && !line3.Equals("admin"))
             {
-                bool bucle = true;
-                string linea;
+                Console.WriteLine("Error: Not sufficient privileges");
 
-                string fileName = @"..\..\..\Archivos\";
-                string[] nombres = Directory.GetFiles(fileName);
-                string[] columnas = new string[20];
-                string nombre;
-                int i = 0;
+            }
+            else if (!dbList.Contains(line))
+            {
+                new CreateDB(line, line2, line3);
+                dbList.Add(line);
+                //DB db = new DB(line);
 
-                //----------Codigo para leer linea
-                StreamReader archivo;
-                string row = null;
-                int k = 0;
-                //--------------------------------
-                while (i < nombres.Length)
+                //bool bucle = true;
+                //string linea;
+                //no se puede cerrar pulsando la X
+                DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
+                using (DB db = new DB(line))
                 {
-                    nombre = nombres[i];
-                    //Console.WriteLine(nombres[i]);
-                    //Console.WriteLine(nombres[i].Length);
-                    int aux = nombres[i].Length - 4;
-                    //Console.WriteLine(aux);
-                    string nom = nombres[i].Substring(18);
-                    nom = nom.Replace(".txt", "");
-                    
-                    using (archivo = File.OpenText(nombre))
+                    Profiles prof = Profiles.getInstance();
+                    prof.SetDB(db);
+                    bool bucle = true;
+                    string linea;
+
+                    string fileName = @"..\..\..\Archivos\";
+                    string[] nombres = Directory.GetFiles(fileName);
+                    string[] columnas = new string[20];
+                    string nombre;
+                    int i = 0;
+
+                    //----------Codigo para leer linea
+                    StreamReader archivo;
+                    string row = null;
+                    int k = 0;
+                    //--------------------------------
+                    while (i < nombres.Length)
                     {
-                        //Console.WriteLine(nom);
-                        //File.Delete(fileName);
-                        k = 0;
-                        while (!archivo.EndOfStream)
+                        nombre = nombres[i];
+                        //Console.WriteLine(nombres[i]);
+                        //Console.WriteLine(nombres[i].Length);
+                        int aux = nombres[i].Length - 4;
+                        //Console.WriteLine(aux);
+                        string nom = nombres[i].Substring(18);
+                        nom = nom.Replace(".txt", "");
+
+                        using (archivo = File.OpenText(nombre))
                         {
-                            row = archivo.ReadLine();
-                            if (k == 0)
+                            //Console.WriteLine(nom);
+                            //File.Delete(fileName);
+                            while (!archivo.EndOfStream)
                             {
-                                columnas = row.Split(';');
-                                db.createTable(nom, columnas);
-                                k++;
-                            }
-                            
-                            else {
+                                row = archivo.ReadLine();
+                                if (k == 0)
+                                {
+                                    columnas = row.Split(';');
+                                    db.createTable(nom, columnas);
+                                    k++;
+                                }
+                                else
+                                {
 
-                                db.insertData(nom, columnas, row.Split(';'));
+                                    db.insertData(nom, columnas, row.Split(';'));
+                                }
                             }
+                            //codigo para lectura con pattern
+                            //-------------------------------
+                            i++;
                         }
-                        //codigo para lectura con pattern
-                        //-------------------------------
-                        i++;
                     }
-                }
-                while (bucle)
-                {
-                    Console.WriteLine("Inserte sentencia o escriba 'exit' para salir");
-                    linea = Console.ReadLine();
-                    if (linea == "exit")
+                    while (bucle)
                     {
-                        bucle = false;
-                    }
-                    else
-                    {
-                        //El tiempo que tarda la sentencia
-                        Stopwatch sw = new Stopwatch();
-                        sw.Start();
-                        string output = db.runQuery(linea) + "(";
-                        output += sw.Elapsed.TotalMilliseconds + ")";
-                        Console.WriteLine(output);
-                        sw.Stop();
-
-                    }
-                }
-                /*
-                    Console.WriteLine(abc[0]);
-                    val = Console.ReadLine();
-
-
-                    System.IO.StreamReader file = new System.IO.StreamReader(@"..\..\..\Archivos\TesterInput-example.txt");
-
-                    while (linea != null )
-                    {
-                        linea = file.ReadLine();
-                        if (linea != "" && linea != null)
+                        Console.WriteLine("Inserte sentencia o escriba 'exit' para salir");
+                        linea = Console.ReadLine();
+                        if (linea == "exit")
                         {
+                            bucle = false;
+                        }
+                        else
+                        {
+                            //El tiempo que tarda la sentencia
                             Stopwatch sw = new Stopwatch();
                             sw.Start();
                             string output = db.runQuery(linea) + "(";
                             output += sw.Elapsed.TotalMilliseconds + ")";
                             Console.WriteLine(output);
                             sw.Stop();
+
                         }
                     }
-                    Console.WriteLine("Querys Finished");
-                */
+                    Console.WriteLine("Database created");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Not sufficient privileges");
             }
         }
-        // Necesario para que no se cierre la ventana de comandos
+
+            
+    
+
+
+
+    // Necesario para que no se cierre la ventana de comandos
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
 
@@ -123,4 +145,5 @@ namespace Programa
         private static extern IntPtr GetConsoleWindow();
         //-------------------------------------------------------------------------------
     }
+    
 }

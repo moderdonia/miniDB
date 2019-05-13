@@ -10,14 +10,15 @@ namespace MiniSQLEngine
 {
     public class DB: IDisposable
     {
-        
-        private Dictionary<string,Table> db;
+        Login login;
+        public Dictionary<string,Table> db;
         Boolean ctrl;
         string name;
+        List<string> DBlist = new List<string>();
         List<int> condsIndex = new List<int>();
         List<Column> listColAux = new List<Column>();
         List<string> ordenAux = new List<string>();
-
+        public string user = "";
 
         public string runQuery(string query)
         {
@@ -27,9 +28,12 @@ namespace MiniSQLEngine
             {
                 return sqltype.Execute(this);
             }
-            else
+            else if(sqltype.GetType().Equals(login))
             {
-                return "Query unrecognized";
+                return sqltype.Execute(this);
+            }
+            else{
+                return Messages.WrongSyntax;
             }
 
         }
@@ -38,6 +42,12 @@ namespace MiniSQLEngine
         {
             db = new Dictionary<string, Table>();
             this.name = name;
+            DBlist.Add(name);
+        }
+
+        public DB(string name,int num)
+        {
+            prof.SetDB(this);
         }
 
         public string createTable(string name, string[] attbs)
@@ -47,7 +57,8 @@ namespace MiniSQLEngine
             if (!db.ContainsKey(name))
             {
                 db.Add(name, table);
-
+                prof.getTables(name);
+                
                 return Messages.CreateTableSuccess;
             }
             else
@@ -400,10 +411,157 @@ namespace MiniSQLEngine
             {
                 return Messages.TableDoesNotExist;
             }
-        } 
-        
+        }
+
+        // Security methods 
+
+        //DB database;
+        //Table tables;
+        Profiles prof = Profiles.getInstance();
+
+       
+
+        public string CreateSecProfile(string profile)
+        {
+
+            if (user == "admin")
+            {
+                prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
+                if (prof.userList.ContainsKey(profile))
+                {
+                    return Messages.SecurityProfileAlreadyExists;
+                }
+                else
+                {
+                    return Messages.SecurityProfileCreated;
+                }
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+        }
+
+        public string DeleteSecProfile(string profile)
+        {
+            if(user=="admin"){
+                prof.userList.Remove(profile);
+                prof.secProfiles.Remove(profile);
+
+                if (prof.userList.ContainsKey(profile))
+                {
+                    return Messages.SecurityProfileDeleted;
+                }
+                else
+                {
+                    return Messages.SecurityProfileDoesNotExist;
+                }
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+        }
+
+        //change privileges of secProfiles on Tables 
+        public string GivePrivileges(string privilege, string table, string secProf)
+        {
+            if (user=="admin")
+            {
+                int index = 0;
+                index = prof.AllPrivileges.IndexOf(privilege);
+                if (!prof.secProfiles[secProf].ContainsKey(table))
+                {
+                    prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
+                    prof.secProfiles[secProf][table].Insert(index, true);
+                    return Messages.SecurityPrivilegeGranted;
+                }
+                else
+                {
+                    return Messages.TableAlreadyExists;
+                }
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+            
+
+            
+        }
+        public string RevokePrivileges(string privilege, string table, string secProf)
+        {
+            if (user=="admin")
+            {
+                int index = 0;
+                index = prof.AllPrivileges.IndexOf(privilege);
+                prof.secProfiles[secProf][table].Insert(index, false);
+
+                return Messages.SecurityPrivilegeRevoked;
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+        }
+        public string addUser(string userName, string pass, string secProf)
+        {
+            if (user=="admin")
+            {
+                prof.userList.Add(userName, pass);
+                prof.secProfiles.Add(userName, new Dictionary<string, List<bool>>());
+
+                //if (prof.userList.ContainsKey(userName))
+                //{
+                //    return Messages.SecurityUserAlreadyExists;
+                //}
+                //else
+                //{
+                foreach (string t in db.Keys)
+                {
+                    prof.secProfiles[userName].Add(t, prof.falsePrivileges);
+                }
+
+                return Messages.SecurityUserAdded;
+                //}
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
+            
+        }
+        public string deleteUser(string userName)
+        {
+            if (user=="admin")
+            {
+                prof.userList.Remove(userName);
+                prof.secProfiles.Remove(userName);
+
+                if (prof.userList.ContainsKey(userName))
+                {
+                    return Messages.SecurityUserDeleted;
+                }
+                else
+                {
+                    return Messages.SecurityUserDoesNotExist;
+                }
+            }
+            else
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }     
+        }
 
         //Internal Methods
+        public string getNameDB()
+        {
+            return name;
+        }
 
         private void prepareColumns(string[] cols)
         {
@@ -420,7 +578,7 @@ namespace MiniSQLEngine
             }
         }
 
-        private void prepareConditions(Table table ,string[] conds)     //saca error aun quitando correctamente los datos
+        private void prepareConditions(Table table ,string[] conds)     
         {
             condsIndex.Clear();           
             for (int condsCols = 0; condsCols < conds.Length; condsCols += 1)
@@ -434,7 +592,7 @@ namespace MiniSQLEngine
                         case "<":
                             if (table.getTable().ContainsKey(conds[condsCols-1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) < Int32.Parse(conds[condsCols+1]))
                                     {
@@ -447,7 +605,7 @@ namespace MiniSQLEngine
                         case "<=":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) <= Int32.Parse(conds[condsCols + 1]))
                                     {
@@ -460,7 +618,7 @@ namespace MiniSQLEngine
                         case ">":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) > Int32.Parse(conds[condsCols + 1]))
                                     {
@@ -473,7 +631,7 @@ namespace MiniSQLEngine
                         case ">=":
                             if (table.getTable().ContainsKey(conds[condsCols - 1]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   //REVISAR
+                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
                                 {
                                     if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) >= Int32.Parse(conds[condsCols + 1]))
                                     {

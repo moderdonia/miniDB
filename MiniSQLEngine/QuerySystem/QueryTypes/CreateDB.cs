@@ -9,6 +9,8 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
     public class CreateDB : SQLtype
     {
         private string database;
+        private string user;
+        private string password;
 
         public override string Execute(DB database)
         {
@@ -23,10 +25,13 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
             }
         
         }
-
-        public CreateDB(string database)
+        
+        public CreateDB(string database, string user, string password)
         {
             this.database = database;
+            this.user = user;
+            this.password = password;
+
         }
         public string getDB()
         {
