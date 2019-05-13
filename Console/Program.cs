@@ -53,6 +53,10 @@ namespace Programa
                     string linea;
 
                     string fileName = @"..\..\..\Archivos\";
+                    if (!Directory.Exists(fileName))
+                    {
+                        System.IO.Directory.CreateDirectory(fileName);
+                    }
                     string[] nombres = Directory.GetFiles(fileName);
                     string[] columnas = new string[20];
                     string nombre;
@@ -75,23 +79,34 @@ namespace Programa
 
                         using (archivo = File.OpenText(nombre))
                         {
-                            //Console.WriteLine(nom);
-                            //File.Delete(fileName);
-                            while (!archivo.EndOfStream)
+                            if (nom == "secProfiles")
                             {
-                                row = archivo.ReadLine();
-                                if (k == 0)
+                                while (!archivo.EndOfStream)
                                 {
-                                    columnas = row.Split(';');
-                                    db.createTable(nom, columnas);
-                                    k++;
-                                }
-                                else
-                                {
+                                    row = archivo.ReadLine();
 
-                                    db.insertData(nom, columnas, row.Split(';'));
                                 }
                             }
+                            else {
+                                while (!archivo.EndOfStream)
+                                {
+                                    row = archivo.ReadLine();
+                                    if (k == 0)
+                                    {
+                                        columnas = row.Split(';');
+                                        db.createTable(nom, columnas);
+                                        k++;
+                                    }
+                                    else
+                                    {
+
+                                        db.insertData(nom, columnas, row.Split(';'));
+                                    }
+                                }
+                            }
+                            //Console.WriteLine(nombre);
+                            //File.Delete(fileName);
+                            
                             //codigo para lectura con pattern
                             //-------------------------------
                             i++;
