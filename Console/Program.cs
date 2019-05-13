@@ -83,8 +83,22 @@ namespace Programa
                             {
                                 while (!archivo.EndOfStream)
                                 {
+                                    string name;
+                                    string pass;
+                                    string secProfile;
+                                    string table;
+                                    List<bool> booleans = new List<bool>();
                                     row = archivo.ReadLine();
-
+                                    string[] a = row.Split(';');
+                                    name = a[0];
+                                    pass = a[1];
+                                    secProfile = a[2];
+                                    table = a[3];
+                                    booleans.Add(bool.Parse(a[4]));
+                                    booleans.Add(bool.Parse(a[5]));
+                                    booleans.Add(bool.Parse(a[6]));
+                                    booleans.Add(bool.Parse(a[7]));
+                                    MiniSQLEngine.Profiles.getInstance().AddProfile(name, pass, secProfile, table, booleans);
                                 }
                             }
                             else {

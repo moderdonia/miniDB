@@ -1,9 +1,11 @@
 ﻿using MiniSQLEngine.QuerySystem;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace MiniSQLEngine
 {
@@ -70,6 +72,27 @@ namespace MiniSQLEngine
                     secProfiles["admin"].Add(nomTable, adminPrivileges);
                 //} 
             //}
+        }
+
+        public void AddProfile(string name, string password, string secProfile, string table, List<bool> booleans)
+        {
+            userList.Add(name, password);
+
+            secProfiles.Add(secProfile, new Dictionary<string, List<bool>>());
+
+            secProfiles[secProfile].Add(table, booleans);
+        }
+
+        public void SaveProfiles()
+        {
+            string aux = "";
+            //Código para guardar todos los perfiles y sus permisos en el fichero
+            foreach(KeyValuePair<string, string> user in userList)
+            {
+                
+            }
+            File.WriteAllText(@"..\..\..\Archivos\secProfiles.txt", aux);
+
         }
     }
 }

@@ -762,6 +762,9 @@ namespace MiniSQLEngine
                 aux = "";
                 salida = "";
             }
+
+            //Guardar todos los usuarios con sus permisos en el fichero
+            prof.SaveProfiles();
         }
     }
 }
