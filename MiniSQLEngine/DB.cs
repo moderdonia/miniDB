@@ -423,7 +423,7 @@ namespace MiniSQLEngine
 
         public string CreateSecProfile(string profile)
         {
-            prof.secProfiles.Add(profile, null);
+            prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
             if (prof.userList.ContainsKey(profile))
             {
                 return Messages.SecurityProfileAlreadyExists;
@@ -453,7 +453,16 @@ namespace MiniSQLEngine
         {
             int index = 0;
             index = prof.AllPrivileges.IndexOf(privilege);
-            prof.secProfiles[secProf][table].Insert(index, true);
+            if (!prof.secProfiles[secProf].ContainsKey(table))
+            {
+                prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
+                prof.secProfiles[secProf][table].Insert(index, true);
+            }
+            else
+            {
+                return Messages.TableAlreadyExists;
+            }
+            
 
             return Messages.SecurityPrivilegeGranted;
         }

@@ -11,7 +11,7 @@ namespace MiniSQLEngine
     {
         private static Profiles profiles;
         DB database;
-        Table tables;
+        List<Table> tables = new List<Table>();
         public List<string> AllPrivileges = new List<string>();
         public Dictionary<string, string> userList= new Dictionary<string, string>(); // username - password
         public Dictionary<string, Dictionary<string, List<bool>>> secProfiles = new Dictionary<string, Dictionary<string, List<bool>>>(); // secProfileName - Privileges (TableName - PrivilegeList)
@@ -49,7 +49,7 @@ namespace MiniSQLEngine
             falsePrivileges.Add(false);
             falsePrivileges.Add(false);
 
-            secProfiles.Add("admin",null);
+            secProfiles.Add("admin", new Dictionary<string, List<bool>>());
             
             userList.Add("admin", "admin");
         }
@@ -58,16 +58,18 @@ namespace MiniSQLEngine
         {
             database = db;
         }
-        public Table getTables(string nomTable)
+        public void getTables(string nomTable)
         {
             
-            tables = database.db[nomTable];
+            tables.Add(database.db[nomTable]);
             
-            foreach (string t in tables.dc.Keys)
-            {
-                secProfiles["admin"].Add(t, adminPrivileges);
-            }
-            return tables;
+            //foreach (Table t in tables)
+            //{
+               // if (secProfiles["admin"].ContainsKey(nomTable))
+                //{
+                    secProfiles["admin"].Add(nomTable, adminPrivileges);
+                //} 
+            //}
         }
     }
 }
