@@ -28,11 +28,8 @@ namespace MiniSQLEngine
             {
                 return sqltype.Execute(this);
             }
-            else if(sqltype.GetType().Equals(login))
+            else
             {
-                return sqltype.Execute(this);
-            }
-            else{
                 return Messages.WrongSyntax;
             }
 
