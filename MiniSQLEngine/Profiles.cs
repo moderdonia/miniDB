@@ -75,11 +75,19 @@ namespace MiniSQLEngine
 
         public void AddProfile(string name, string password, string secProfile, string table, List<bool> booleans)
         {
-            userList.Add(name, password);
+            if (!userList.ContainsKey(name))
+            {
+                userList.Add(name, password);
+            }
 
-            secProfiles.Add(name, new Dictionary<string, List<bool>>());
-
-            secProfiles[name].Add(table, booleans);
+            if (!secProfiles.ContainsKey(name))
+            {
+                secProfiles.Add(name, new Dictionary<string, List<bool>>());
+            }
+            if (!secProfiles[name].ContainsKey(table))
+            {
+                secProfiles[name].Add(table, booleans);
+            }
 
             AddUserProf(name, secProfile);
         }
@@ -111,7 +119,11 @@ namespace MiniSQLEngine
 
         public void AddUserProf(string userName, string secProf)
         {
-            userSecProfiles.Add(userName, secProf);
+            if (!userSecProfiles.ContainsKey(userName))
+            {
+                userSecProfiles.Add(userName, secProf);
+            }
+            
         }
     }
 }
