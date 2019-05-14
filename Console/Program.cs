@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Programa
 {
@@ -20,6 +23,44 @@ namespace Programa
             string line3;
             List<string> dbList = new List<string>();
 
+            const string argPrefixIp = "ip=";
+            const string argPrefixPort = "port=";
+
+            string ip = null;
+            int port = 0;
+
+            foreach (string arg in args)
+            {
+                if (arg.StartsWith(argPrefixIp)) ip = arg.Substring(argPrefixIp.Length);
+                else if (arg.StartsWith(argPrefixPort)) port = int.Parse(arg.Substring(argPrefixPort.Length));
+            }
+            if (ip == null || port == 0)
+            {
+                Console.WriteLine("ERROR. Usage: TCPClient ip=<ip> port=<port>");
+                return;
+            }
+
+            using (TcpClient client = new TcpClient(ip, port))
+            {
+                NetworkStream networkStream = client.GetStream();
+
+                byte[] outputBuffer = Encoding.ASCII.GetBytes("Do you want to marry me????");
+                byte[] inputBuffer = new byte[1024];
+                byte[] endMessage = Encoding.ASCII.GetBytes("END");
+
+                for (int i = 0; i < 5; i++)
+                {
+                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+
+                    int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                    Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
+
+                    Thread.Sleep(2000);
+                }
+                networkStream.Write(endMessage, 0, endMessage.Length);
+            }
+
+
             Console.WriteLine("What database you wanna open bro?");
             line = Console.ReadLine();
 
@@ -29,10 +70,9 @@ namespace Programa
             Console.WriteLine("And your password dude?");
             line3 = Console.ReadLine();
 
-
             if (!line2.Equals("admin") && !line3.Equals("admin"))
             {
-                Console.WriteLine("Error: Not sufficient privileges");
+            Console.WriteLine("Error: Not sufficient privileges");
 
             }
             else if (!dbList.Contains(line))
