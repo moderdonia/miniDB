@@ -28,8 +28,11 @@ namespace MiniSQLEngine
             {
                 return sqltype.Execute(this);
             }
-            else
-            {
+            //else if(sqltype.GetType().Equals(login))
+            //{
+               // return sqltype.Execute(this);
+           // }
+            else{
                 return Messages.WrongSyntax;
             }
 
@@ -511,6 +514,7 @@ namespace MiniSQLEngine
             {
                 prof.userList.Add(userName, pass);
                 prof.secProfiles.Add(userName, new Dictionary<string, List<bool>>());
+                prof.AddUserProf(userName, secProf);
 
                 //if (prof.userList.ContainsKey(userName))
                 //{
@@ -759,6 +763,9 @@ namespace MiniSQLEngine
                 aux = "";
                 salida = "";
             }
+
+            //Guardar todos los usuarios con sus permisos en el fichero
+            prof.SaveProfiles();
         }
     }
 }

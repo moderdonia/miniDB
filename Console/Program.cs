@@ -93,22 +93,27 @@ namespace Programa
                         dbList.Add(line);
                         //DB db = new DB(line);
 
-                        //bool bucle = true;
-                        //string linea;
-                        //no se puede cerrar pulsando la X
-                        DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
-                        using (DB db = new DB(line))
-                        {
-                            Profiles prof = Profiles.getInstance();
-                            prof.SetDB(db);
-                            bool bucle = true;
-                            string linea;
+                //bool bucle = true;
+                //string linea;
+                //no se puede cerrar pulsando la X
+                DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
+                using (DB db = new DB(line))
+                {
+                    db.user = line2;
+                    Profiles prof = Profiles.getInstance();
+                    prof.SetDB(db);
+                    bool bucle = true;
+                    string linea;
 
-                            string fileName = @"..\..\..\Archivos\";
-                            string[] nombres = Directory.GetFiles(fileName);
-                            string[] columnas = new string[20];
-                            string nombre;
-                            int i = 0;
+                    string fileName = @"..\..\..\Archivos\";
+                    if (!Directory.Exists(fileName))
+                    {
+                        System.IO.Directory.CreateDirectory(fileName);
+                    }
+                    string[] nombres = Directory.GetFiles(fileName);
+                    string[] columnas = new string[20];
+                    string nombre;
+                    int i = 0;
 
                             //----------Codigo para leer linea
                             StreamReader archivo;
@@ -125,21 +130,42 @@ namespace Programa
                                 string nom = nombres[i].Substring(18);
                                 nom = nom.Replace(".txt", "");
 
-                                using (archivo = File.OpenText(nombre))
+                        using (archivo = File.OpenText(nombre))
+                        {
+                            if (nom == "secProfiles")
+                            {
+                                while (!archivo.EndOfStream)
                                 {
-                                    //Console.WriteLine(nom);
-                                    //File.Delete(fileName);
-                                    while (!archivo.EndOfStream)
+                                    string name;
+                                    string pass;
+                                    string secProfile;
+                                    string table;
+                                    List<bool> booleans = new List<bool>();
+                                    row = archivo.ReadLine();
+                                    string[] a = row.Split(';');
+                                    name = a[0];
+                                    pass = a[1];
+                                    secProfile = a[2];
+                                    table = a[3];
+                                    booleans.Add(bool.Parse(a[4]));
+                                    booleans.Add(bool.Parse(a[5]));
+                                    booleans.Add(bool.Parse(a[6]));
+                                    booleans.Add(bool.Parse(a[7]));
+                                    MiniSQLEngine.Profiles.getInstance().AddProfile(name, pass, secProfile, table, booleans);
+                                }
+                            }
+                            else {
+                                while (!archivo.EndOfStream)
+                                {
+                                    row = archivo.ReadLine();
+                                    if (k == 0)
                                     {
-                                        row = archivo.ReadLine();
-                                        if (k == 0)
-                                        {
-                                            columnas = row.Split(';');
-                                            db.createTable(nom, columnas);
-                                            k++;
-                                        }
-                                        else
-                                        {
+                                        columnas = row.Split(';');
+                                        db.createTable(nom, columnas);
+                                        k++;
+                                    }
+                                    else
+                                    {
 
                                             db.insertData(nom, columnas, row.Split(';'));
                                         }
