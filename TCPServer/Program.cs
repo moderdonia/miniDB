@@ -16,7 +16,7 @@ namespace TCPClient
             const string argPrefixIp = "ip=";
             const string argPrefixPort = "port=";
 
-            string ip = "192.168.0.15";
+            string ip = ""; //poner la ip de vuestro ordenador
             int port = 1080;
 
             foreach (string arg in args)
