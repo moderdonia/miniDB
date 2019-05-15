@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace TCPClient
 {
@@ -13,6 +14,9 @@ namespace TCPClient
     {
         static void Main(string[] args)
         {
+
+            string login = @"(\w+),(\w+),(\w+)";
+
             const string argPrefixIp = "ip=";
             const string argPrefixPort = "port=";
 
@@ -50,6 +54,30 @@ namespace TCPClient
                     
                     Thread.Sleep(2000);
                 }
+
+                //parsear la sentencia
+
+                string dbr = "";
+                string user = "";
+                string pass = "";
+                string request2 = "";
+
+                Match matchLog = Regex.Match(request, login);
+
+                if (matchLog.Success)
+                {
+                    dbr = matchLog.Groups[1].Value;
+                    user = matchLog.Groups[2].Value;
+                    pass = matchLog.Groups[3].Value;
+
+                    request2 = "<Open Database=" + dbr + " User=" + user + " Password=" + pass + "/>";
+
+                }
+                else 
+                {
+                    request2 = "<Query>" + request + "</Query>";
+                }
+
                 networkStream.Write(endMessage, 0, endMessage.Length);
             }
         }
