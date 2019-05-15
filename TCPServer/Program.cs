@@ -38,6 +38,8 @@ namespace TCPClient
             {
                 NetworkStream networkStream = client.GetStream();
                 string request = "";
+                string request2 = "";
+                int cont = 0;
                 byte[] outputBuffer = new byte[1024];
                 byte[] inputBuffer = new byte[1024];
                 byte[] endMessage = Encoding.ASCII.GetBytes("END");
@@ -49,35 +51,30 @@ namespace TCPClient
                     Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
 
                     request = Console.ReadLine();
-                    outputBuffer = Encoding.ASCII.GetBytes(request);
+
+                    //parsear la sentencia
+                   
+                        if (cont == 0)
+                        {
+                            request2 = "<Open Database=" + "\u0022" + request + "\u0022";
+                            cont++;
+                        }
+                        else if (cont == 1)
+                        {
+                            request2 += " User=" + "\u0022" + request + "\u0022";
+                            cont++;
+                        }
+                        else if (cont == 2)
+                        {
+                            request2 += " Password=" + "\u0022" + request + "\u0022" + "/>";
+                        }
+                    outputBuffer = Encoding.ASCII.GetBytes(request2);
                     networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-                    
+
                     Thread.Sleep(2000);
-                }
-
-                //parsear la sentencia
-
-                string dbr = "";
-                string user = "";
-                string pass = "";
-                string request2 = "";
-
-                Match matchLog = Regex.Match(request, login);
-
-                if (matchLog.Success)
-                {
-                    dbr = matchLog.Groups[1].Value;
-                    user = matchLog.Groups[2].Value;
-                    pass = matchLog.Groups[3].Value;
-
-                    request2 = "<Open Database=" + dbr + " User=" + user + " Password=" + pass + "/>";
 
                 }
-                else 
-                {
-                    request2 = "<Query>" + request + "</Query>";
-                }
-
+                
                 networkStream.Write(endMessage, 0, endMessage.Length);
             }
         }
