@@ -20,8 +20,7 @@ namespace Programa
         {
 
             string line="";
-            string line2="";
-            string line3="";
+            string[] lineArray = new string[3];
             List<string> dbList = new List<string>();
 
 
@@ -60,46 +59,44 @@ namespace Programa
 
                     byte[] outputBuffer = Encoding.ASCII.GetBytes("What database you wanna open bro?");
                     networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-
-                    size = networkStream.Read(inputBuffer, 0, 1024);
-                    request = Encoding.ASCII.GetString(inputBuffer, 0, size);
-
-                    line = request;
+                    //Thread.Sleep(3000);
+                    //size = networkStream.Read(inputBuffer, 0, 1024);
+                    //request = Encoding.ASCII.GetString(inputBuffer, 0, size);
 
                     outputBuffer = Encoding.ASCII.GetBytes("What's your name mate?");
                     networkStream.Write(outputBuffer, 0, outputBuffer.Length);
 
-                    size = networkStream.Read(inputBuffer, 0, 1024);
-                    request = Encoding.ASCII.GetString(inputBuffer, 0, size);
+                    Thread.Sleep(3000);
+                    //size = networkStream.Read(inputBuffer, 0, 1024);
+                    //request += Encoding.ASCII.GetString(inputBuffer, 0, size);
 
-                    line2 = request;
 
                     outputBuffer = Encoding.ASCII.GetBytes("And your password dude?");
                     networkStream.Write(outputBuffer, 0, outputBuffer.Length);
 
                     size = networkStream.Read(inputBuffer, 0, 1024);
-                    request = Encoding.ASCII.GetString(inputBuffer, 0, size);
-
-                    line3 = request;
-
-                    if (!line2.Equals("admin") && !line3.Equals("admin"))
+                    request += Encoding.ASCII.GetString(inputBuffer, 0, size);
+                    DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
+                    line = DesParser(request);
+                    if (!line.Contains("admin,admin"))
                     {
                         Console.WriteLine("Error: Not sufficient privileges");
 
                     }
                     else if (!dbList.Contains(line))
                     {
-                        new CreateDB(line, line2, line3);
+                        lineArray = line.Split(',');
+                        new CreateDB(lineArray[0], lineArray[1], lineArray[2]);
                         dbList.Add(line);
                         //DB db = new DB(line);
 
                         //bool bucle = true;
                         //string linea;
                         //no se puede cerrar pulsando la X
-                        DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
+                        
                         using (DB db = new DB(line))
                         {
-                            db.user = line2;
+                            db.user = lineArray[1];
                             Profiles prof = Profiles.getInstance();
                             prof.SetDB(db);
                             //bool bucle = true;
@@ -173,23 +170,26 @@ namespace Programa
                                         }
                                         //codigo para lectura con pattern
                                         //-------------------------------
-                                        i++;
+                                        
                                     }
                                 }
+                                i++;
                             }
                             while (request != "END")
                             {
-                                outputBuffer = Encoding.ASCII.GetBytes("Inserte sentencia o escriba 'exit' para salir");
+                                outputBuffer = Encoding.ASCII.GetBytes("\nInserte sentencia o escriba 'END' para salir");
                                 networkStream.Write(outputBuffer, 0, outputBuffer.Length);
 
                                 size = networkStream.Read(inputBuffer, 0, 1024);
                                 request = Encoding.ASCII.GetString(inputBuffer, 0, size);
 
+                                DesParser(request);
+
                                 Console.WriteLine("Request received: " + request);
 
                                 Stopwatch sw = new Stopwatch();
                                 sw.Start();
-                                string output = db.runQuery(request) + "(";
+                                string output = "<Answer>" + db.runQuery(request) + "</Answer>" + "(";
                                 output += sw.Elapsed.TotalMilliseconds + ")";
                                 Console.WriteLine(output);
                                 sw.Stop();
@@ -213,10 +213,36 @@ namespace Programa
 
                 
             }
-        }    
+        //-------------------------------------------------------------------------------
+        }
+        private static string DesParser(string query)
+        {
 
+            //CreateDBXML
+            string createXML = @"<Open\s*Database\=\'(\w+)\'\s*User\=\'(\w+)\'\s*Password\=\'(\w+)\'\/>;";
 
-    // Necesario para que no se cierre la ventana de comandos
+            //QueryXML
+            string queryXML = @"<Query\>([\w+\s*\*\=]+\;)\<\/Query\>";
+
+            string queryX = "";
+
+            Match matchXML = Regex.Match(query, queryXML);
+            Match matchXML2 = Regex.Match(query, createXML);
+
+            if (matchXML.Success)
+            {
+                queryX = matchXML.Groups[1].Value;
+            }
+            else if (matchXML2.Success)
+            {
+                queryX = matchXML2.Groups[1].Value;
+                queryX += "," + matchXML2.Groups[2].Value;
+                queryX += "," + matchXML2.Groups[3].Value;
+            }
+            return queryX;
+        }
+
+        // Necesario para que no se cierre la ventana de comandos
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
 
@@ -228,7 +254,5 @@ namespace Programa
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
-        //-------------------------------------------------------------------------------
-    }
-    
+    }          
 }

@@ -41,50 +41,50 @@ namespace MiniSQLEngine
         string deleteUser;
 
         string createXML;
-        string queryXML;
+        string queryML;
 
         public SQLParser()
         {
             //SELECT
             //Con *:
-            select1 = @"SELECT\s+(\*)\s+FROM\s+(\w+);";
-            select2 = @"SELECT\s+(\*)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
+            select1 = @"SELECT\s*(\*)\s*FROM\s*(\w+);";
+            select2 = @"SELECT\s*(\*)\s*FROM\s*(\w+)\s*WHERE\s*(\w+)\s*(=|<|>)\s*([\w\']+);";
             //Con una tabla:
-            select3 = @"SELECT\s+(\w+)\s+FROM\s+(\w+);";
-            select4 = @"SELECT\s+(\w+)\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
+            select3 = @"SELECT\s*(\w+)\s*FROM\s*(\w+);";
+            select4 = @"SELECT\s*(\w+)\s*FROM\s*(\w+)\s*WHERE\s*(\w+)\s*(=|<|>)\s*([\w\']+);";
             //Con mas de una tabla:
-            select5 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+);";
-            select6 = @"SELECT\s+(\w+)(\,\s+(\w+))+\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*([\w\']+);";
+            select5 = @"SELECT\s*(\w+)(\,\s*(\w+))+\s*FROM\s*(\w+);";
+            select6 = @"SELECT\s*(\w+)(\,\s*(\w+))+\s*FROM\s*(\w+)\s*WHERE\s*(\w+)\s*(=|<|>)\s*([\w\']+);";
 
             //Insert
-            insert1 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //CON TODOS SUS VALUES(1)
-            insert2 = @"INSERT\s+INTO\s+(\w+)\s+VALUES\s+\(*([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(CON TODOS SUS VALUES(+1))
-            insert3 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)\)\s+VALUES\s+\(([\w\'\s+\.]+)\);"; //(CON UN VALUE)
-            insert4 = @"INSERT\s+INTO\s+(\w+)\s+\((\w+)(\,\s+(\w+))+\)\s+VALUES\s+\(([\w\'\s+\.]+)(\,\s+([\w\'\s+\.]+))+\);"; //(completa)
+            insert1 = @"INSERT\s*INTO\s*(\w+)\s*VALUES\s*\(([\w\'\s*\.\-]+)\);"; //CON TODOS SUS VALUES(1)
+            insert2 = @"INSERT\s*INTO\s*(\w+)\s*VALUES\s*\(*([\w\'\s*\.\-]+)(\,\s*([\w\'\s*\.\-]+))+\);"; //(CON TODOS SUS VALUES(+1))
+            insert3 = @"INSERT\s*INTO\s*(\w+)\s*\((\w+)\)\s*VALUES\s*\(([\w\'\s*\.\-]+)\);"; //(CON UN VALUE)
+            insert4 = @"INSERT\s*INTO\s*(\w+)\s*\((\w+)(\,\s*(\w+))+\)\s*VALUES\s*\(([\w\'\s*\.\-]+)(\,\s*([\w\'\s*\.\-]+))+\);"; //(completa)
 
             //Delete
-            delete = @"DELETE\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
+            delete = @"DELETE\s*FROM\s*(\w+)\s*WHERE\s*(\w+)\s*(=|<|>)\s*(\w+);";
 
             //Update
-            update1 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)\s+WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);";
-            update2 = @"UPDATE\s+(\w+)\s+SET\s+(\w+)\s*(\=)\s*(\w+)(\,\s+(\w+)\s*(\=)\s*(\w+)\s+)WHERE\s+(\w+)\s*(=|<|>)\s*(\w+);"; //no traga comillas en los attbs ni espacios
+            update1 = @"UPDATE\s*(\w+)\s*SET\s*(\w+)\s*(\=)\s*(\w+)\s*WHERE\s*(\w+)\s*(=|<|>)\s*(\w+);";
+            update2 = @"UPDATE\s*(\w+)\s*SET\s*(\w+)\s*(\=)\s*(\w+)(\,\s*(\w+)\s*(\=)\s*(\w+)\s*)WHERE\s*(\w+)\s*(=|<|>)\s*(\w+);"; //no traga comillas en los attbs ni espacios
 
             //Drop Table
-            dropTable = @"DROP\s+TABLE\s+(\w+);";
+            dropTable = @"DROP\s*TABLE\s*(\w+);";
 
             //Drop DB
-            dropDB = @"DROP\s+DATABASE\s+(\w+);";
+            dropDB = @"DROP\s*DATABASE\s*(\w+);";
 
             //Create DB
-            //createDB = @"CREATE\s+DATABASE\s+(\w+);";
+            //createDB = @"CREATE\s*DATABASE\s*(\w+);";
 
             //Backup DB
-            backupDB = @"BACKUP\s+DATABASE\s+(\w+)\s+TO\s+DISK\s*\=\s*\'([^\']+)\';";
+            backupDB = @"BACKUP\s*DATABASE\s*(\w+)\s*TO\s*DISK\s*\=\s*\'([^\']+)\';";
 
             //Create Table
-            //string createTable = @"(CREATE\s+TABLE)\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\s+|\,\s+\w+\s+(INT|DOUBLE|TEXT))+)\,\s+(PRIMARY\s+KEY)\s+\((\w+)\)\,\s+(FOREIGN\s+KEY)\s+\((\w+)\)\s+REFERENCES\s+(\w+)\s+\((\w+)\);";
-            createTable1 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)\);";
-            createTable2 = @"CREATE\s+TABLE\s+(\w+)\s+\((\w+)\s+(INT|DOUBLE|TEXT)(\,\s+(\w+)\s+(INT|DOUBLE|TEXT))+\);";
+            //string createTable = @"(CREATE\s*TABLE)\s*(\w+)\s*\((\w+)\s*(INT|DOUBLE|TEXT)(\s*|\,\s*\w+\s*(INT|DOUBLE|TEXT))+)\,\s*(PRIMARY\s*KEY)\s*\((\w+)\)\,\s*(FOREIGN\s*KEY)\s*\((\w+)\)\s*REFERENCES\s*(\w+)\s*\((\w+)\);";
+            createTable1 = @"CREATE\s*TABLE\s*(\w+)\s*\((\w+)\s*(INT|DOUBLE|TEXT)\);";
+            createTable2 = @"CREATE\s*TABLE\s*(\w+)\s*\((\w+)\s*(INT|DOUBLE|TEXT)(\,\s*(\w+)\s*(INT|DOUBLE|TEXT))+\);";
 
             //Login
             login = @"(\w+),(\w+),(\w+)";
@@ -107,41 +107,21 @@ namespace MiniSQLEngine
             //Delete User
             deleteUser = @"DELETE\s*USER\s*(\w+);";
 
-            //CreateDBXML
-            createXML = @"<Open\s*Database\=\u0022(\w+)\u0022\s*User\=\u0022(\w+)\u0022\s*Password\=\u0022(\w+)\u0022\/>;";
-
-            //QueryXML
-            queryXML = @"<Query\>([\w+\s*\*\=]+\;)\<\/Query\>";
+            
         }
 
-       
+        
 
         public SQLtype Parser(string query)
         {
-            string queryX = "";
-
-            Match matchXML = Regex.Match(query, queryXML);
-            Match matchXML2 = Regex.Match(query, createXML);
-
-            if (matchXML.Success)
-            {
-                queryX = matchXML.Groups[1].Value;
-            }
-            else if (matchXML2.Success)
-            {
-                queryX = matchXML2.Groups[1].Value;
-                queryX += ", " + matchXML2.Groups[2].Value;
-                queryX += ", " + matchXML2.Groups[3].Value;
-            }
-          
+            
             //CREATE TABLE
             Column[] ct2 = new Column[10];
             string[] ct3 = new string[10]; //*
             string ct1 = "";
-
-           
-            Match matchcreate1 = Regex.Match(queryX, createTable1);
-            Match matchcreate2 = Regex.Match(queryX, createTable2);
+            
+            Match matchcreate1 = Regex.Match(query, createTable1);
+            Match matchcreate2 = Regex.Match(query, createTable2);
 
             if (matchcreate1.Success)
             {
@@ -181,7 +161,7 @@ namespace MiniSQLEngine
             string backupDB1 = "";
             string backupDB2 = "";
 
-            Match matchBPDB = Regex.Match(queryX, backupDB);
+            Match matchBPDB = Regex.Match(query, backupDB);
 
             if (matchBPDB.Success)
             {
@@ -198,7 +178,7 @@ namespace MiniSQLEngine
             //CREATE DB
             string createDB1 = "";
 
-            Match matchcDB = Regex.Match(queryX, createDB);
+            Match matchcDB = Regex.Match(query, createDB);
 
             if (matchcDB.Success)
             {
@@ -217,10 +197,10 @@ namespace MiniSQLEngine
             string cupdate1 = "";
             string[] cupdate3 = new string[10];
 
-            Match matchUp1 = Regex.Match(queryX, update1);
-            Match matchUp2 = Regex.Match(queryX, update2);
+            Match matchUp1 = Regex.Match(query, update1);
+            Match matchUp2 = Regex.Match(query, update2);
 
-            if (Regex.Match(queryX, update1).Success)
+            if (Regex.Match(query, update1).Success)
             {
                 cupdate1 = matchUp1.Groups[1].Value;
                 cupdate2[0] = matchUp1.Groups[2].Value;
@@ -234,7 +214,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, update2).Success)
+            else if (Regex.Match(query, update2).Success)
             { 
                 cupdate1 = matchUp2.Groups[1].Value;
                 //The first column of the set
@@ -261,9 +241,9 @@ namespace MiniSQLEngine
             string delete1 = "";
             string[] delete2 = new string[10];
 
-            Match matchDel = Regex.Match(queryX, delete);
+            Match matchDel = Regex.Match(query, delete);
 
-            if (Regex.Match(queryX, delete).Success)
+            if (Regex.Match(query, delete).Success)
             {
                 delete1 = matchDel.Groups[1].Value;
                 delete2[0] = matchDel.Groups[2].Value;
@@ -283,14 +263,14 @@ namespace MiniSQLEngine
             string[] camp3 = new string[10];
 
 
-            Match matchS1 = Regex.Match(queryX, select1);
-            Match matchS2 = Regex.Match(queryX, select2);
-            Match matchS3 = Regex.Match(queryX, select3);
-            Match matchS4 = Regex.Match(queryX, select4);
-            Match matchS5 = Regex.Match(queryX, select5);
-            Match matchS6 = Regex.Match(queryX, select6);
+            Match matchS1 = Regex.Match(query, select1);
+            Match matchS2 = Regex.Match(query, select2);
+            Match matchS3 = Regex.Match(query, select3);
+            Match matchS4 = Regex.Match(query, select4);
+            Match matchS5 = Regex.Match(query, select5);
+            Match matchS6 = Regex.Match(query, select6);
 
-            if (Regex.Match(queryX, select1).Success)
+            if (Regex.Match(query, select1).Success)
             {
                 camp1[0] = matchS1.Groups[1].Value;
                 camp2 = matchS1.Groups[2].Value;
@@ -299,7 +279,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, select2).Success)
+            else if (Regex.Match(query, select2).Success)
             {
                 camp1[0] = matchS2.Groups[1].Value;
                 camp2 = matchS2.Groups[2].Value;
@@ -311,7 +291,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, select3).Success)
+            else if (Regex.Match(query, select3).Success)
             {
                 camp1[0] = matchS3.Groups[1].Value;
                 camp2 = matchS3.Groups[2].Value;
@@ -320,7 +300,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, select4).Success)
+            else if (Regex.Match(query, select4).Success)
             {
                 camp1[0] = matchS4.Groups[1].Value;
                 camp2 = matchS4.Groups[2].Value;
@@ -332,7 +312,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, select5).Success)
+            else if (Regex.Match(query, select5).Success)
             {
 
                 camp1[0] = matchS5.Groups[1].Value;
@@ -347,7 +327,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, select6).Success)
+            else if (Regex.Match(query, select6).Success)
             {
 
                 camp1[0] = matchS6.Groups[1].Value;
@@ -371,7 +351,7 @@ namespace MiniSQLEngine
 
             string campoDT1 = "";
 
-            Match matchDT = Regex.Match(queryX, dropTable);
+            Match matchDT = Regex.Match(query, dropTable);
 
             if (matchDT.Success)
             {
@@ -387,7 +367,7 @@ namespace MiniSQLEngine
 
             string campoDB1 = "";
 
-            Match matchDB = Regex.Match(queryX, dropDB);
+            Match matchDB = Regex.Match(query, dropDB);
 
             if (matchDB.Success)
             {
@@ -406,12 +386,12 @@ namespace MiniSQLEngine
             string[] cinsert2 = new string[10];
             string[] cinsert3 = new string[10];
 
-            Match matchI1 = Regex.Match(queryX, insert1);
-            Match matchI2 = Regex.Match(queryX, insert2);
-            Match matchI3 = Regex.Match(queryX, insert3);
-            Match matchI4 = Regex.Match(queryX, insert4);
+            Match matchI1 = Regex.Match(query, insert1);
+            Match matchI2 = Regex.Match(query, insert2);
+            Match matchI3 = Regex.Match(query, insert3);
+            Match matchI4 = Regex.Match(query, insert4);
 
-            if (Regex.Match(queryX, insert1).Success)
+            if (Regex.Match(query, insert1).Success)
             {
                 cinsert1 = matchI1.Groups[1].Value;
                 //cinsert3[0] = matchI1.Groups[2].Value;
@@ -420,7 +400,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if(Regex.Match(queryX, insert2).Success)
+            else if(Regex.Match(query, insert2).Success)
             {
                 cinsert1 = matchI2.Groups[1].Value;
                 cinsert3[0] = matchI2.Groups[2].Value;
@@ -434,7 +414,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, insert3).Success)
+            else if (Regex.Match(query, insert3).Success)
             {
                 cinsert1 = matchI3.Groups[1].Value;
                 cinsert3[0] = matchI3.Groups[3].Value;
@@ -444,7 +424,7 @@ namespace MiniSQLEngine
 
                 return sentencia;
             }
-            else if (Regex.Match(queryX, insert4).Success)
+            else if (Regex.Match(query, insert4).Success)
             {
                 cinsert1 = matchI4.Groups[1].Value;
                 cinsert3[0] = matchI4.Groups[5].Value;
@@ -470,7 +450,7 @@ namespace MiniSQLEngine
             string createDB2 = "";
             string createDB3 = "";
 
-            Match matchcDB = Regex.Match(queryX, login);
+            Match matchcDB = Regex.Match(query, login);
 
             if (matchcDB.Success)
             {
@@ -487,7 +467,7 @@ namespace MiniSQLEngine
             //CREATE SECURITY PROFILE
             string security ="";
 
-            Match matchCS = Regex.Match(queryX, create);
+            Match matchCS = Regex.Match(query, create);
 
             if (matchCS.Success)
             {
@@ -502,7 +482,7 @@ namespace MiniSQLEngine
             //DROP SECURITY PROFILE
             string securityD = "";
 
-            Match matchDS = Regex.Match(queryX, drop);
+            Match matchDS = Regex.Match(query, drop);
 
             if (matchDS.Success)
             {
@@ -519,7 +499,7 @@ namespace MiniSQLEngine
             string table = "";
             string profile = "";
 
-            Match matchG = Regex.Match(queryX, grant);
+            Match matchG = Regex.Match(query, grant);
 
             if (matchG.Success)
             {
@@ -538,7 +518,7 @@ namespace MiniSQLEngine
             string tableR = "";
             string profileR = "";
 
-            Match matchR = Regex.Match(queryX, revoke);
+            Match matchR = Regex.Match(query, revoke);
 
             if (matchR.Success)
             {
@@ -557,7 +537,7 @@ namespace MiniSQLEngine
             string pass = "";
             string profileU = "";
 
-            Match matchU = Regex.Match(queryX, addUser);
+            Match matchU = Regex.Match(query, addUser);
 
             if (matchU.Success)
             {
@@ -574,7 +554,7 @@ namespace MiniSQLEngine
             //DELETE USER
             string userD = "";
 
-            Match matchDU = Regex.Match(queryX, deleteUser);
+            Match matchDU = Regex.Match(query, deleteUser);
 
             if (matchDU.Success)
             {
@@ -588,6 +568,32 @@ namespace MiniSQLEngine
 
             return null;
 
+        }
+        public string DesParser(string query)
+        {
+
+            //CreateDBXML
+            string createXML = @"<Open\s*Database\=\'(\w+)\'\s*User\=\'(\w+)\'\s*Password\=\'(\w+)\'\/>;";
+
+            //QueryXML
+            string queryXML = @"<Query\>([\w+\s*\*\=]+\;)\<\/Query\>";
+
+            string queryX = "";
+
+            Match matchXML = Regex.Match(query, queryXML);
+            Match matchXML2 = Regex.Match(query, createXML);
+
+            if (matchXML.Success)
+            {
+                queryX = matchXML.Groups[1].Value;
+            }
+            else if (matchXML2.Success)
+            {
+                queryX = matchXML2.Groups[1].Value;
+                queryX += ", " + matchXML2.Groups[2].Value;
+                queryX += ", " + matchXML2.Groups[3].Value;
+            }
+            return queryX;
         }
 
     }

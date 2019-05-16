@@ -14,7 +14,7 @@ namespace TCPClient
     {
         static void Main(string[] args)
         {
-
+            //DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
             string login = @"(\w+),(\w+),(\w+)";
 
             const string argPrefixIp = "ip=";
@@ -47,36 +47,73 @@ namespace TCPClient
 
                 while (request!="END")
                 {
-                    int readBytes = networkStream.Read(inputBuffer, 0, 1024);
-                    Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
-
-                    request = Console.ReadLine();
+                    
 
                     //parsear la sentencia
                    
                         if (cont == 0)
                         {
-                            request2 = "<Open Database=" + "\u0022" + request + "\u0022";
+                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
+
+                            request = Console.ReadLine();
+
+                            request2 = "<Open Database=" + "'" + request + "'";
                             cont++;
                         }
                         else if (cont == 1)
                         {
-                            request2 += " User=" + "\u0022" + request + "\u0022";
+                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
+
+                            request = Console.ReadLine();
+
+                            request2 += " User=" + "'" + request + "'";
                             cont++;
                         }
                         else if (cont == 2)
                         {
-                            request2 += " Password=" + "\u0022" + request + "\u0022" + "/>";
-                        }
-                    outputBuffer = Encoding.ASCII.GetBytes(request2);
-                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
 
-                    Thread.Sleep(2000);
+                            request = Console.ReadLine();
+                        
+                            request2 += " Password=" + "'" + request + "'/>;";
+                            cont++;
+                    }
+                    else if (cont==3)
+                    {
+                        outputBuffer = Encoding.ASCII.GetBytes(request2);
+                        networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+                        cont++;
+                    }
+                    else
+                    {
+                        int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                        Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
 
+                        request = Console.ReadLine();
+
+                        outputBuffer = Encoding.ASCII.GetBytes(request);
+                        networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+
+                        Thread.Sleep(2000);
+                    }
                 }
-                
                 networkStream.Write(endMessage, 0, endMessage.Length);
             }
         }
+        // Necesario para que no se cierre la ventana de comandos
+        //private const int MF_BYCOMMAND = 0x00000000;
+        //public const int SC_CLOSE = 0xF060;
+
+        //[DllImport("user32.dll")]
+        //public static extern int DeleteMenu(IntPtr hMenu, int nPosition, int wFlags);
+
+        //[DllImport("user32.dll")]
+        //private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        //[DllImport("kernel32.dll", ExactSpelling = true)]
+        //private static extern IntPtr GetConsoleWindow();
     }
 }
