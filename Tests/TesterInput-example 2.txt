@@ -16,6 +16,7 @@ INSERT INTO Employees_Public VALUES ('Ramon','Programmer');
 INSERT INTO Employees_Public VALUES ('Miren','Sales');
 CREATE SECURITY PROFILE Employee;
 GRANT SELECT ON Employees_Public TO Employee;
+GRANT DELETE ON EmployeesPersonal TO Employee;
 ADD USER ('Eva','1234',Employee);
 ADD USER ('Ramon','abcd',Employee);
 

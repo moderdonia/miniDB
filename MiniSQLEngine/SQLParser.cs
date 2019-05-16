@@ -526,7 +526,7 @@ namespace MiniSQLEngine
                 tableR = matchR.Groups[2].Value;
                 profileR = matchR.Groups[3].Value;
 
-                SQLtype sentencia = new Login(typeR, tableR, profileR);
+                SQLtype sentencia = new Revoke(typeR, tableR, profileR);
 
                 return sentencia;
 

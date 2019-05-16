@@ -80,13 +80,13 @@ namespace MiniSQLEngine
                 userList.Add(name, password);
             }
 
-            if (!secProfiles.ContainsKey(name))
+            if (!secProfiles.ContainsKey(secProfile))
             {
-                secProfiles.Add(name, new Dictionary<string, List<bool>>());
+                secProfiles.Add(secProfile, new Dictionary<string, List<bool>>());
             }
-            if (!secProfiles[name].ContainsKey(table))
+            if (!secProfiles[secProfile].ContainsKey(table))
             {
-                secProfiles[name].Add(table, booleans);
+                secProfiles[secProfile].Add(table, booleans);
             }
 
             AddUserProf(name, secProfile);
@@ -100,12 +100,12 @@ namespace MiniSQLEngine
             foreach(KeyValuePair<string, string> user in userList)
             {
                 if (user.Key != "admin") {
-                    foreach (string tableName in secProfiles[user.Key].Keys) //Foreach table in secProfiles
+                    foreach (string tableName in secProfiles[userSecProfiles[user.Key]].Keys) //Foreach table in secProfiles
                     {
                         aux += user.Key + ";" + user.Value + ";";
                         aux += userSecProfiles[user.Key] + ";"; //Add secProf to string
                         aux += tableName + ";"; //Add tableName to string
-                        booleans = secProfiles[user.Key][tableName];
+                        booleans = secProfiles[userSecProfiles[user.Key]][tableName];
                         foreach (bool b in booleans)
                         {
                             aux += b + ";"; //Adding the boolean values
@@ -123,6 +123,7 @@ namespace MiniSQLEngine
             {
                 userSecProfiles.Add(userName, secProf);
             }
+              
             
         }
     }

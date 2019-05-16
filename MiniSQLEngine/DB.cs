@@ -70,6 +70,7 @@ namespace MiniSQLEngine
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
+           // if(prof.userSecProfiles[user].)
             //string //FileName = @"..\..\..\Archivos\" + pTable + ".txt";
             //string texto = //File.ReadAllText(//FileName);
             int i =0;
@@ -427,7 +428,7 @@ namespace MiniSQLEngine
             if (user == "admin")
             {
                 prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
-                if (prof.userList.ContainsKey(profile))
+                if (prof.secProfiles.ContainsKey(profile))
                 {
                     return Messages.SecurityProfileAlreadyExists;
                 }
@@ -446,10 +447,10 @@ namespace MiniSQLEngine
         public string DeleteSecProfile(string profile)
         {
             if(user=="admin"){
-                prof.userList.Remove(profile);
+                //prof.userList.Remove(profile);
                 prof.secProfiles.Remove(profile);
 
-                if (prof.userList.ContainsKey(profile))
+                if (prof.secProfiles.ContainsKey(profile))
                 {
                     return Messages.SecurityProfileDeleted;
                 }
@@ -472,16 +473,28 @@ namespace MiniSQLEngine
             {
                 int index = 0;
                 index = prof.AllPrivileges.IndexOf(privilege);
-                if (!prof.secProfiles[secProf].ContainsKey(table))
+                try
                 {
-                    prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
-                    prof.secProfiles[secProf][table].Insert(index, true);
-                    return Messages.SecurityPrivilegeGranted;
+                    if (!(prof.secProfiles[secProf]).ContainsKey(table))
+                    {
+                        prof.secProfiles[secProf].Add(table, prof.falsePrivileges);
+                        prof.secProfiles[secProf][table].Insert(index, true);
+                        return Messages.SecurityPrivilegeGranted;
+                    }
+                    else
+                    {
+                        prof.secProfiles[secProf][table].Insert(index, true);
+                        return Messages.SecurityPrivilegeGranted;
+                    }
                 }
-                else
+                catch
                 {
-                    return Messages.TableAlreadyExists;
+                    return Messages.TableDoesNotExist;
                 }
+                
+                
+                
+                
             }
             else
             {
