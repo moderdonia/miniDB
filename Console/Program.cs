@@ -22,7 +22,8 @@ namespace Programa
             string line="";
             string[] lineArray = new string[3];
             List<string> dbList = new List<string>();
-
+            Profiles prof = Profiles.getInstance();
+            DB database;
 
             const string argPrefixPort = "port=";
 
@@ -42,6 +43,8 @@ namespace Programa
 
             Console.WriteLine("Server listening for clients");
 
+           
+
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
@@ -51,53 +54,32 @@ namespace Programa
                 {
                     
                     byte[] inputBuffer = new byte[1024];
+                    byte[] outputBuffer = new byte[1024];
                     NetworkStream networkStream = client.GetStream();
 
                     //Read message from the client
                     int size = 1024 ;
                     string request = "";
-
-                    byte[] outputBuffer = Encoding.ASCII.GetBytes("What database you wanna open bro?");
-                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-                    //Thread.Sleep(3000);
-                    //size = networkStream.Read(inputBuffer, 0, 1024);
-                    //request = Encoding.ASCII.GetString(inputBuffer, 0, size);
-
-                    outputBuffer = Encoding.ASCII.GetBytes("What's your name mate?");
-                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-
-                    Thread.Sleep(3000);
-                    //size = networkStream.Read(inputBuffer, 0, 1024);
-                    //request += Encoding.ASCII.GetString(inputBuffer, 0, size);
-
-
-                    outputBuffer = Encoding.ASCII.GetBytes("And your password dude?");
-                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-
                     size = networkStream.Read(inputBuffer, 0, 1024);
                     request += Encoding.ASCII.GetString(inputBuffer, 0, size);
                     DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
                     line = DesParser(request);
-                    if (!line.Contains("admin,admin"))
-                    {
-                        Console.WriteLine("Error: Not sufficient privileges");
+                    lineArray = line.Split(',');
 
-                    }
-                    else if (!dbList.Contains(line))
+                    if (lineArray[1].Equals("admin") && lineArray[2]=="admin" && !dbList.Contains(lineArray[0]))
                     {
-                        lineArray = line.Split(',');
-                        new CreateDB(lineArray[0], lineArray[1], lineArray[2]);
-                        dbList.Add(line);
+                        
+                        //new CreateDB(lineArray[0], lineArray[1], lineArray[2]);
+                        dbList.Add(lineArray[0]);
                         //DB db = new DB(line);
 
-                        //bool bucle = true;
-                        //string linea;
-                        //no se puede cerrar pulsando la X
-                        
-                        using (DB db = new DB(line))
+
+
+                        //********************************* aqui
+                        using (DB db = new DB(lineArray[0])) //desde aqui
                         {
                             db.user = lineArray[1];
-                            Profiles prof = Profiles.getInstance();
+                            database = db;
                             prof.SetDB(db);
                             //bool bucle = true;
                             //string linea;
@@ -170,34 +152,46 @@ namespace Programa
                                         }
                                         //codigo para lectura con pattern
                                         //-------------------------------
-                                        
+
                                     }
                                 }
                                 i++;
                             }
-                            while (request != "END")
-                            {
-                                outputBuffer = Encoding.ASCII.GetBytes("\nInserte sentencia o escriba 'END' para salir");
-                                networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+                        } //hasta aqui es la carga de datos (esto estaba abajo *******)
 
-                                size = networkStream.Read(inputBuffer, 0, 1024);
-                                request = Encoding.ASCII.GetString(inputBuffer, 0, size);
 
-                                DesParser(request);
+                        //bool bucle = true;
+                        //string linea;
+                        //no se puede cerrar pulsando la X
 
-                                Console.WriteLine("Request received: " + request);
 
-                                Stopwatch sw = new Stopwatch();
-                                sw.Start();
-                                string output = "<Answer>" + db.runQuery(request) + "</Answer>" + "(";
-                                output += sw.Elapsed.TotalMilliseconds + ")";
-                                Console.WriteLine(output);
-                                sw.Stop();
-                                outputBuffer = Encoding.ASCII.GetBytes(output);
-                                networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-                            }
-                            client.Close();
+                        while (request != "END")
+                        {
+                            outputBuffer = Encoding.ASCII.GetBytes("\nInserte sentencia o escriba 'END' para salir");
+                            networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+
+                            size = networkStream.Read(inputBuffer, 0, 1024);
+                            request = Encoding.ASCII.GetString(inputBuffer, 0, size);
+
+                            DesParser(request);
+
+                            Console.WriteLine("Request received: " + request);
+
+                            Stopwatch sw = new Stopwatch();
+                            sw.Start();
+                            string output = "<Answer>" + database.runQuery(request) + "</Answer>" + "(";
+                            output += sw.Elapsed.TotalMilliseconds + ")";
+                            Console.WriteLine(output);
+                            sw.Stop();
+                            outputBuffer = Encoding.ASCII.GetBytes(output);
+                            networkStream.Write(outputBuffer, 0, outputBuffer.Length);
                         }
+                        client.Close();
+                        
+                    }
+                    else
+                    {
+
                     }
                 });
                 childSocketThread.Start();

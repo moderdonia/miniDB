@@ -17,7 +17,7 @@ namespace MiniSQLEngine.QuerySystem.QueryTypes
         public override string Execute(DB database)
         {   
             
-            if(user.Equals("admin") && !password.Equals("admin") && !dbList.Contains(db))
+            if(user.Equals("admin") && password.Equals("admin") && !dbList.Contains(db))
             {                
                 new CreateDB(db, user, password);
                 database.user = user;

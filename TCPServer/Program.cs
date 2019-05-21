@@ -39,66 +39,28 @@ namespace TCPClient
                 NetworkStream networkStream = client.GetStream();
                 string request = "";
                 string request2 = "";
-                int cont = 0;
                 byte[] outputBuffer = new byte[1024];
                 byte[] inputBuffer = new byte[1024];
                 byte[] endMessage = Encoding.ASCII.GetBytes("END");
+                string[] line1 = new string[3];
 
+                line1 = Console.ReadLine().Split(',');
+                request2 = "<Open Database=" + "'" + line1[0] + "'" + " User=" + "'" + line1[1] + "'" + " Password=" + "'" + line1[2] + "'/>;";
+
+                outputBuffer = Encoding.ASCII.GetBytes(request2);
+                networkStream.Write(outputBuffer, 0, outputBuffer.Length);
 
                 while (request!="END")
-                {
-                    
+                {  
+                    int readBytes = networkStream.Read(inputBuffer, 0, 1024);
+                    Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
 
-                    //parsear la sentencia
-                   
-                        if (cont == 0)
-                        {
-                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
-                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
+                    request = Console.ReadLine();
 
-                            request = Console.ReadLine();
+                    outputBuffer = Encoding.ASCII.GetBytes(request);
+                    networkStream.Write(outputBuffer, 0, outputBuffer.Length);
 
-                            request2 = "<Open Database=" + "'" + request + "'";
-                            cont++;
-                        }
-                        else if (cont == 1)
-                        {
-                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
-                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
-
-                            request = Console.ReadLine();
-
-                            request2 += " User=" + "'" + request + "'";
-                            cont++;
-                        }
-                        else if (cont == 2)
-                        {
-                            int readBytes = networkStream.Read(inputBuffer, 0, 1024);
-                            Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
-
-                            request = Console.ReadLine();
-                        
-                            request2 += " Password=" + "'" + request + "'/>;";
-                            cont++;
-                    }
-                    else if (cont==3)
-                    {
-                        outputBuffer = Encoding.ASCII.GetBytes(request2);
-                        networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-                        cont++;
-                    }
-                    else
-                    {
-                        int readBytes = networkStream.Read(inputBuffer, 0, 1024);
-                        Console.WriteLine("Response received: " + Encoding.ASCII.GetString(inputBuffer, 0, readBytes));
-
-                        request = Console.ReadLine();
-
-                        outputBuffer = Encoding.ASCII.GetBytes(request);
-                        networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-
-                        Thread.Sleep(2000);
-                    }
+                    Thread.Sleep(2000);                    
                 }
                 networkStream.Write(endMessage, 0, endMessage.Length);
             }

@@ -29,15 +29,14 @@ namespace MiniSQLEngine
                 return sqltype.Execute(this);
             }
             //else if(sqltype.GetType().Equals(login))
-            //{
-               // return sqltype.Execute(this);
-           // }
+           // {
+            //    return sqltype.Execute(this);
+            //}
             else{
                 return Messages.WrongSyntax;
             }
 
         }
-
         public DB(string name)
         {
             db = new Dictionary<string, Table>();
@@ -45,237 +44,291 @@ namespace MiniSQLEngine
             DBlist.Add(name);
         }
 
-        public DB(string name,int num)
-        {
-            prof.SetDB(this);
-        }
+        //public DB(string name,int num)
+        //{
+         //   prof.SetDB(this);
+        //}
 
         public string createTable(string name, string[] attbs)
         {
-            prepareColumns(attbs);
-            Table table = new Table(name,listColAux);
-            if (!db.ContainsKey(name))
+            if (user == "admin")
             {
-                db.Add(name, table);
-                prof.getTables(name);
-                
-                return Messages.CreateTableSuccess;
+                prepareColumns(attbs);
+                Table table = new Table(name, listColAux);
+                if (!db.ContainsKey(name))
+                {
+                    db.Add(name, table);
+                    prof.getTables(name);
+
+                    return Messages.CreateTableSuccess;
+                }
+                else
+                {
+                    return Messages.TableAlreadyExists;
+                }
             }
             else
             {
-                return Messages.TableAlreadyExists;
+                return Messages.SecurityNotSufficientPrivileges;
             }
-            
         }
 
         public string insertData(string pTable, string[]cols, string[] data) //name = table , data = values , cols = attb
         {
-           // if(prof.userSecProfiles[user].)
-            //string //FileName = @"..\..\..\Archivos\" + pTable + ".txt";
-            //string texto = //File.ReadAllText(//FileName);
-            int i =0;
-            int x = data.Length;
-            ctrl = true;
-            
-            
-            prepareColumns(cols);
-
-            if (listColAux.Count == 0)
+            if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]].ContainsKey(pTable))
             {
-                if (db.ContainsKey(pTable))
+                if ( user == "admin" || prof.secProfiles[prof.userSecProfiles[user]][pTable][1] == true )
                 {
-                    foreach (string d in db[pTable].getTable().Keys)
-                    {
 
-                        if (!(d is null))
+                    int i = 0;
+                    int x = data.Length;
+                    ctrl = true;
+
+
+                    prepareColumns(cols);
+
+                    if (listColAux.Count == 0)
+                    {
+                        if (db.ContainsKey(pTable))
                         {
-                            ctrl = true;
-                            while (ctrl && i < data.Length)
+                            foreach (string d in db[pTable].getTable().Keys)
                             {
-                                if (data[i] != null && db[pTable].getTable().ContainsKey(d))
+
+                                if (!(d is null))
                                 {
-                                    string aux = data[i].ToString();
-                                    db[pTable].getTable()[d].Add(aux);
-                                    //texto += aux + ";";
+                                    ctrl = true;
+                                    while (ctrl && i < data.Length)
+                                    {
+                                        if (data[i] != null && db[pTable].getTable().ContainsKey(d))
+                                        {
+                                            string aux = data[i].ToString();
+                                            db[pTable].getTable()[d].Add(aux);
+                                            //texto += aux + ";";
+                                        }
+                                        i++;
+                                        ctrl = false;
+                                    }
+
                                 }
-                                i++;
-                                ctrl = false;
                             }
-                            
+                            // texto += Environment.NewLine;
+                            //File.Delete(//FileName);
+                            //File.WriteAllText(//FileName, texto);
+                            return Messages.InsertSuccess;
+                        }
+                        else
+                        {
+                            //texto += Environment.NewLine;
+                            //File.Delete(//FileName);
+                            //File.WriteAllText(//FileName, texto);
+                            return Messages.TableDoesNotExist;
                         }
                     }
-                   // texto += Environment.NewLine;
-                    //File.Delete(//FileName);
-                    //File.WriteAllText(//FileName, texto);
-                    return Messages.InsertSuccess;
+                    else
+                    {
+                        foreach (Column k in listColAux)
+                        {
+                            ordenAux.Add(k.name);
+                        }
+                        IEnumerable<string> missCols;
+                        missCols = db[pTable].getTable().Keys.Except(ordenAux);
+                        IEnumerator<string> it = missCols.GetEnumerator();
+
+                        if (db.ContainsKey(pTable))
+                        {
+                            foreach (Column d in listColAux)
+                            {
+                                if (!(d is null))
+                                {
+                                    ctrl = true;
+                                    while (ctrl)
+                                    {
+                                        if (data[i] != null && db[pTable].getTable().ContainsKey(d.name))
+                                        {
+                                            string aux = data[i].ToString();
+                                            db[pTable].getTable()[d.name].Add(aux);
+                                            // texto += aux + ";";
+                                        }
+                                        i++;
+                                        ctrl = false;
+                                    }
+
+                                }
+                            }
+                            if (missCols.Count() != 0)
+                            {
+                                while (it.MoveNext())
+                                {
+                                    db[pTable].getTable()[it.Current].Add("null");
+                                }
+                            }
+                            //texto += Environment.NewLine;
+                            //File.Delete(//FileName);
+                            //File.WriteAllText(//FileName, texto);
+                            return Messages.InsertSuccess;
+                        }
+                        else
+                        {
+                            //texto += Environment.NewLine;
+                            //File.Delete(//FileName);
+                            //File.WriteAllText(//FileName, texto);
+                            return Messages.TableDoesNotExist;
+                        }
+                    }
                 }
                 else
                 {
-                    //texto += Environment.NewLine;
-                    //File.Delete(//FileName);
-                    //File.WriteAllText(//FileName, texto);
-                    return Messages.TableDoesNotExist;
+                    return Messages.SecurityNotSufficientPrivileges;
                 }
             }
             else
-            { 
-                foreach (Column k in listColAux)
-                {
-                    ordenAux.Add(k.name);    
-                }
-                IEnumerable<string> missCols;
-                missCols = db[pTable].getTable().Keys.Except(ordenAux);
-                IEnumerator<string> it = missCols.GetEnumerator();
-
-                if (db.ContainsKey(pTable))
-                {
-                    foreach (Column d in listColAux)
-                    {
-                        if (!(d is null))
-                        {
-                            ctrl = true;
-                            while (ctrl)
-                            {
-                                if (data[i] != null && db[pTable].getTable().ContainsKey(d.name))
-                                {
-                                    string aux = data[i].ToString();
-                                    db[pTable].getTable()[d.name].Add(aux);
-                                   // texto += aux + ";";
-                                }
-                                i++;
-                                ctrl = false;
-                            }
-                            
-                        }
-                    }
-                    if (missCols.Count() != 0)
-                    {
-                        while (it.MoveNext())
-                        {
-                            db[pTable].getTable()[it.Current].Add("null");
-                        }
-                    }
-                    //texto += Environment.NewLine;
-                    //File.Delete(//FileName);
-                    //File.WriteAllText(//FileName, texto);
-                    return Messages.InsertSuccess;
-                }
-                else
-                {
-                    //texto += Environment.NewLine;
-                    //File.Delete(//FileName);
-                    //File.WriteAllText(//FileName, texto);
-                    return Messages.TableDoesNotExist;
-                }
-            }        
+            {
+                return Messages.SecurityNotSufficientPrivileges;
+            }
         }
 
         public string dropTable(string table)
         {
-            if (db.ContainsKey(table))
+            if (user == "admin")
             {
-                db.Remove(table);
-                return Messages.TupleDeleteSuccess;
+                if (db.ContainsKey(table))
+                {
+                    db.Remove(table);
+                    return Messages.TupleDeleteSuccess;
+                }
+                else
+                {
+                    return Messages.TableDoesNotExist;
+                }
             }
             else
             {
-                return Messages.TableDoesNotExist;
+                return Messages.SecurityNotSufficientPrivileges;
             }
         }
 
         public string deleteTuple(string pTable, string[] conds)
         {
-            Table table = db[pTable];
-
-            prepareConditions(table, conds);
-            for(int i=0; i < condsIndex.Count ; i=+2)
+            if(user == "admin" || prof.secProfiles[prof.userSecProfiles[user]].ContainsKey(pTable) )
             {
-                if (table.getTable().ContainsKey(conds[i]))
+                if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]][pTable][0] == true )
                 {
-                    foreach (int x in condsIndex)
+                    Table table = db[pTable];
+
+                    prepareConditions(table, conds);
+                    for (int i = 0; i < condsIndex.Count; i = +2)
                     {
-                        foreach(List<string> h in table.getTable().Values)
+                        if (table.getTable().ContainsKey(conds[i]))
                         {
-                            h.RemoveAt(x);
+                            foreach (int x in condsIndex)
+                            {
+                                foreach (List<string> h in table.getTable().Values)
+                                {
+                                    h.RemoveAt(x);
+                                }
+
+                            }
                         }
-                        
-                    }   
+                        else
+                        {
+                            return Messages.TableDoesNotExist;
+                        }
+                    }
+                    return Messages.TupleDeleteSuccess;
                 }
                 else
                 {
-                    return Messages.TableDoesNotExist;
-                }         
+                    return Messages.SecurityNotSufficientPrivileges;
+                }
+            }else
+{
+                return Messages.SecurityNotSufficientPrivileges;
             }
-            return Messages.TupleDeleteSuccess;
+
         }
 
         public string exeUpdate(string pTable, string[] cols,string[] conds)
         {
-            prepareColumns(cols);
-
-            if (db.ContainsKey(pTable))
+            if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]].ContainsKey(pTable))
             {
-                Table table = db[pTable];
-
-                if (conds[0] == null)
+                if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]][pTable][3] == true )
                 {
-                    foreach (Column s in listColAux)
+                    prepareColumns(cols);
+
+                    if (db.ContainsKey(pTable))
                     {
-                        if (!(s.name is null))
+                        Table table = db[pTable];
+
+                        if (conds[0] == null)
                         {
-                            if (table.getTable().ContainsKey(s.name))
+                            foreach (Column s in listColAux)
                             {
-                                for (int t = 0; t < table.getTable().Count;t++)
+                                if (!(s.name is null))
                                 {
-                                    for (int g = 0; g < cols.Length; g += 2)
+                                    if (table.getTable().ContainsKey(s.name))
                                     {
-                                        table.getTable()[s.name][t] = cols[g];
+                                        for (int t = 0; t < table.getTable().Count; t++)
+                                        {
+                                            for (int g = 0; g < cols.Length; g += 2)
+                                            {
+                                                table.getTable()[s.name][t] = cols[g];
+                                            }
+                                        }
+                                        return Messages.TupleUpdateSuccess;
+                                    }
+                                    else
+                                    {
+                                        return Messages.ColumnDoesNotExist + " " + s.name;
                                     }
                                 }
-                                return Messages.TupleUpdateSuccess;
-                            }
-                            else
-                            {
-                                return Messages.ColumnDoesNotExist + " " + s.name; 
                             }
                         }
+                        else
+                        {
+                            prepareConditions(table, conds);
+                            foreach (Column s in listColAux)
+                            {
+                                if (!(s.name is null))
+                                {
+                                    if (table.getTable().ContainsKey(s.name))
+                                    {
+                                        foreach (int i in condsIndex)
+                                        {
+                                            for (int g = 0; g < cols.Length; g += 2)
+                                            {
+                                                if (cols[g + 1] != null)
+                                                {
+                                                    table.getTable()[s.name][i] = cols[g + 2];
+                                                }
+
+                                            }
+
+                                        }
+                                        return Messages.TupleUpdateSuccess;
+                                    }
+                                    else
+                                    {
+                                        return Messages.ColumnDoesNotExist;
+                                    }
+                                }
+                            }
+                        }
+                        return Messages.InsertSuccess;
+                    }
+                    else
+                    {
+                        return Messages.TableDoesNotExist;
                     }
                 }
                 else
                 {
-                    prepareConditions(table, conds);
-                    foreach (Column s in listColAux) 
-                    {
-                        if (!(s.name is null))
-                        {
-                            if (table.getTable().ContainsKey(s.name))   
-                            {
-                                foreach (int i in condsIndex)
-                                {
-                                    for(int g = 0; g < cols.Length; g += 2)
-                                    {
-                                        if(cols[g+1] != null)
-                                        {
-                                            table.getTable()[s.name][i] = cols[g + 2];
-                                        }
-                                        
-                                    }
-                                    
-                                }
-                                return Messages.TupleUpdateSuccess;
-                            }
-                            else
-                            {
-                                return Messages.ColumnDoesNotExist;
-                            }
-                        }
-                    }
+                    return Messages.SecurityNotSufficientPrivileges;
                 }
-                return Messages.InsertSuccess;
+
             }
             else
             {
-                return Messages.TableDoesNotExist;
+                return Messages.SecurityNotSufficientPrivileges;
             }
         }
 
@@ -283,134 +336,151 @@ namespace MiniSQLEngine
 
         public string exeSelect(string pTable, string[] cols, string[] conds)
         {
-           
-            prepareColumns(cols);
-            if (db.ContainsKey(pTable))
+            if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]].ContainsKey(pTable) )
             {
-                Table table = db[pTable];
-                     
-                string outPut;
-                
-                string[] sm = new string[cols.Length];
-
-                
-                if (conds[0] == null)
+                if (user == "admin" || prof.secProfiles[prof.userSecProfiles[user]][pTable][2] == true )
                 {
-                    
-                    Dictionary<string, List<string>> columnDic = table.getTable();
-                    string column1Name = columnDic.Keys.ToArray()[0];
-                    int numTuples = columnDic[column1Name].Count;
-                    outPut = "{";
 
-                    foreach (Column s in listColAux)
+
+
+
+                    prepareColumns(cols);
+                    if (db.ContainsKey(pTable))
                     {
-                        if (!(s.name is null))
-                        {
-                            outPut += s.name + ", ";
-                        }
-                    }
+                        Table table = db[pTable];
 
-                    int n = outPut.LastIndexOf(',');
-                    outPut = outPut.Substring(0, n);
-                    outPut += "}";
+                        string outPut;
 
-                    for (int j = 0; j < numTuples; j++)
-                    {
-                        outPut += "{";
+                        string[] sm = new string[cols.Length];
 
-                        foreach (Column column in listColAux)
+
+                        if (conds[0] == null)
                         {
 
-                            outPut += db[pTable].getTable()[column.name][j] + ", ";
-                        }
+                            Dictionary<string, List<string>> columnDic = table.getTable();
+                            string column1Name = columnDic.Keys.ToArray()[0];
+                            int numTuples = columnDic[column1Name].Count;
+                            outPut = "{";
 
-                        int indes = outPut.LastIndexOf(',');
-                        outPut = outPut.Substring(0, indes);
-                        outPut += "}";
-                    }
- 
-                }
-                else
-                {
-                    prepareConditions(table, conds);
+                            foreach (Column s in listColAux)
+                            {
+                                if (!(s.name is null))
+                                {
+                                    outPut += s.name + ", ";
+                                }
+                            }
 
-                    Dictionary<string, List<string>> columnDic = table.getTable();
-                    string column1Name = columnDic.Keys.ToArray()[0];
-                    int numTuples = columnDic[column1Name].Count;
-                    outPut = "{";
+                            int n = outPut.LastIndexOf(',');
+                            outPut = outPut.Substring(0, n);
+                            outPut += "}";
 
-                    foreach (Column s in listColAux)
-                    {
-                        if (!(s.name is null))
-                        {
-                            outPut += s.name + ", ";
-                        }
-                    }
+                            for (int j = 0; j < numTuples; j++)
+                            {
+                                outPut += "{";
 
-                    int n = outPut.LastIndexOf(',');
-                    outPut = outPut.Substring(0, n);
-                    outPut += "}";
-
-                    foreach (Column f in listColAux)
-                    {
-                        ordenAux.Add(f.name);
-                    }
-                    IEnumerable<string> missCols;
-                    missCols = db[pTable].getTable().Keys.Except(ordenAux);
-                    IEnumerator<string> it = missCols.GetEnumerator();
-                    
-
-                    int p = 0;
-                    if(it.MoveNext() == true)
-                    {
-                        it.Reset();
-                        foreach (int w in condsIndex)
-                        {
-
-                            outPut += "{";
                                 foreach (Column column in listColAux)
                                 {
-                                    while (it.MoveNext())
+
+                                    outPut += db[pTable].getTable()[column.name][j] + ", ";
+                                }
+
+                                int indes = outPut.LastIndexOf(',');
+                                outPut = outPut.Substring(0, indes);
+                                outPut += "}";
+                            }
+
+                        }
+                        else
+                        {
+                            prepareConditions(table, conds);
+
+                            Dictionary<string, List<string>> columnDic = table.getTable();
+                            string column1Name = columnDic.Keys.ToArray()[0];
+                            int numTuples = columnDic[column1Name].Count;
+                            outPut = "{";
+
+                            foreach (Column s in listColAux)
+                            {
+                                if (!(s.name is null))
+                                {
+                                    outPut += s.name + ", ";
+                                }
+                            }
+
+                            int n = outPut.LastIndexOf(',');
+                            outPut = outPut.Substring(0, n);
+                            outPut += "}";
+
+                            foreach (Column f in listColAux)
+                            {
+                                ordenAux.Add(f.name);
+                            }
+                            IEnumerable<string> missCols;
+                            missCols = db[pTable].getTable().Keys.Except(ordenAux);
+                            IEnumerator<string> it = missCols.GetEnumerator();
+
+
+                            int p = 0;
+                            if (it.MoveNext() == true)
+                            {
+                                it.Reset();
+                                foreach (int w in condsIndex)
+                                {
+
+                                    outPut += "{";
+                                    foreach (Column column in listColAux)
                                     {
-                                        if (!it.Current.Equals(columnDic.Keys.ToArray()[p]))
+                                        while (it.MoveNext())
                                         {
-                                        outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                            if (!it.Current.Equals(columnDic.Keys.ToArray()[p]))
+                                            {
+                                                outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                            }
+                                            p++;
                                         }
-                                    p++;
+
                                     }
+                                    int n2 = outPut.LastIndexOf(',');
+                                    outPut = outPut.Substring(0, n2);
+                                    outPut += "}";
 
                                 }
-                                int n2 = outPut.LastIndexOf(',');
-                                outPut = outPut.Substring(0, n2);
-                                outPut += "}";
-                            
+                            }
+                            else
+                            {
+                                foreach (int w in condsIndex)
+                                {
+
+                                    outPut += "{";
+                                    foreach (Column column in listColAux)
+                                    {
+                                        outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                    }
+                                    int n3 = outPut.LastIndexOf(',');
+                                    outPut = outPut.Substring(0, n3);
+                                    outPut += "}";
+
+                                }
+                            }
+
+
                         }
+
+                        return outPut;
                     }
                     else
                     {
-                        foreach (int w in condsIndex)
-                        {
-
-                            outPut += "{";
-                            foreach (Column column in listColAux)
-                            {
-                                outPut += db[pTable].getTable()[column.name][w] + ", ";
-                            }
-                            int n3 = outPut.LastIndexOf(',');
-                            outPut = outPut.Substring(0, n3);
-                            outPut += "}";
-                            
-                        }
+                        return Messages.TableDoesNotExist;
                     }
-                    
-                    
                 }
-                
-                return outPut;
+                else
+                {
+                    return Messages.SecurityNotSufficientPrivileges;
+                }
             }
             else
             {
-                return Messages.TableDoesNotExist;
+                return Messages.SecurityNotSufficientPrivileges;
             }
         }
 
@@ -427,13 +497,14 @@ namespace MiniSQLEngine
 
             if (user == "admin")
             {
-                prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
+               
                 if (prof.secProfiles.ContainsKey(profile))
                 {
                     return Messages.SecurityProfileAlreadyExists;
                 }
                 else
                 {
+                    prof.secProfiles.Add(profile, new Dictionary<string, List<bool>>());
                     return Messages.SecurityProfileCreated;
                 }
             }
@@ -491,10 +562,7 @@ namespace MiniSQLEngine
                 {
                     return Messages.TableDoesNotExist;
                 }
-                
-                
-                
-                
+                           
             }
             else
             {
@@ -525,8 +593,23 @@ namespace MiniSQLEngine
         {
             if (user=="admin")
             {
-                prof.userList.Add(userName, pass);
-                prof.secProfiles.Add(userName, new Dictionary<string, List<bool>>());
+                if (!prof.userList.ContainsKey(userName))
+                {
+                    prof.userList.Add(userName, pass);
+                }
+                else
+                {
+                    return Messages.SecurityUserAlreadyExists;
+                }
+                if (!prof.secProfiles.ContainsKey(secProf))
+                {
+                    prof.secProfiles.Add(secProf, new Dictionary<string, List<bool>>());
+                }
+                else
+                {
+                    return Messages.SecurityProfileAlreadyExists;
+                }
+ 
                 prof.AddUserProf(userName, secProf);
 
                 //if (prof.userList.ContainsKey(userName))
@@ -595,7 +678,7 @@ namespace MiniSQLEngine
         private void prepareConditions(Table table ,string[] conds)     
         {
             condsIndex.Clear();           
-            for (int condsCols = 0; condsCols < conds.Length; condsCols += 1)
+            for (int condsCols = 0; condsCols < conds.Length -2 ; condsCols += 1)
             {
                 if(conds[condsCols]!=null)
                 {
@@ -604,11 +687,11 @@ namespace MiniSQLEngine
                     switch (s)
                     {
                         case "<":
-                            if (table.getTable().ContainsKey(conds[condsCols-1]))
+                            if (table.getTable().ContainsKey(conds[condsCols]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
+                                for (int i = 0; i < table.getTable()[conds[condsCols]].Count(); i++)   
                                 {
-                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) < Int32.Parse(conds[condsCols+1]))
+                                    if (Int32.Parse(table.getTable()[conds[condsCols]][i]) < Int32.Parse(conds[condsCols+2]))
                                     {
                                         condsIndex.Add(i);
                                     }
@@ -617,11 +700,11 @@ namespace MiniSQLEngine
                             break;
 
                         case "<=":
-                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            if (table.getTable().ContainsKey(conds[condsCols]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
+                                for (int i = 0; i < table.getTable()[conds[condsCols]].Count(); i++)   
                                 {
-                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) <= Int32.Parse(conds[condsCols + 1]))
+                                    if (Int32.Parse(table.getTable()[conds[condsCols]][i]) <= Int32.Parse(conds[condsCols + 2]))
                                     {
                                         condsIndex.Add(i);
                                     }
@@ -630,11 +713,11 @@ namespace MiniSQLEngine
                             break;
 
                         case ">":
-                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            if (table.getTable().ContainsKey(conds[condsCols]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
+                                for (int i = 0; i < table.getTable()[conds[condsCols]].Count(); i++)   
                                 {
-                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) > Int32.Parse(conds[condsCols + 1]))
+                                    if (Int32.Parse(table.getTable()[conds[condsCols]][i]) > Int32.Parse(conds[condsCols+2]))
                                     {
                                         condsIndex.Add(i);
                                     }
@@ -643,11 +726,11 @@ namespace MiniSQLEngine
                             break;
 
                         case ">=":
-                            if (table.getTable().ContainsKey(conds[condsCols - 1]))
+                            if (table.getTable().ContainsKey(conds[condsCols]))
                             {
-                                for (int i = 0; i < table.getTable()[conds[condsCols - 1]].Count(); i++)   
+                                for (int i = 0; i < table.getTable()[conds[condsCols]].Count(); i++)   
                                 {
-                                    if (Int32.Parse(table.getTable()[conds[condsCols - 1]][i]) >= Int32.Parse(conds[condsCols + 1]))
+                                    if (Int32.Parse(table.getTable()[conds[condsCols]][i]) >= Int32.Parse(conds[condsCols + 2]))
                                     {
                                         condsIndex.Add(i);
                                     }
