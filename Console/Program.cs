@@ -50,7 +50,7 @@ namespace Programa
                 TcpClient client = listener.AcceptTcpClient();
                 Console.WriteLine("Client connection accepted");
 
-                var childSocketThread = new Thread(() =>
+               // var childSocketThread = new Thread(() =>
                 {
                     
                     byte[] inputBuffer = new byte[1024];
@@ -61,140 +61,152 @@ namespace Programa
                     int size = 1024 ;
                     string request = "";
                     size = networkStream.Read(inputBuffer, 0, 1024);
-                    request += Encoding.ASCII.GetString(inputBuffer, 0, size);
+                    request = Encoding.ASCII.GetString(inputBuffer, 0, size);
                     DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
-                    line = DesParser(request);
+                    line = ParseOpenRequest(request);
                     lineArray = line.Split(',');
 
-                    if (lineArray[1].Equals("admin") && lineArray[2]=="admin" && !dbList.Contains(lineArray[0]))
+                    //Open database
                     {
-                        
+
                         //new CreateDB(lineArray[0], lineArray[1], lineArray[2]);
                         dbList.Add(lineArray[0]);
                         //DB db = new DB(line);
 
 
-
-                        //********************************* aqui
-                        using (DB db = new DB(lineArray[0])) //desde aqui
+                        try
                         {
-                            db.user = lineArray[1];
-                            database = db;
-                            prof.SetDB(db);
-                            //bool bucle = true;
-                            //string linea;
-
-                            string fileName = @"..\..\..\Archivos\";
-                            if (!Directory.Exists(fileName))
+                            //********************************* aqui
+                            using (DB db = new DB(lineArray[0])) //desde aqui
                             {
-                                System.IO.Directory.CreateDirectory(fileName);
-                            }
-                            string[] nombres = Directory.GetFiles(fileName);
-                            string[] columnas = new string[20];
-                            string nombre;
-                            int i = 0;
+                                db.user = lineArray[1];
+                                database = db;
+                                prof.SetDB(db);
+                                //bool bucle = true;
+                                //string linea;
 
-                            //----------Codigo para leer linea
-                            StreamReader archivo;
-                            string row = null;
-                            int k = 0;
-                            //--------------------------------
-                            while (i < nombres.Length)
-                            {
-                                nombre = nombres[i];
-                                //Console.WriteLine(nombres[i]);
-                                //Console.WriteLine(nombres[i].Length);
-                                int aux = nombres[i].Length - 4;
-                                //Console.WriteLine(aux);
-                                string nom = nombres[i].Substring(18);
-                                nom = nom.Replace(".txt", "");
-
-                                using (archivo = File.OpenText(nombre))
+                                string fileName = @"..\..\..\Archivos\";
+                                if (!Directory.Exists(fileName))
                                 {
-                                    if (nom == "secProfiles")
-                                    {
-                                        while (!archivo.EndOfStream)
-                                        {
-                                            string name;
-                                            string pass;
-                                            string secProfile;
-                                            string table;
-                                            List<bool> booleans = new List<bool>();
-                                            row = archivo.ReadLine();
-                                            string[] a = row.Split(';');
-                                            name = a[0];
-                                            pass = a[1];
-                                            secProfile = a[2];
-                                            table = a[3];
-                                            booleans.Add(bool.Parse(a[4]));
-                                            booleans.Add(bool.Parse(a[5]));
-                                            booleans.Add(bool.Parse(a[6]));
-                                            booleans.Add(bool.Parse(a[7]));
-                                            MiniSQLEngine.Profiles.getInstance().AddProfile(name, pass, secProfile, table, booleans);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        while (!archivo.EndOfStream)
-                                        {
-                                            row = archivo.ReadLine();
-                                            if (k == 0)
-                                            {
-                                                columnas = row.Split(';');
-                                                db.createTable(nom, columnas);
-                                                k++;
-                                            }
-                                            else
-                                            {
-
-                                                db.insertData(nom, columnas, row.Split(';'));
-                                            }
-                                        }
-                                        //codigo para lectura con pattern
-                                        //-------------------------------
-
-                                    }
+                                    System.IO.Directory.CreateDirectory(fileName);
                                 }
-                                i++;
-                            }
-                        } //hasta aqui es la carga de datos (esto estaba abajo *******)
+                                string[] nombres = Directory.GetFiles(fileName);
+                                string[] columnas = new string[20];
+                                string nombre;
+                                int i = 0;
 
+                                //----------Codigo para leer linea
+                                StreamReader archivo;
+                                string row = null;
+                                int k = 0;
+                                //--------------------------------
+                                while (i < nombres.Length)
+                                {
+                                    nombre = nombres[i];
+                                    //Console.WriteLine(nombres[i]);
+                                    //Console.WriteLine(nombres[i].Length);
+                                    int aux = nombres[i].Length - 4;
+                                    //Console.WriteLine(aux);
+                                    string nom = nombres[i].Substring(18);
+                                    nom = nom.Replace(".txt", "");
 
-                        //bool bucle = true;
-                        //string linea;
-                        //no se puede cerrar pulsando la X
+                                    using (archivo = File.OpenText(nombre))
+                                    {
+                                        if (nom == "secProfiles")
+                                        {
+                                            while (!archivo.EndOfStream)
+                                            {
+                                                string name;
+                                                string pass;
+                                                string secProfile;
+                                                string table;
+                                                List<bool> booleans = new List<bool>();
+                                                row = archivo.ReadLine();
+                                                string[] a = row.Split(';');
+                                                name = a[0];
+                                                pass = a[1];
+                                                secProfile = a[2];
+                                                table = a[3];
+                                                booleans.Add(bool.Parse(a[4]));
+                                                booleans.Add(bool.Parse(a[5]));
+                                                booleans.Add(bool.Parse(a[6]));
+                                                booleans.Add(bool.Parse(a[7]));
+                                                MiniSQLEngine.Profiles.getInstance().AddProfile(name, pass, secProfile, table, booleans);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            while (!archivo.EndOfStream)
+                                            {
+                                                row = archivo.ReadLine();
+                                                if (k == 0)
+                                                {
+                                                    columnas = row.Split(';');
+                                                    db.createTable(nom, columnas);
+                                                    k++;
+                                                }
+                                                else
+                                                {
+                                                    try
+                                                    {
+                                                        db.insertData(nom, columnas, row.Split(';'));
+                                                    }
+                                                    catch
+                                                    {
+                                                        Console.WriteLine("uh oh 2");
+                                                    }
+                                                }
+                                            }
+                                            //codigo para lectura con pattern
+                                            //-------------------------------
 
+                                        }
+                                    }
+                                    i++;
+                                }
+                                string success = "<Success/>";
+                                byte[] successAsBytes = Encoding.ASCII.GetBytes(success);
+                                networkStream.Write(successAsBytes, 0, successAsBytes.Length);
+                                bool close = true;
 
-                        while (request != "END")
+                                while (close)
+                                {
+                                    try
+                                    {
+                                        size = networkStream.Read(inputBuffer, 0, 1024);
+                                        request = Encoding.ASCII.GetString(inputBuffer, 0, size);
+                                        string output = null;
+                                        try
+                                        {
+                                            request = ParseQuery(request);
+
+                                            output = "<Answer>" + database.runQuery(request) + "</Answer>";
+                                            Console.WriteLine(output);
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("uh oh");
+                                        }
+                                        //sw.Stop();
+                                        outputBuffer = Encoding.ASCII.GetBytes(output);
+                                        networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        close = false;
+                                    }
+
+                                }
+                            } //hasta aqui es la carga de datos (esto estaba abajo *******)
+                        }
+                        catch
                         {
-                            outputBuffer = Encoding.ASCII.GetBytes("\nInserte sentencia o escriba 'END' para salir");
-                            networkStream.Write(outputBuffer, 0, outputBuffer.Length);
-
-                            size = networkStream.Read(inputBuffer, 0, 1024);
-                            request = Encoding.ASCII.GetString(inputBuffer, 0, size);
-
-                            DesParser(request);
-
-                            Console.WriteLine("Request received: " + request);
-
-                            Stopwatch sw = new Stopwatch();
-                            sw.Start();
-                            string output = "<Answer>" + database.runQuery(request) + "</Answer>" + "(";
-                            output += sw.Elapsed.TotalMilliseconds + ")";
-                            Console.WriteLine(output);
-                            sw.Stop();
-                            outputBuffer = Encoding.ASCII.GetBytes(output);
-                            networkStream.Write(outputBuffer, 0, outputBuffer.Length);
+                            Console.WriteLine("uh oh 3");
                         }
                         client.Close();
-                        
                     }
-                    else
-                    {
-
-                    }
-                });
-                childSocketThread.Start();
+                }
+                //childSocketThread.Start();
 
                 //Console.WriteLine("What database you wanna open bro?");
                 //line = Console.ReadLine();
@@ -209,17 +221,45 @@ namespace Programa
             }
         //-------------------------------------------------------------------------------
         }
-        private static string DesParser(string query)
+        private static string ParseQuery(string query)
         {
 
             //CreateDBXML
-            string createXML = @"<Open\s*Database\=\'(\w+)\'\s*User\=\'(\w+)\'\s*Password\=\'(\w+)\'\/>;";
+            string createXML = "<Open\\s*Database=\"(\\w+)\"\\s*User=\"(\\w+)\"\\s*Password=\"(\\w+)\"/>";
 
             //QueryXML
-            string queryXML = @"<Query\>([\w+\s*\*\=]+\;)\<\/Query\>";
+            string queryXML = "<Query>(.*)</Query>";
 
             string queryX = "";
 
+            query.Replace("\\", "");
+            Match matchXML = Regex.Match(query, queryXML);
+            Match matchXML2 = Regex.Match(query, createXML);
+
+            if (matchXML.Success)
+            {
+                queryX = matchXML.Groups[1].Value;
+            }
+            else if (matchXML2.Success)
+            {
+                queryX = matchXML2.Groups[1].Value;
+                queryX += "," + matchXML2.Groups[2].Value;
+                queryX += "," + matchXML2.Groups[3].Value;
+            }
+            return queryX;
+        }
+        private static string ParseOpenRequest(string query)
+        {
+
+            //CreateDBXML
+            string createXML = "<Open\\s*Database=\"(\\w+)\"\\s*User=\"(\\w+)\"\\s*Password=\"(\\w+)\"/>";
+
+            //QueryXML
+            string queryXML = "<Query>(.*)</Query>";
+
+            string queryX = "";
+
+            query.Replace("\\", "");
             Match matchXML = Regex.Match(query, queryXML);
             Match matchXML2 = Regex.Match(query, createXML);
 

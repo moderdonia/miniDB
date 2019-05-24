@@ -45,7 +45,7 @@ namespace TCPClient
                 string[] line1 = new string[3];
 
                 line1 = Console.ReadLine().Split(',');
-                request2 = "<Open Database=" + "'" + line1[0] + "'" + " User=" + "'" + line1[1] + "'" + " Password=" + "'" + line1[2] + "'/>;";
+                request2 = "<Open Database=" + "'" + line1[0] + "'" + " User=" + "'" + line1[1] + "'" + " Password=" + "'" + line1[2] + "'/>";
 
                 outputBuffer = Encoding.ASCII.GetBytes(request2);
                 networkStream.Write(outputBuffer, 0, outputBuffer.Length);

@@ -66,10 +66,10 @@ namespace MiniSQLEngine
             
             //foreach (Table t in tables)
             //{
-               // if (secProfiles["admin"].ContainsKey(nomTable))
-                //{
+                if (!secProfiles["admin"].ContainsKey(nomTable))
+                {
                     secProfiles["admin"].Add(nomTable, adminPrivileges);
-                //} 
+                } 
             //}
         }
 
@@ -99,18 +99,22 @@ namespace MiniSQLEngine
             //Código para guardar todos los perfiles y sus permisos en el fichero
             foreach(KeyValuePair<string, string> user in userList)
             {
-                if (user.Key != "admin") {
+                if (user.Key != "admin")
+                {
                     foreach (string tableName in secProfiles[userSecProfiles[user.Key]].Keys) //Foreach table in secProfiles
                     {
-                        aux += user.Key + ";" + user.Value + ";";
-                        aux += userSecProfiles[user.Key] + ";"; //Add secProf to string
-                        aux += tableName + ";"; //Add tableName to string
-                        booleans = secProfiles[userSecProfiles[user.Key]][tableName];
-                        foreach (bool b in booleans)
+                        if (userSecProfiles.ContainsKey(user.Key))
                         {
-                            aux += b + ";"; //Adding the boolean values
+                            aux += user.Key + ";" + user.Value + ";";
+                            aux += userSecProfiles[user.Key] + ";"; //Add secProf to string
+                            aux += tableName + ";"; //Add tableName to string
+                            booleans = secProfiles[userSecProfiles[user.Key]][tableName];
+                            foreach (bool b in booleans)
+                            {
+                                aux += b + ";"; //Adding the boolean values
+                            }
+                            aux += Environment.NewLine;
                         }
-                        aux += Environment.NewLine;
                     }
                 }
             }

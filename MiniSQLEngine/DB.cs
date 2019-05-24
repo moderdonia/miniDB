@@ -366,7 +366,7 @@ namespace MiniSQLEngine
                             {
                                 if (!(s.name is null))
                                 {
-                                    outPut += s.name + ", ";
+                                    outPut += s.name + ",";
                                 }
                             }
 
@@ -381,7 +381,7 @@ namespace MiniSQLEngine
                                 foreach (Column column in listColAux)
                                 {
 
-                                    outPut += db[pTable].getTable()[column.name][j] + ", ";
+                                    outPut += db[pTable].getTable()[column.name][j].Trim('\'') + ",";
                                 }
 
                                 int indes = outPut.LastIndexOf(',');
@@ -403,7 +403,7 @@ namespace MiniSQLEngine
                             {
                                 if (!(s.name is null))
                                 {
-                                    outPut += s.name + ", ";
+                                    outPut += s.name + ",";
                                 }
                             }
 
@@ -434,7 +434,7 @@ namespace MiniSQLEngine
                                         {
                                             if (!it.Current.Equals(columnDic.Keys.ToArray()[p]))
                                             {
-                                                outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                                outPut += db[pTable].getTable()[column.name][w].Trim('\'') + ",";
                                             }
                                             p++;
                                         }
@@ -454,7 +454,7 @@ namespace MiniSQLEngine
                                     outPut += "{";
                                     foreach (Column column in listColAux)
                                     {
-                                        outPut += db[pTable].getTable()[column.name][w] + ", ";
+                                        outPut += db[pTable].getTable()[column.name][w].Trim('\'') + ",";
                                     }
                                     int n3 = outPut.LastIndexOf(',');
                                     outPut = outPut.Substring(0, n3);
